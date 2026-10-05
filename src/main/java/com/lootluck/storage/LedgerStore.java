@@ -28,7 +28,7 @@ public final class LedgerStore
 		validate(ledger);Export data=new Export();data.format=1;data.profile=WikiParser.hash(key);data.ledger=ledger;
 		// A chooser grants access only to the selected file. Stage in our own directory.
 		Filepath temp=directory.createTempFile("export-",".tmp");
-		try { temp.write(gson.toJson(data));temp.copyTo(target,StandardCopyOption.REPLACE_EXISTING); }
+		try { temp.write(gson.newBuilder().setPrettyPrinting().create().toJson(data));temp.copyTo(target,StandardCopyOption.REPLACE_EXISTING); }
 		finally { temp.deleteIfExists(); }
 	}
 	public Ledger importData(String key,Filepath source) throws IOException

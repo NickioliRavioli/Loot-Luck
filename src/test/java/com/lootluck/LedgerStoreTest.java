@@ -23,6 +23,7 @@ public class LedgerStoreTest
 	{
 		Filepath path=Filepath.Unchecked.getRooted(folder.getRoot().toPath());LedgerStore store=new LedgerStore(path,new Gson());Filepath export=path.joinSegment("export.json");
 		Ledger original=Fixtures.engine().lifetime();store.save("A",original);store.exportData("A",original,export);
+		try(java.io.Reader reader=export.openReader()) { StringBuilder text=new StringBuilder();char[] buffer=new char[1024];int count;while((count=reader.read(buffer))!=-1) { text.append(buffer,0,count); }assertTrue(text.toString().contains("\n  \"format\": 1"));assertTrue(text.toString().contains("\n  \"ledger\": {")); }
 		Ledger imported=store.importData("A",export);assertEquals(original.sources.size(),imported.sources.size());assertEquals(original.history.size(),imported.history.size());
 		try { store.importData("B",export);fail("Wrong profile accepted"); }catch(java.io.IOException expected) { assertTrue(expected.getMessage().contains("account")); }
 		store.backupBeforeImport("A",original);assertTrue(path.joinSegment(WikiParser.hash("A")+".before-import.json").exists());
