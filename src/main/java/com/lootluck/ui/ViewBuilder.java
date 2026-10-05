@@ -32,7 +32,7 @@ public final class ViewBuilder
 			{
 				PanelState.Item row=new PanelState.Item();row.id=item.id;row.key=source.key+":"+item.id;row.name=item.name;row.quantity=item.quantity;row.occurrences=item.occurrences;row.lastReceived=item.lastReceived;
 				boolean ambiguousNotes=item.originalIds.stream().anyMatch(original->original!=item.id)&&!com.lootluck.rates.ItemRateMatcher.notedName(item.name);
-				List<RateRow> matching=byName.get(normalize(item.name));
+				List<RateRow> matching=byName.get(com.lootluck.rates.ItemRateMatcher.lookupName(item.name));
 				if(ambiguousNotes) { matching=sourceRates.stream().filter(rate->normalize(rate.itemName).equals(normalize(item.name))).collect(java.util.stream.Collectors.toList()); }
 				applyRate(row,matching);applySegment(row,s);display.put("id:"+item.id,row);
 				if(ambiguousNotes) { row.rateTooltip+="\n\nLegacy aggregate may mix noted and unnoted loot; quantities cannot be split retrospectively."; }
@@ -49,7 +49,7 @@ public final class ViewBuilder
 				for(Map.Entry<String,List<RateRow>> group:byName.entrySet())
 				{
 					Integer id=identities.get(group.getKey());
-					boolean obtained=display.values().stream().anyMatch(i->id!=null?i.id==id:normalize(i.name).equals(group.getKey()));
+					boolean obtained=display.values().stream().anyMatch(i->(id!=null&&i.id==id)||com.lootluck.rates.ItemRateMatcher.lookupName(i.name).equals(group.getKey()));
 					if(obtained) { continue; }
 					PanelState.Item row=new PanelState.Item();row.id=id==null?0:id;RateRow first=group.getValue().get(0);row.name=first.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(first)?" (noted)":"");row.key=source.key+":rate:"+group.getKey();
 					applyRate(row,group.getValue());applySegment(row,s);display.put("rate:"+group.getKey(),row);

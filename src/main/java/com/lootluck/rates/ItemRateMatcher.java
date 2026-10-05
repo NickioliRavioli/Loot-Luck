@@ -8,6 +8,13 @@ import java.util.stream.Collectors;
 public final class ItemRateMatcher
 {
 	private ItemRateMatcher() { }
+	/** Lookup aliases only: never rewrite stored identities or reward-casket names. */
+	public static String lookupName(String name)
+	{
+		String normalized=name.replace('\u2019','\'').trim().toLowerCase(Locale.ROOT);
+		if(normalized.matches("scroll box \\((beginner|easy|medium|hard|elite|master)\\)")) { return "clue scroll"+normalized.substring("scroll box".length()); }
+		return normalized;
+	}
 	public static boolean notedName(String name) { return name.toLowerCase(Locale.ROOT).endsWith(" (noted)"); }
 	public static String baseName(String name) { return notedName(name)?name.substring(0,name.length()-8):name; }
 	public static boolean notedRow(RateRow row) { String quantity=row.quantity==null?"":row.quantity.toLowerCase(Locale.ROOT);return quantity.contains("noted")&&!quantity.contains("unnoted"); }

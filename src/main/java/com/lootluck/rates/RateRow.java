@@ -33,7 +33,7 @@ public final class RateRow
 	}
 	public String display()
 	{
-		if (conditions != null && !conditions.isBlank() && !"Never".equalsIgnoreCase(conditions.trim())) { return "Conditional"; }
+		if (hasUnresolvedConditions()) { return "Conditional"; }
 		Double p = publishedProbability();
 		if (p == null) { return conditions != null && !conditions.isBlank()?"Conditional":"Rate unknown"; }
 		if (p == 1.0) { return "Always"; }
@@ -43,7 +43,7 @@ public final class RateRow
 	public Color color()
 	{
 		Double p = publishedProbability();
-		if (conditions != null && !conditions.isBlank() && !"Never".equalsIgnoreCase(conditions.trim())) { return new Color(205,143,183); }
+		if (hasUnresolvedConditions()) { return new Color(205,143,183); }
 		if (p == null) { return new Color(170,170,170); }
 		return p == 1 ? new Color(138,174,226) : p >= 1.0/25 ? new Color(130,184,117) :
 			p >= 1.0/99.99 ? new Color(213,195,101) : p >= 1.0/999.99 ? new Color(213,148,86) : new Color(216,121,121);
@@ -51,7 +51,17 @@ public final class RateRow
 	public String tooltip()
 	{
 		return "Published rate: " + rawRate + "\nQuantity: " + quantity + " · Rolls: " + mechanics.getOrDefault("Rolls", "unknown") +
-			(variant==null||variant.isBlank()?"":"\nTable: "+variant)+(conditions==null||conditions.isBlank()?"":"\nConditions: "+conditions)+
+			(variant==null||variant.isBlank()?"":"\nTable: "+variant)+(conditions==null||conditions.isBlank()?"":"\nConditions: "+readableConditions())+
 			"\nFetched: " + fetchedAt + "\nSource: " + url;
+	}
+	private String withoutMembershipMarker()
+	{
+		return conditions==null?"":conditions.replaceAll("(?i)<sub\\b[^>]*title\\s*=\\s*[\"']Members-only[\"'][^>]*>\\s*\\(m\\)\\s*</sub>","").trim();
+	}
+	private boolean hasUnresolvedConditions() { String other=withoutMembershipMarker();return !other.isBlank()&&!"Never".equalsIgnoreCase(other); }
+	private String readableConditions()
+	{
+		String other=withoutMembershipMarker();String prefix=other.equals(conditions.trim())?"":"Members world only";
+		return prefix+(prefix.isEmpty()||other.isEmpty()?"":"; ")+other.replaceAll("<[^>]*>","");
 	}
 }
