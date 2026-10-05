@@ -77,6 +77,7 @@ public class LootLuckPlugin extends Plugin
 	private final Map<String,Integer> identities=new ConcurrentHashMap<>();
 	private int scanCursor;
 	private boolean scanning;
+	private final com.lootluck.tracking.MysteryBoxTracker mysteryBoxes=new com.lootluck.tracking.MysteryBoxTracker();
 
 	@Override protected void startUp()
 	{
@@ -103,6 +104,7 @@ public class LootLuckPlugin extends Plugin
 	}
 	private void activate(String key)
 	{
+		mysteryBoxes.clear();
 		activeProfile=key;long token=generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.cancelRequests(); }
 		submit(r->{
 			r.profile=key;r.engine=null;
@@ -114,6 +116,7 @@ public class LootLuckPlugin extends Plugin
 	@Subscribe public void onRuneScapeProfileChanged(RuneScapeProfileChanged event) { activate(event.getNewProfile()); }
 	@Subscribe public void onGameStateChanged(GameStateChanged event)
 	{
+		if(event.getGameState()!=GameState.LOGGED_IN) { mysteryBoxes.clear(); }
 		if(event.getGameState()==GameState.LOGGED_IN||event.getGameState()==GameState.LOGIN_SCREEN) { checkPrerequisite();startIdentityScan();publish(); }
 	}
 	@Subscribe public void onPluginChanged(PluginChanged event) { checkPrerequisite();publish(); }
@@ -126,11 +129,16 @@ public class LootLuckPlugin extends Plugin
 	@Subscribe public void onLootReceived(LootReceived event)
 	{
 		if(!running||activeProfile==null||event.getType()==null||"PLAYER".equals(event.getType().name())||event.getName()==null||event.getName().isBlank()) { return; }
-		String profile=activeProfile;long token=generation.get();
 		String metadata=event.getMetadata() instanceof Number?String.valueOf(event.getMetadata()):"unresolved";
 		SourceIdentity source=new SourceIdentity(event.getType().name(),event.getName(),"combat="+event.getCombatLevel()+";metadata="+metadata,client.getWorldType().toString());
+		if("Mystery box".equals(event.getName())) { mysteryBoxes.clear(); }
+		recordLoot(source,event.getItems(),Math.max(0,event.getAmount()));
+	}
+	private void recordLoot(SourceIdentity source,java.util.Collection<ItemStack> items,long amount)
+	{
+		String profile=activeProfile;long token=generation.get();
 		Map<Integer,Long> quantities=new LinkedHashMap<>();Map<Integer,String> itemNames=new LinkedHashMap<>();Map<Integer,Integer> originals=new LinkedHashMap<>();
-		if(event.getItems()!=null) { for(ItemStack stack:event.getItems())
+		if(items!=null) { for(ItemStack stack:items)
 		{
 			if(stack.getId()<=0||stack.getQuantity()<=0) { continue; }
 			ItemComposition original=itemManager.getItemComposition(stack.getId());
@@ -139,7 +147,7 @@ public class LootLuckPlugin extends Plugin
 			quantities.merge(id,(long)stack.getQuantity(),Math::addExact);itemNames.put(id,name);originals.put(stack.getId(),id);
 			identities.putIfAbsent(ViewBuilder.normalize(name),id);
 		} }
-		Observation observation=new Observation(source,System.currentTimeMillis(),Math.max(0,event.getAmount()),quantities,itemNames,originals);
+		Observation observation=new Observation(source,System.currentTimeMillis(),amount,quantities,itemNames,originals);
 		RuntimeData current=runtime;java.util.List<com.lootluck.rates.RateRow> recordedRates=current==null||current.rates==null?java.util.List.of():current.rates.rows(source);
 		submit(r->{
 			// Ordered activation precedes its events; a queued old-profile event cannot write into the new profile.
@@ -148,6 +156,39 @@ public class LootLuckPlugin extends Plugin
 			catch(Exception ex) { r.error="Observation save failed; tracking paused. Check RuneLite logs.";log.warn(r.error,ex);r.engine=null; }
 			if(r.rates!=null) { r.rates.refresh(source,false); }publishOnWorker(r,token);
 		});
+	}
+	@Subscribe public void onMenuOptionClicked(net.runelite.api.events.MenuOptionClicked event)
+	{
+		if(!running||activeProfile==null||client.getGameState()!=GameState.LOGGED_IN) { return; }
+		if(event.getItemId()==net.runelite.api.gameval.ItemID.MACRO_QUIZ_MYSTERY_BOX&&"Open".equals(event.getMenuOption()))
+		{
+			collectMysteryBox();mysteryBoxes.arm(inventorySnapshot(),client.getTickCount());
+		}
+	}
+	@Subscribe public void onChatMessage(net.runelite.api.events.ChatMessage event)
+	{
+		if(event.getType()==net.runelite.api.ChatMessageType.GAMEMESSAGE||event.getType()==net.runelite.api.ChatMessageType.SPAM)
+		{
+			mysteryBoxes.message(net.runelite.client.util.Text.removeTags(event.getMessage()));
+		}
+	}
+	@Subscribe public void onGameTick(net.runelite.api.events.GameTick event) { collectMysteryBox(); }
+	private Map<Integer,Long> inventorySnapshot()
+	{
+		Map<Integer,Long> items=new LinkedHashMap<>();net.runelite.api.ItemContainer inventory=client.getItemContainer(net.runelite.api.gameval.InventoryID.INV);
+		if(inventory!=null) { for(net.runelite.api.Item item:inventory.getItems()) { if(item.getId()>0&&item.getQuantity()>0) { items.merge(item.getId(),(long)item.getQuantity(),Math::addExact); } } }
+		return items;
+	}
+	private void collectMysteryBox()
+	{
+		if(!running||activeProfile==null||!mysteryBoxes.pending()) { return; }
+		Map<Integer,Long> gained=mysteryBoxes.poll(inventorySnapshot(),client.getTickCount());
+		if(gained.size()>1) { log.debug("Ambiguous mystery box inventory change; skipping observation");return; }
+		if(!gained.isEmpty())
+		{
+			java.util.List<ItemStack> items=new java.util.ArrayList<>();gained.forEach((id,quantity)->items.add(new ItemStack(id,Math.toIntExact(quantity))));
+			recordLoot(new SourceIdentity("EVENT","Mystery box","manual-open;inventory-confirmed",client.getWorldType().toString()),items,1);
+		}
 	}
 	private void startIdentityScan()
 	{
@@ -278,6 +319,7 @@ public class LootLuckPlugin extends Plugin
 	}
 	@Override protected void shutDown()
 	{
+		mysteryBoxes.clear();
 		running=false;generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.close(); }
 		// Already captured immutable observations finish on the storage worker; never block the client thread.
 		// Shared executor is not shut down; only previously accepted immutable observations drain.
