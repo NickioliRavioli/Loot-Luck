@@ -61,8 +61,34 @@ final class EffectButton extends JButton
 			case RARITY:
 				wash(g,width,height,rarity,45);float radius=Math.max(width,height)*.75f;
 				g.setPaint(new RadialGradientPaint(new Point2D.Float((float)(width*(.5+.25*Math.sin(seconds*.7))),height*.5f),radius,new float[]{0,1},new Color[]{alpha(rarity,85),alpha(rarity,0)}));g.fillRect(0,0,width,height);edge(g,width,height,rarity,(int)(55+30*Math.sin(seconds)));break;
+			case FIRE:
+				wash(g,width,height,new Color(255,86,20),32);
+				for(int i=0;i<12;i++)
+				{
+					double age=(seconds*.6+i*.173)%1,x=((i*.618)%1)*width+Math.sin(seconds*3+i)*3;
+					double y=height*(1-age*.85),size=(1-age)*(5+height*.16);
+					g.setPaint(new GradientPaint((float)x,(float)y,alpha(new Color(255,204,60),(int)(135*(1-age))),(float)x,(float)(y+size*2),alpha(new Color(239,61,14),0)));
+					Path2D flame=new Path2D.Double();flame.moveTo(x,y-size);flame.curveTo(x+size,y,x+size,y+size,x,y+size);flame.curveTo(x-size,y+size,x-size,y,x,y-size);g.fill(flame);
+				}break;
+			case RAIN:
+				wash(g,width,height,new Color(87,143,208),25);g.setStroke(new BasicStroke(1f));
+				for(int i=0;i<15;i++) { double age=(seconds*.7+i*.137)%1,x=((i*.618)%1)*width-age*8,y=age*(height+12)-6;g.setColor(alpha(new Color(143,201,242),90+i%3*20));g.draw(new Line2D.Double(x,y,x-3,y+7)); }break;
+			case RARITY_PRISM:
+				wash(g,width,height,rarity,60);Color prism=neighbor(rarity,.06f);float center=(float)(width*(.5+.4*Math.sin(seconds*.7)));
+				g.setPaint(new LinearGradientPaint(center-width,0,center+width,height,new float[]{0,.4f,.55f,.7f,1},new Color[]{alpha(rarity,25),alpha(rarity,80),alpha(prism,100),alpha(rarity,75),alpha(rarity,20)}));g.fillRect(0,0,width,height);edge(g,width,height,rarity,100);break;
+			case RARITY_AURORA:
+				wash(g,width,height,rarity,60);
+				for(int i=0;i<3;i++) { float x=(float)(width*(.5+.45*Math.sin(seconds*.35+i*1.7))),y=(float)(height*(.5+.4*Math.cos(seconds*.45+i)));g.setPaint(new RadialGradientPaint(new Point2D.Float(x,y),Math.max(width,height)*.6f,new float[]{0,1},new Color[]{alpha(i==1?neighbor(rarity,-.05f):rarity,65),alpha(rarity,0)}));g.fillRect(0,0,width,height); }edge(g,width,height,rarity,85);break;
+			case RARITY_OPAL:
+				wash(g,width,height,rarity,65);double motion=seconds*.3;
+				for(int i=0;i<6;i++) { double x=width*((i*.213+motion*.08)%1),y=height*(.5+.5*Math.sin(motion+i));g.setColor(alpha(i%3==0?neighbor(rarity,.04f):rarity,30+i%3*15));Path2D facet=new Path2D.Double();facet.moveTo(x-width*.3,y);facet.lineTo(x,y-height);facet.lineTo(x+width*.3,y);facet.lineTo(x,y+height);facet.closePath();g.fill(facet); }edge(g,width,height,rarity,95);break;
 			default:break;
 		}
+	}
+	private static Color neighbor(Color color,float offset)
+	{
+		float[] hsb=Color.RGBtoHSB(color.getRed(),color.getGreen(),color.getBlue(),null);
+		return Color.getHSBColor((hsb[0]+offset+1)%1,hsb[1]*.75f,Math.min(1,hsb[2]*1.2f));
 	}
 	private static Color alpha(Color color,int opacity) { return new Color(color.getRed(),color.getGreen(),color.getBlue(),opacity); }
 	private static void wash(Graphics2D g,int w,int h,Color c,int opacity) { g.setPaint(new GradientPaint(0,0,alpha(c,opacity),0,h,alpha(c,8)));g.fillRect(0,0,w,h); }

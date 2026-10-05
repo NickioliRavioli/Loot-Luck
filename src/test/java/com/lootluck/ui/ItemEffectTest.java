@@ -44,7 +44,10 @@ public class ItemEffectTest
 	}
 	@Test public void rarityAuraUsesTheItemColor()
 	{
-		BufferedImage red=frame(ItemEffect.RARITY,Color.RED,2,210,44),blue=frame(ItemEffect.RARITY,Color.BLUE,2,210,44);
-		assertTrue(different(red,blue));Color redPixel=new Color(red.getRGB(100,20)),bluePixel=new Color(blue.getRGB(100,20));assertTrue(redPixel.getRed()>redPixel.getBlue());assertTrue(bluePixel.getBlue()>bluePixel.getRed());
+		for(ItemEffect effect:new ItemEffect[]{ItemEffect.RARITY,ItemEffect.RARITY_PRISM,ItemEffect.RARITY_AURORA,ItemEffect.RARITY_OPAL})
+		{
+			BufferedImage red=frame(effect,Color.RED,2,210,44),blue=frame(effect,Color.BLUE,2,210,44);
+			assertTrue(effect.title,different(red,blue));Color redPixel=new Color(red.getRGB(100,20)),bluePixel=new Color(blue.getRGB(100,20));assertTrue(effect.title,redPixel.getRed()>redPixel.getBlue());assertTrue(effect.title,bluePixel.getBlue()>bluePixel.getRed());
+		}
 	}
 }
