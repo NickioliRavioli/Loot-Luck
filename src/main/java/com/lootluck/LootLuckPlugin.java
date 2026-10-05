@@ -164,12 +164,6 @@ public class LootLuckPlugin extends Plugin
 			if(scanCursor>=client.getItemCount()) { scanning=false;publish();return true; }return false;
 		});
 	}
-	private void prepareIcon(PanelState.Item item)
-	{
-		int quantity=(int)Math.max(1,Math.min(Integer.MAX_VALUE,item.quantity));
-		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(item.id,quantity,config.iconQuantities()&&!config.stackCounts()&&item.quantity>0);if(image==null) { return; }item.icon=new ImageIcon(image);
-		image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));
-	}
 	private javax.swing.Icon previewIcon(boolean quantity)
 	{
 		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(net.runelite.api.gameval.ItemID.COINS,12500,quantity);
@@ -266,7 +260,7 @@ public class LootLuckPlugin extends Plugin
 				long total=0;
 				for(PanelState.Item item:source.items)
 				{
-					if(item.id<=0) { continue; }prepareIcon(item);ItemComposition comp=itemManager.getItemComposition(item.id);if(comp.getNote()!=-1) { comp=itemManager.getItemComposition(comp.getLinkedNoteId()); }
+					if(item.id<=0) { continue; }if(item.quantity==0) { item.valueAvailable=true;continue; }ItemComposition comp=itemManager.getItemComposition(item.id);if(comp.getNote()!=-1) { comp=itemManager.getItemComposition(comp.getLinkedNoteId()); }
 					try { item.geEach=itemManager.getItemPrice(item.id);item.haEach=comp.getHaPrice();item.ge=Math.multiplyExact(item.geEach,item.quantity);item.ha=Math.multiplyExact(item.haEach,item.quantity);total=Math.addExact(total,item.ge);item.valueAvailable=true; }
 					catch(ArithmeticException ex) { item.valueAvailable=false; }
 				}

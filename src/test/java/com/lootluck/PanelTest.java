@@ -14,6 +14,19 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void largeRewardSourcesLoadVisibleIconsAndToggleAllHeaders() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			PanelState state=new PanelState();state.notice="";java.util.concurrent.atomic.AtomicInteger icons=new java.util.concurrent.atomic.AtomicInteger();
+			PanelState.Source source=new PanelState.Source();source.key="casket";source.name="Reward casket (easy)";
+			for(int i=0;i<10000;i++) { PanelState.Item item=new PanelState.Item();item.id=i+1;item.key="item:"+i;item.name=String.format(java.util.Locale.ROOT,"Item %05d",i);item.rate="1/128";source.items.add(item); }
+			state.sources.add(source);LootLuckPanel panel=new LootLuckPanel(id->{icons.incrementAndGet();return null;},value->{},value->{},()->{},()->{});panel.update(state);javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,400);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);
+			assertTrue(icons.get()<30);assertNotNull(findButton(panel,"Item 00000"));assertNull(findButton(panel,"Item 09999"));
+			findButton(panel,"Item 00000").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Expected"));
+			findButton(panel,"Collapse all sources").doClick();assertNull(findButton(panel,"Item 00000"));
+			findButton(panel,"Expand all sources").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findButton(panel,"Item 00000"));assertNotNull(findLabel(panel,"Expected"));viewport.removeNotify();
+		});
+	}
 	@Test public void observationViewsOmitRatesAndKeepRepeatedRewardsSeparate() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{

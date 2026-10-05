@@ -48,6 +48,7 @@ public final class LootLuckPanel extends PluginPanel
 	private final Consumer<Boolean> scopeChanged;
 	private final Consumer<String> openWiki;
 	private final Set<String> collapsed=new HashSet<>();
+	private final JButton toggleSources=new JButton();
 	private PanelState state=new PanelState();
 	private String expanded;
 	private final java.util.Map<String,JButton> itemButtons=new java.util.HashMap<>();
@@ -70,7 +71,9 @@ public final class LootLuckPanel extends PluginPanel
 		top.setOpaque(false);
 		JPanel heading=new JPanel(new BorderLayout());heading.setOpaque(false);
 		JLabel title=new JLabel("Loot Luck");title.setForeground(GOLD);title.setFont(FontManager.getRunescapeFont());heading.add(title,BorderLayout.CENTER);
-		JButton settingsButton=new JButton("⚙");settingsButton.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,18));settingsButton.getAccessibleContext().setAccessibleName("Settings");heading.add(settingsButton,BorderLayout.EAST);top.add(heading);
+		JButton settingsButton=new JButton("⚙");settingsButton.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,18));settingsButton.getAccessibleContext().setAccessibleName("Settings");top.add(heading);
+		JPanel headerActions=new JPanel(new GridLayout(1,2,4,0));headerActions.setOpaque(false);headerActions.add(toggleSources);headerActions.add(settingsButton);heading.add(headerActions,BorderLayout.EAST);
+		toggleSources.addActionListener(e->{boolean collapse=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));for(PanelState.Source source:state.sources) { if(collapse) { collapsed.add(source.key); }else { collapsed.remove(source.key); } }render();});
 		settings.setOpaque(false);JButton back=new JButton("← Back to loot");settings.add(back);settings.add(label("Settings",GOLD));
 		settingsButton.addActionListener(e->showSettings(true));back.addActionListener(e->showSettings(false));
 		top.add(view);
@@ -115,6 +118,7 @@ public final class LootLuckPanel extends PluginPanel
 	private void render()
 	{
 		content.removeAll();itemButtons.clear();
+		boolean anyExpanded=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));toggleSources.setText(anyExpanded?"▴":"▾");toggleSources.getAccessibleContext().setAccessibleName(anyExpanded?"Collapse all sources":"Expand all sources");toggleSources.setEnabled(view.getSelectedIndex()==0&&!state.sources.isEmpty());
 		dataSettings.setEnabled(state.canManageData);
 		if(configSettings!=null) { configSettings.sync(); }
 		if(!state.notice.isEmpty()) { JLabel notice=label(state.notice,MUTED);content.add(notice); }
@@ -141,8 +145,8 @@ public final class LootLuckPanel extends PluginPanel
 				if(sort.getSelectedIndex()==0) { ordered.sort(Comparator.comparingLong((PanelState.Item i)->i.lastReceived).reversed().thenComparing(i->i.name)); }
 				if(sort.getSelectedIndex()==1) { ordered.sort(Comparator.comparingDouble((PanelState.Item i)->publishedOrder(i)).thenComparing(i->i.name)); }
 				if(driest()) { ordered.sort(Comparator.comparingDouble((PanelState.Item i)->i.dryness==null?Double.NEGATIVE_INFINITY:i.dryness).reversed().thenComparing(i->i.name)); }
-				for(PanelState.Item item:ordered) { rows.add(itemRow(item));if(item.key.equals(expanded)) { rows.add(details(item)); } }
-				group.add(rows,BorderLayout.CENTER);
+				if(ordered.size()>100) { group.add(virtualSourceItems(ordered),BorderLayout.CENTER); }
+				else { for(PanelState.Item item:ordered) { rows.add(itemRow(item));if(item.key.equals(expanded)) { rows.add(details(item)); } }group.add(rows,BorderLayout.CENTER); }
 			}
 			group.setMaximumSize(new Dimension(Integer.MAX_VALUE,group.getPreferredSize().height));content.add(group);content.add(javax.swing.Box.createVerticalStrut(5));
 		}
@@ -153,6 +157,20 @@ public final class LootLuckPanel extends PluginPanel
 	{
 		try { return "Always".equals(item.rate)?1:item.rate.startsWith("1/")?1/Double.parseDouble(item.rate.substring(2).replace(",","")):Double.POSITIVE_INFINITY; }
 		catch(NumberFormatException e) { return Double.POSITIVE_INFINITY; }
+	}
+	private JPanel virtualSourceItems(java.util.List<PanelState.Item> items)
+	{
+		java.util.List<Integer> heights=new ArrayList<>();
+		final JPanel disclosure=items.stream().filter(item->item.key.equals(expanded)).findFirst().map(this::details).orElse(null);
+		int lineHeight=getFontMetrics(FontManager.getRunescapeSmallFont()).getHeight();
+		for(PanelState.Item item:items)
+		{
+			int rates=1;if(state.showAllRates) { rates=Math.max(1,(int)item.rateOptions.stream().filter(option->!option.historical).map(option->option.rate).distinct().count()); }
+			heights.add(Math.max(44,8+(1+rates)*lineHeight+1)+(item.key.equals(expanded)&&disclosure!=null?disclosure.getPreferredSize().height:0));
+		}
+		return new VirtualItemList(heights,index->{
+			PanelState.Item item=items.get(index);JPanel row=new JPanel(new BorderLayout());row.setOpaque(false);row.add(itemRow(item),BorderLayout.NORTH);if(item.key.equals(expanded)&&disclosure!=null) { row.add(disclosure,BorderLayout.CENTER); }return row;
+		},index->itemButtons.remove(items.get(index).key));
 	}
 	private void renderObservations()
 	{
@@ -175,18 +193,21 @@ public final class LootLuckPanel extends PluginPanel
 			if(itemSort.getSelectedIndex()==1) { ordered.sort(Comparator.comparingLong((PanelState.Item item)->item.occurrences).reversed().thenComparing(item->item.name)); }
 			if(itemSort.getSelectedIndex()==2) { ordered.sort(Comparator.comparingLong((PanelState.Item item)->item.quantity).reversed().thenComparing(item->item.name)); }
 			if(ordered.isEmpty()) { content.add(label("No items recorded in this view.",MUTED)); }
-			for(PanelState.Item item:ordered)
+			if(ordered.size()>100)
 			{
-				content.add(observationRow(item,true));
-				if(item.key.equals(expanded))
-				{
-					JPanel details=new JPanel(new GridLayout(0,1,0,3));details.setOpaque(false);details.setBorder(BorderFactory.createEmptyBorder(5,8,8,4));details.add(label("Source breakdown",GOLD));
-					for(PanelState.Source source:state.sources) { for(PanelState.Item row:source.items) { if(row.id==item.id&&row.quantity>0) { details.add(label(source.name+": x"+NUMBER.format(row.quantity)+" · "+NUMBER.format(row.occurrences)+" outcomes",MUTED)); } } }
-					details.setAlignmentX(LEFT_ALIGNMENT);details.setMaximumSize(new Dimension(Integer.MAX_VALUE,details.getPreferredSize().height));content.add(details);
-				}
+				JPanel disclosure=ordered.stream().filter(item->item.key.equals(expanded)).findFirst().map(this::sourceBreakdown).orElse(null);
+				java.util.List<Integer> heights=new ArrayList<>();for(PanelState.Item item:ordered) { heights.add(42+(item.key.equals(expanded)&&disclosure!=null?disclosure.getPreferredSize().height:0)); }
+				content.add(new VirtualItemList(heights,index->{PanelState.Item item=ordered.get(index);JPanel row=new JPanel(new BorderLayout());row.setOpaque(false);JButton button=observationRow(item,true);button.setPreferredSize(new Dimension(210,42));row.add(button,BorderLayout.NORTH);if(item.key.equals(expanded)&&disclosure!=null) { row.add(disclosure,BorderLayout.CENTER); }return row;},index->itemButtons.remove(ordered.get(index).key)));
 			}
+			else { for(PanelState.Item item:ordered) { content.add(observationRow(item,true));if(item.key.equals(expanded)) { content.add(sourceBreakdown(item)); } } }
 		}
 		content.add(label(state.dataStatus,MUTED));
+	}
+	private JPanel sourceBreakdown(PanelState.Item item)
+	{
+		JPanel details=new JPanel(new GridLayout(0,1,0,3));details.setOpaque(false);details.setBorder(BorderFactory.createEmptyBorder(5,8,8,4));details.add(label("Source breakdown",GOLD));
+		for(PanelState.Source source:state.sources) { for(PanelState.Item row:source.items) { if(row.id==item.id&&row.quantity>0) { details.add(label(source.name+": x"+NUMBER.format(row.quantity)+" · "+NUMBER.format(row.occurrences)+" outcomes",MUTED)); } } }
+		details.setAlignmentX(LEFT_ALIGNMENT);details.setMaximumSize(new Dimension(Integer.MAX_VALUE,details.getPreferredSize().height));return details;
 	}
 	private JButton observationRow(PanelState.Item item,boolean combined)
 	{
