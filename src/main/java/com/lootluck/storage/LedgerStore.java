@@ -16,6 +16,43 @@ public final class LedgerStore
 	private final Gson gson;
 	public LedgerStore(Filepath directory, Gson gson) throws IOException { this.directory = directory; this.gson = gson; directory.createDirectories(); }
 	private Filepath file(String key) { return directory.joinSegment(WikiParser.hash(key) + ".json"); }
+	private static final class Export
+	{
+		int format;
+		String profile;
+		Ledger ledger;
+	}
+	/** A user-selected file; observations and rate history only, no credentials. */
+	public void exportData(String key,Ledger ledger,Filepath target) throws IOException
+	{
+		validate(ledger);Export data=new Export();data.format=1;data.profile=WikiParser.hash(key);data.ledger=ledger;
+		// A chooser grants access only to the selected file. Stage in our own directory.
+		Filepath temp=directory.createTempFile("export-",".tmp");
+		try { temp.write(gson.toJson(data));temp.copyTo(target,StandardCopyOption.REPLACE_EXISTING); }
+		finally { temp.deleteIfExists(); }
+	}
+	public Ledger importData(String key,Filepath source) throws IOException
+	{
+		try(Reader reader=source.openReader())
+		{
+			Export data=gson.fromJson(reader,Export.class);
+			if(data==null||data.format!=1||!WikiParser.hash(key).equals(data.profile)) { throw new IOException("Not a supported Loot Luck export for this account."); }
+			validate(data.ledger);return data.ledger;
+		}
+		catch(RuntimeException ex) { throw new IOException("Invalid Loot Luck export. Current data was not changed.",ex); }
+	}
+	public void backupBeforeImport(String key,Ledger ledger) throws IOException
+	{
+		if(ledger!=null) { exportData(key,ledger,directory.joinSegment(WikiParser.hash(key)+".before-import.json")); }
+		else if(file(key).exists()) { file(key).copyTo(directory.joinSegment(WikiParser.hash(key)+".before-import-snapshot.json"),StandardCopyOption.REPLACE_EXISTING); }
+	}
+	public void deleteData(String key) throws IOException
+	{
+		// First install an empty snapshot so a partial deletion cannot revive old data.
+		save(key,new Ledger());
+		directory.joinSegment(WikiParser.hash(key)+".backup.json").deleteIfExists();
+		file(key).deleteIfExists();
+	}
 	public Ledger load(String key) throws IOException
 	{
 		Filepath main = file(key), backup = directory.joinSegment(WikiParser.hash(key)+".backup.json");

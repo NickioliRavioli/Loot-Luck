@@ -86,3 +86,14 @@ table. This is descriptive row matching, not certified attempt statistics;
 older ambiguous history is not reinterpreted. Historical rate rows stay separate.
 Guaranteed published rates display Always. A numeric rate with only a Never
 alternate displays its numeric rarity; the restriction remains in its tooltip.
+
+The sidebar's Data settings menu provides Export data, Import data and Delete data
+for the selected RuneScape profile. Exports contain lifetime observations, retained
+collection history and recorded-rate snapshots in JSON, with a hashed profile key;
+they do not include credentials, plugin settings or the Wiki cache. Import replaces
+lifetime data (no merge), requires a matching profile, and resets the session. The
+configured history limit applies to imported history. Existing observations are
+saved in a separate `<profile-hash>.before-import.json` export before replacement.
+Delete resets lifetime and session data and removes the active/recovery snapshots;
+exports, including the pre-import export, are kept. These operations require
+confirmation where data is replaced or removed and run on the storage worker.

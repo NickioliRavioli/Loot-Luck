@@ -40,6 +40,8 @@ public final class LootLuckPanel extends PluginPanel
 	private final JComboBox<String> itemSort=new JComboBox<>(new String[]{"Most recent","Most occurrences","Most quantity"});
 	private final JPanel controls=new JPanel(new GridLayout(1,2,4,0));
 	private final javax.swing.JCheckBox unobtained=new javax.swing.JCheckBox("Include unobtained");
+	private final JButton dataSettings=new JButton("Data settings");
+	private Consumer<String> dataAction=action->{};
 	private int historyPage;
 	private final Consumer<Boolean> scopeChanged;
 	private final Consumer<Boolean> allChanged;
@@ -73,17 +75,24 @@ public final class LootLuckPanel extends PluginPanel
 		JPanel actions=new JPanel(new GridLayout(1,2,4,0));actions.setOpaque(false);
 		JButton refreshButton=new JButton("Refresh"),resetButton=new JButton("Reset session");refreshButton.setToolTipText("Opt-in Wiki refresh; enable in Loot Luck configuration first.");resetButton.setText("Reset");resetButton.setToolTipText("Reset session counters only; lifetime observations remain.");
 		actions.add(refreshButton);actions.add(resetButton);top.add(actions);add(top,BorderLayout.NORTH);
+		dataSettings.setToolTipText("Export, import or delete this account's Loot Luck observations.");top.add(dataSettings);dataSettings.addActionListener(e->{
+			javax.swing.JPopupMenu menu=new javax.swing.JPopupMenu();
+			for(String action:new String[]{"Export data","Import data","Delete data"}) { javax.swing.JMenuItem entry=new javax.swing.JMenuItem(action);entry.addActionListener(event->dataAction.accept(action));menu.add(entry); }
+			menu.show(dataSettings,0,dataSettings.getHeight());
+		});
 		content.setLayout(new javax.swing.BoxLayout(content,javax.swing.BoxLayout.Y_AXIS));content.setOpaque(false);add(content,BorderLayout.CENTER);
 		scope.addActionListener(e->scopeChanged.accept(session()));sort.addActionListener(e->{scopeChanged.accept(session());render();});
 		refreshButton.addActionListener(e->refresh.run());resetButton.addActionListener(e->reset.run());
 		view.addActionListener(e->{historyPage=0;controls.removeAll();controls.setLayout(new GridLayout(1,view.getSelectedIndex()==1?1:2,4,0));controls.add(scope);if(view.getSelectedIndex()==0) { controls.add(sort); }else if(view.getSelectedIndex()==2) { controls.add(itemSort); }controls.revalidate();controls.repaint();render();});itemSort.addActionListener(e->render());
 	}
 	public boolean session() { return scope.getSelectedIndex()==1; }
+	public void setDataAction(Consumer<String> action) { dataAction=action; }
 	public boolean driest() { return sort.getSelectedIndex()==2; }
 	public void update(PanelState state) { if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); } this.state=state;render(); }
 	private void render()
 	{
 		content.removeAll();itemButtons.clear();
+		dataSettings.setEnabled(state.canManageData);
 		unobtained.setVisible(view.getSelectedIndex()==0);unobtained.setSelected(state.includeUnobtained||driest());unobtained.setEnabled(!driest());
 		if(!state.notice.isEmpty()) { JLabel notice=label(state.notice,MUTED);notice.setToolTipText(state.notice);content.add(notice); }
 		if(view.getSelectedIndex()!=0) { renderObservations();content.revalidate();content.repaint();return; }

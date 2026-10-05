@@ -85,6 +85,7 @@ public class LootLuckPlugin extends Plugin
 		SwingUtilities.invokeLater(()->{
 			if(!running||run!=runtime) { return; }
 			panel=new LootLuckPanel((id,quantity)->observationIcon(id,quantity),value->{session=value;all=panel.driest();publish();},value->{configManager.setConfiguration(LootLuckConfig.GROUP,"includeUnobtained",value);publish();},this::resetSession,this::refresh);
+			panel.setDataAction(this::manageData);
 			BufferedImage image=new BufferedImage(16,16,BufferedImage.TYPE_INT_ARGB);java.awt.Graphics2D g=image.createGraphics();g.setColor(new Color(223,192,113));g.drawString("LL",0,12);g.dispose();
 			navigation=NavigationButton.builder().tooltip("Loot Luck").icon(image).priority(6).panel(panel).build();toolbar.addNavigation(navigation);publish();
 		});
@@ -173,6 +174,56 @@ public class LootLuckPlugin extends Plugin
 		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(id,(int)Math.max(1,Math.min(Integer.MAX_VALUE,quantity)),config.iconQuantities()&&!config.stackCounts()&&quantity>0);if(image==null) { return null; }image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));return new ImageIcon(image);
 	}
 	private void resetSession() { submit(r->{if(r.engine!=null) { r.engine.resetSession(); }publishOnWorker(r,generation.get());}); }
+	private void manageData(String action)
+	{
+		if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); }
+		String profile=activeProfile;RuntimeData selected=runtime;long token=generation.get();
+		if(profile==null||selected==null) { return; }
+		boolean importing="Import data".equals(action),deleting="Delete data".equals(action);
+		if(importing||deleting)
+		{
+			String message=importing?"Replace this account's lifetime observations with an export?\nSession counters will reset. Existing data is backed up before replacement.\nThe configured history limit still applies.":"Delete this account's lifetime observations and collection history?\nSession counters will reset. Exported files are kept.\nExport first if you want to restore this test data.";
+			if(javax.swing.JOptionPane.showConfirmDialog(panel,message,action,javax.swing.JOptionPane.OK_CANCEL_OPTION,javax.swing.JOptionPane.WARNING_MESSAGE)!=javax.swing.JOptionPane.OK_OPTION) { return; }
+		}
+		Filepath target=null;
+		if(!deleting)
+		{
+			Filepath.Chooser chooser=new Filepath.Chooser().setAcceptsFiles().setDialogTitle(action).addExtensionFilter("Loot Luck JSON","json");
+			if(importing) { chooser.setIsOpen(); }else { chooser.setIsSave().setDefaultExtension("json").setFileName("loot-luck-export.json"); }
+			java.util.List<Filepath> files=chooser.showDialog(panel);if(files==null||files.isEmpty()) { return; }target=files.get(0);
+			if(!importing&&javax.swing.JOptionPane.showConfirmDialog(panel,"Export to "+target.getFileName()+"?\nAn existing file at that location will be replaced.",action,javax.swing.JOptionPane.OK_CANCEL_OPTION)!=javax.swing.JOptionPane.OK_OPTION) { return; }
+		}
+		Filepath chosen=target;
+		submit(r->{
+			if(r!=selected||token!=generation.get()||!profile.equals(activeProfile)||!profile.equals(r.profile)) { return; }
+			try
+			{
+				if(r.store==null) { throw new java.io.IOException("Storage is not ready."); }
+				if(importing)
+				{
+					Ledger imported=r.store.importData(profile,chosen);
+					LedgerEngine replacement=new LedgerEngine(imported);replacement.setHistoryLimit(config.historyLimit());
+					r.store.backupBeforeImport(profile,r.engine==null?null:r.engine.lifetime());
+					r.store.save(profile,imported);r.engine=replacement;r.error="";
+				}
+				else if(deleting)
+				{
+					r.engine=null;r.store.deleteData(profile);r.engine=new LedgerEngine(new Ledger());r.engine.setHistoryLimit(config.historyLimit());r.error="";
+				}
+				else
+				{
+					if(r.engine==null) { throw new java.io.IOException("No loaded observations to export."); }
+					r.store.exportData(profile,r.engine.lifetime(),chosen);
+				}
+				publishOnWorker(r,token);dataMessage(token,action,deleting?"Account observations deleted.":importing?"Data imported. Session reset.":"Data exported to "+chosen.getFileName()+".",false);
+			}
+			catch(Exception ex) { if(deleting) { r.error="Data deletion failed; tracking paused. Retry or import an export.";publishOnWorker(r,token); }log.debug("Loot Luck data action failed: {}",action,ex);dataMessage(token,action,ex.getMessage()==null?"Data operation failed. See RuneLite logs.":ex.getMessage(),true); }
+		});
+	}
+	private void dataMessage(long token,String title,String message,boolean error)
+	{
+		SwingUtilities.invokeLater(()->{if(running&&token==generation.get()&&panel!=null) { javax.swing.JOptionPane.showMessageDialog(panel,message,title,error?javax.swing.JOptionPane.ERROR_MESSAGE:javax.swing.JOptionPane.INFORMATION_MESSAGE); }});
+	}
 	private void refresh()
 	{
 		submit(r->{
@@ -197,6 +248,7 @@ public class LootLuckPlugin extends Plugin
 		view.showGe=config.showGe();view.showHa=config.showHa();view.luckColors=config.luckColors();view.showAllRates=config.showAllRates();
 		view.showWikiLinks=config.showWikiLinks();
 		view.includeUnobtained=config.includeUnobtained();
+		view.canManageData=r.store!=null&&activeProfile!=null&&activeProfile.equals(r.profile);
 		view.stackCounts=config.stackCounts();view.iconQuantities=config.iconQuantities()&&!config.stackCounts()&&!view.stackCounts;
 		view.notice=!r.error.isEmpty()?r.error:!lootTrackerEnabled?"Enable RuneLite Loot Tracker to receive loot.":activeProfile==null?"Log in to select an account profile.":view.sources.isEmpty()?"No loot recorded yet.":"";
 		view.dataStatus=r.rates==null?"Rate catalogue loading":r.rates.status+(config.wikiRefresh()?" · refresh enabled":" · offline mode");

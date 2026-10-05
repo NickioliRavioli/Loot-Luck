@@ -32,3 +32,15 @@ If a narrow adapter is necessary, give it a reviewed completion identity/eligibi
 - A model mismatch or coverage gap suppresses exact streak/probability results.
 
 Until these checks pass, keep the source observable with its probability statistics unavailable. A locally running client or screenshot does not replace these checks.
+
+## Data settings controls
+
+- Export the current account, collect more loot, then import the export. Confirm
+  lifetime totals return to the export and the session is empty.
+- Cancel each chooser and confirmation: observations must remain unchanged.
+- Reject an export from another account and a malformed JSON file without changes.
+- Switch accounts while a chooser is open: the pending action must not touch either
+  account. Retry explicitly for the newly selected account.
+- Export, delete, restart, and confirm old data is not restored by the recovery
+  snapshot. Import the saved export to restore the test observations.
+- Check that the history limit applies on import, while lifetime totals remain.

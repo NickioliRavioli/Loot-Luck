@@ -11,6 +11,7 @@ public final class PanelState
 	public boolean showGe=true, showHa=false, luckColors=true, showAllRates=false;
 	public boolean showWikiLinks=true;
 	public boolean includeUnobtained;
+	public boolean canManageData;
 	public boolean iconQuantities=true;
 	public boolean stackCounts=false;
 	public List<Source> sources=new ArrayList<>();
