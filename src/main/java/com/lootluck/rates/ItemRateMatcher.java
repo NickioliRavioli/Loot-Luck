@@ -1,0 +1,36 @@
+package com.lootluck.rates;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+/** Noted items are separate game identities; never select a row using aggregate quantity. */
+public final class ItemRateMatcher
+{
+	private ItemRateMatcher() { }
+	public static boolean notedName(String name) { return name.toLowerCase(Locale.ROOT).endsWith(" (noted)"); }
+	public static String baseName(String name) { return notedName(name)?name.substring(0,name.length()-8):name; }
+	public static boolean notedRow(RateRow row) { String quantity=row.quantity==null?"":row.quantity.toLowerCase(Locale.ROOT);return quantity.contains("noted")&&!quantity.contains("unnoted"); }
+	public static List<RateRow> match(String name,List<RateRow> rows,boolean ambiguousLegacy)
+	{
+		if(rows==null) { return List.of(); }
+		if(ambiguousLegacy) { return rows; }
+		boolean noted=notedName(name);return rows.stream().filter(row->notedRow(row)==noted).collect(Collectors.toList());
+	}
+	/** Match a notification quantity only when it can represent one row/roll. */
+	public static List<RateRow> matchCollection(String name,List<RateRow> rows,long quantity,long amount)
+	{
+		List<RateRow> candidates=match(name,rows,false);
+		if(amount!=1||quantity<=0||candidates.stream().anyMatch(row->!"1".equals(row.mechanics.get("Rolls")))) { return List.of(); }
+		return candidates.stream().filter(row->{
+			try {
+				String low=row.mechanics.get("Quantity Low"),high=row.mechanics.get("Quantity High");
+				if(low!=null&&high!=null) { return quantity>=Long.parseLong(low)&&quantity<=Long.parseLong(high); }
+				String text=row.quantity==null?"":row.quantity.replace(" (noted)","").trim();
+				String[] bounds=text.split("[-–—]");
+				return bounds.length==1?quantity==Long.parseLong(bounds[0].trim()):bounds.length==2&&quantity>=Long.parseLong(bounds[0].trim())&&quantity<=Long.parseLong(bounds[1].trim());
+			} catch(NumberFormatException ex) { return false; }
+		}).collect(Collectors.toList());
+	}
+}
+
