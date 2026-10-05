@@ -26,6 +26,7 @@ public final class PanelState
 	public static final class Item
 	{
 		public String key,name,rate,rateTooltip,reason;
+		public String worldMarker="";
 		public int id;
 		public long quantity,occurrences,lastReceived;
 		public Long attempts,dry;

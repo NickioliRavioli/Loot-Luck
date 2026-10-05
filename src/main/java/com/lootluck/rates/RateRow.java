@@ -62,6 +62,13 @@ public final class RateRow
 	{
 		return stripWorldMarker(stripWorldMarker(conditions==null?"":conditions,"Members-only","m"),"Free-to-play-only","f");
 	}
+	public String worldMarker()
+	{
+		String original=conditions==null?"":conditions.trim();
+		boolean members=!stripWorldMarker(original,"Members-only","m").equals(original);
+		boolean free=!stripWorldMarker(original,"Free-to-play-only","f").equals(original);
+		return members==free?"":members?"(m)":"(f)";
+	}
 	private boolean hasUnresolvedConditions() { String other=withoutWorldMarkers();return !other.isBlank()&&!"Never".equalsIgnoreCase(other); }
 	private String readableConditions()
 	{

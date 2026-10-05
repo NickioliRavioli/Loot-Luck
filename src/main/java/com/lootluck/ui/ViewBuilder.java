@@ -84,6 +84,8 @@ public final class ViewBuilder
 	{
 		row.rarity=new Color(160,160,160);row.rate="Rate unknown";row.rateTooltip="No resolved Wiki drop rate. Unknown is not zero.";
 		if(rates==null||rates.isEmpty()) { return; }
+		String marker=rates.get(0).worldMarker();
+		if(rates.stream().allMatch(rate->marker.equals(rate.worldMarker()))) { row.worldMarker=marker; }
 		for(RateRow rate:rates) { addRateOption(row,rate,false); }
 		row.rateTooltip=rates.stream().map(RateRow::tooltip).collect(java.util.stream.Collectors.joining("\n\n"));
 		if(rates.size()==1) { row.rate=rates.get(0).display();row.rarity=rates.get(0).color(); }

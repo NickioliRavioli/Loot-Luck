@@ -202,7 +202,7 @@ public final class LootLuckPanel extends PluginPanel
 		JButton button=new JButton();button.setLayout(new BorderLayout(5,0));button.setBackground(item.key.equals(expanded)?new Color(56,49,39):ROW);button.setBorder(BorderFactory.createMatteBorder(0,0,1,0,BG));
 		JLabel icon=new JLabel(item.icon!=null?item.icon:item.id>0?icons.apply(item.id,item.quantity):null);icon.setHorizontalAlignment(JLabel.CENTER);icon.setBorder(BorderFactory.createEmptyBorder(0,2,0,2));icon.setPreferredSize(new Dimension(40,36));if(item.id==0) { icon.setText("?");icon.setToolTipText("Item identity unresolved; no guessed game ID."); }button.add(icon,BorderLayout.WEST);
 		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.setBorder(BorderFactory.createEmptyBorder(4,0,4,0));
-		JLabel name=label(item.name,item.quantity==0?MUTED:Color.LIGHT_GRAY);text.add(name);
+		JLabel name=label(item.name+(item.worldMarker.isEmpty()?"":" "+item.worldMarker),item.quantity==0?MUTED:Color.LIGHT_GRAY);if(item.rateTooltip!=null) { name.setToolTipText(html(item.rateTooltip)); }text.add(name);
 		java.util.Set<String> shownRates=new java.util.LinkedHashSet<>();
 		if(state.showAllRates) { for(PanelState.RateOption option:item.rateOptions) { if(!option.historical&&shownRates.add(option.rate)) { JLabel rate=label(option.rate,option.color);rate.setToolTipText(rarityTooltip(item,option));text.add(rate); } } }
 		String summary=item.rate.startsWith("Variants:")||item.rate.equals("Multiple published rates")?"Multiple published rates":item.rate;
