@@ -99,7 +99,7 @@ public final class ViewBuilder
 			boolean same=rates.stream().allMatch(r->r.display().equals(rates.get(0).display()));
 			boolean numeric=rates.stream().allMatch(r->r.display().startsWith("1/")||r.display().equals("Always"));
 			List<String> alternatives=rates.stream().map(RateRow::display).distinct().collect(java.util.stream.Collectors.toList());
-			row.rate=same?rates.get(0).display():numeric&&alternatives.size()<=3?"Variants: "+String.join(", ",alternatives):numeric?"Multiple published rates":"Conditional / variants";
+			row.rate=same?rates.get(0).display():numeric&&alternatives.size()<=3?"Variants: "+String.join(", ",alternatives):numeric?"Multiple published rates":"Multiple published rates *";
 			if(!same&&rates.stream().anyMatch(rate->"Varies".equals(rate.display()))&&rates.stream().allMatch(rate->rate.publishedProbability()!=null||"Varies".equals(rate.display()))) { row.rate="Varies"; }
 			boolean sameColor=rates.stream().allMatch(r->r.color().equals(rates.get(0).color()));
 			row.rarity=same||numeric&&sameColor?rates.get(0).color():numeric?new Color(160,160,160):new Color(205,143,183);

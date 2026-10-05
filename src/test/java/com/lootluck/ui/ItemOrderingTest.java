@@ -25,9 +25,9 @@ public class ItemOrderingTest
 	@Test public void publishedVariableRatesAndWintertodtSectionsArePreserved()
 	{
 		RateRow row=new RateRow();row.owner="Reward Cart";row.variant="Reward Cart";row.rawRate="Varies";row.conditions="Depends on skill level";row.itemName="Oak logs";
-		assertEquals("Varies",row.display());assertNull(row.publishedProbability());assertEquals("Logs",DropTableGroups.table(row));
+		assertEquals("Varies",row.display());assertEquals(new java.awt.Color(255,163,255),row.color());assertNull(row.publishedProbability());assertEquals("Logs",DropTableGroups.table(row));
 		row.itemName="Grimy ranarr weed";assertEquals("Herbs",DropTableGroups.table(row));row.itemName="Spirit seed";assertEquals("Seeds",DropTableGroups.table(row));
 		row.owner="Other source";row.variant="Other source#Rare drop table";assertEquals(row.variant,DropTableGroups.table(row));
-		row.rawRate="";assertEquals("Conditional",row.display());
+		row.rawRate="";assertEquals("*",row.display());
 	}
 }

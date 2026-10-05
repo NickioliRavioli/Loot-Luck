@@ -31,7 +31,7 @@ public class ScrollBoxRatesTest
 	{
 		for(String tier:List.of("beginner","easy","medium","hard","elite","master")) { assertEquals("clue scroll ("+tier+")",ItemRateMatcher.lookupName("Scroll box ("+tier+")")); }
 		assertEquals("reward casket (easy)",ItemRateMatcher.lookupName("Reward casket (easy)"));assertEquals("scroll box (unknown)",ItemRateMatcher.lookupName("Scroll box (unknown)"));
-		RateRow row=new RateRow();row.rawRate="1/128";row.conditions="<sub title=\"Members-only\" style=\"cursor:help\">(m)</sub> Requires a quest";assertEquals("Conditional",row.display());
+		RateRow row=new RateRow();row.rawRate="1/128";row.conditions="<sub title=\"Members-only\" style=\"cursor:help\">(m)</sub> Requires a quest";assertEquals("1/128 *",row.display());
 	}
 }
 

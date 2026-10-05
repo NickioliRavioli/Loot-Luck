@@ -11,6 +11,7 @@ import java.awt.Color;
 
 public final class RateRow
 {
+	public static final Color VARIES_COLOR=new Color(255,163,255);
 	public String owner, variant, itemName, rawRate, quantity, conditions, fetchedAt, hash, url;
 	public int itemId;
 	public boolean approximate;
@@ -34,17 +35,17 @@ public final class RateRow
 	public String display()
 	{
 		if(rawRate!=null&&"Varies".equalsIgnoreCase(rawRate.trim())) { return "Varies"; }
-		if (hasUnresolvedConditions()) { return "Conditional"; }
 		Double p = publishedProbability();
-		if (p == null) { return conditions != null && !conditions.isBlank()?"Conditional":"Rate unknown"; }
-		if (p == 1.0) { return "Always"; }
+		if (p == null) { return hasUnresolvedConditions()?"*":"Rate unknown"; }
+		String marker=hasUnresolvedConditions()?" *":"";
+		if (p == 1.0) { return "Always"+marker; }
 		DecimalFormat f = new DecimalFormat("#,##0.#", DecimalFormatSymbols.getInstance(Locale.US));
-		return (approximate ? "~" : "") + "1/" + f.format(1 / p);
+		return (approximate ? "~" : "") + "1/" + f.format(1 / p)+marker;
 	}
 	public Color color()
 	{
 		Double p = publishedProbability();
-		if (hasUnresolvedConditions()) { return new Color(205,143,183); }
+		if ((rawRate!=null&&"Varies".equalsIgnoreCase(rawRate.trim()))||(p==null&&hasUnresolvedConditions())) { return VARIES_COLOR; }
 		if (p == null) { return new Color(170,170,170); }
 		return p == 1 ? new Color(138,174,226) : p >= 1.0/25 ? new Color(130,184,117) :
 			p >= 1.0/99.99 ? new Color(213,195,101) : p >= 1.0/999.99 ? new Color(213,148,86) : new Color(216,121,121);

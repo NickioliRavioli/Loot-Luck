@@ -34,6 +34,6 @@ public class QuantityRowsTest
 	}
 	@Test public void neverIsAnAlternateNotAOneTimeInference()
 	{
-		RateRow row=row("Salvage","1","a");row.conditions="Never";assertEquals("1/10",row.display());assertTrue(row.tooltip().contains("Never"));row.rawRate="1/1";assertEquals("Always",row.display());row.conditions="Requires a quest";assertEquals("Conditional",row.display());
+		RateRow row=row("Salvage","1","a");row.conditions="Never";assertEquals("1/10",row.display());assertTrue(row.tooltip().contains("Never"));row.rawRate="1/1";assertEquals("Always",row.display());row.conditions="Requires a quest";assertEquals("Always *",row.display());
 	}
 }

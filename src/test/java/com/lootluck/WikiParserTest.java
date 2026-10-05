@@ -36,7 +36,7 @@ public class WikiParserTest
 	@Test public void unknownConditionalAndGuaranteed()
 	{
 		RateRow row=new RateRow();row.rawRate="Always";assertEquals("Always",row.display());row.rawRate="Varies";assertNull(row.publishedProbability());assertEquals("Varies",row.display());
-		row.rawRate="1/100";row.conditions="Requires a ring";assertEquals("Conditional",row.display());assertEquals(0.01,row.publishedProbability(),0);assertTrue(row.tooltip().contains("Requires a ring"));
+		row.rawRate="1/100";row.conditions="Requires a ring";assertEquals("1/100 *",row.display());assertEquals(0.01,row.publishedProbability(),0);assertTrue(row.tooltip().contains("Requires a ring"));
 		assertNull(WikiRateProvider.owner(new SourceIdentity("PLAYER","Goblin","","")));
 	}
 	@Test public void unvalidatedRowsHaveNoDerivedStatistics()

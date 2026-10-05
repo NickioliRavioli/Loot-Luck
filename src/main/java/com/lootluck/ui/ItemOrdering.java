@@ -22,7 +22,7 @@ final class ItemOrdering
 	private static Double probability(PanelState.Item item)
 	{
 		if(item.publishedRarity!=null) { return item.publishedRarity; }
-		try { return "Always".equals(item.rate)?1.0:item.rate.replace("~","").startsWith("1/")?1/Double.parseDouble(item.rate.replace("~","").substring(2).replace(",","")):null; }
+		try { return "Always".equals(item.rate.replace(" *",""))?1.0:item.rate.replace("~","").replace(" *","").startsWith("1/")?1/Double.parseDouble(item.rate.replace("~","").replace(" *","").substring(2).replace(",","")):null; }
 		catch(RuntimeException ignored) { return null; }
 	}
 }

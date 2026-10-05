@@ -218,9 +218,9 @@ public final class LootLuckPanel extends PluginPanel
 		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.setBorder(BorderFactory.createEmptyBorder(4,0,4,0));
 		JLabel name=label(item.name+(item.worldMarker.isEmpty()?"":" "+item.worldMarker),item.quantity==0?MUTED:Color.LIGHT_GRAY);text.add(name);
 		java.util.Set<String> shownRates=new java.util.LinkedHashSet<>();
-		if(state.showAllRates) { for(PanelState.RateOption option:item.rateOptions) { if(!option.historical&&shownRates.add(option.rate)) { JLabel rate=label(option.rate,option.color);text.add(rate); } } }
-		String summary=item.rate.startsWith("Variants:")||item.rate.equals("Multiple published rates")?"Multiple published rates":item.rate;
-		if(shownRates.isEmpty()) { JLabel rate=label(summary,item.rarity);text.add(rate); }button.add(text,BorderLayout.CENTER);
+		if(state.showAllRates) { for(PanelState.RateOption option:item.rateOptions) { if(!option.historical&&shownRates.add(option.rate)) { JLabel rate=rateLabel(option.rate,option.color);text.add(rate); } } }
+		String summary=item.rate.startsWith("Variants:")||item.rate.equals("Multiple published rates")?"Multiple published rates"+(item.rate.contains("*")?" *":""):item.rate;
+		if(shownRates.isEmpty()) { JLabel rate=rateLabel(summary,item.rarity);text.add(rate); }button.add(text,BorderLayout.CENTER);
 		button.add(itemCounts(item),BorderLayout.EAST);
 
 		button.getAccessibleContext().setAccessibleName(item.name+", "+item.rate+", quantity "+item.quantity+", "+(item.key.equals(expanded)?"expanded":"collapsed"));
@@ -291,7 +291,7 @@ public final class LootLuckPanel extends PluginPanel
 				for(PanelState.RateOption option:table.getValue())
 				{
 					JPanel line=new JPanel(new GridLayout(1,3,4,0));line.setOpaque(false);line.add(label(option.dropQuantity==null?"—":option.dropQuantity,MUTED));
-					JLabel rate=label(option.rate,option.color);line.add(rate);
+					JLabel rate=rateLabel(option.rate,option.color);line.add(rate);
 					JLabel quantity=label("x"+NUMBER.format(option.quantity==null?0:option.quantity),Color.YELLOW);quantity.setHorizontalAlignment(JLabel.RIGHT);line.add(quantity);breakdown.add(line);
 				}
 			}
@@ -325,6 +325,11 @@ public final class LootLuckPanel extends PluginPanel
 		JPanel cell=new JPanel(new BorderLayout(3,0));cell.setOpaque(false);JLabel label=label(name,MUTED),number=label(value,color==null?Color.LIGHT_GRAY:color);cell.add(label,BorderLayout.CENTER);cell.add(number,BorderLayout.EAST);grid.add(cell);
 	}
 	private static JLabel label(String text,Color color) { JLabel l=new JLabel(text);l.setAlignmentX(LEFT_ALIGNMENT);l.setFont(FontManager.getRunescapeSmallFont());l.setForeground(color);return l; }
+	private static JLabel rateLabel(String text,Color color)
+	{
+		if(text.endsWith(" *")) { String rate=text.substring(0,text.length()-2).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;");return label("<html>"+rate+" <font color='#ffa3ff'>*</font></html>",color); }
+		return label(text,"Varies".equals(text)||"*".equals(text)?com.lootluck.rates.RateRow.VARIES_COLOR:color);
+	}
 	private static String value(Double value) { return value==null?"—":DECIMAL.format(value); }
 	private static String percent(Double p) { return p==null?"—":new DecimalFormat("0.####",DecimalFormatSymbols.getInstance(Locale.US)).format(p*100)+"%"; }
 	private static String date(long time) { return time==0?"Never observed":DateTimeFormatter.ofPattern("d MMM yyyy HH:mm").withZone(ZoneId.systemDefault()).format(Instant.ofEpochMilli(time)); }

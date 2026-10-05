@@ -17,7 +17,7 @@ public class WorldMarkerRatesTest
 			assertEquals("(f)",row.worldMarker());
 			assertEquals(new Color(130,184,117),row.color());
 			assertTrue(row.tooltip().contains("Conditions: Free-to-play world only"));assertFalse(row.tooltip().contains("<sub"));
-			row.conditions=marker+" Requires a quest";assertEquals("Conditional",row.display());assertTrue(row.tooltip().contains("Free-to-play world only; Requires a quest"));
+			row.conditions=marker+" Requires a quest";assertEquals(row.rawRate.equals("15/81")?"1/5.4 *":"1/16.2 *",row.display());assertTrue(row.tooltip().contains("Free-to-play world only; Requires a quest"));
 		}
 	}
 	@Test public void membersMarkerAndUnknownConditionsRetainTheirMeaning()
@@ -25,7 +25,7 @@ public class WorldMarkerRatesTest
 		RateRow row=new RateRow();row.rawRate="1/128";row.conditions="<sub title='Members-only'>(m)</sub>";
 		assertEquals("1/128",row.display());assertTrue(row.tooltip().contains("Members world only"));
 		assertEquals("(m)",row.worldMarker());
-		row.conditions="<sub title='Unrecognized'>(f)</sub>";assertEquals("Conditional",row.display());
+		row.conditions="<sub title='Unrecognized'>(f)</sub>";assertEquals("1/128 *",row.display());
 		assertEquals("",row.worldMarker());
 	}
 }
