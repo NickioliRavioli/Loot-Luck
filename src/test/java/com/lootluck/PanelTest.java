@@ -14,6 +14,30 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void unobtainedIconsKeepLiveColorAndTransparencyAcrossSelection() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			BufferedImage sprite=new BufferedImage(36,32,BufferedImage.TYPE_INT_ARGB);
+			PanelState state=new PanelState();state.gridView=true;state.iconQuantities=false;
+			PanelState.Source source=new PanelState.Source();source.key="test";source.name="Test";
+			PanelState.Item item=new PanelState.Item();item.id=1;item.key="unobtained";item.name="Unobtained";item.rate="1/128";item.icon=new javax.swing.ImageIcon(sprite);source.items.add(item);state.sources.add(source);
+			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,400);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);
+			javax.swing.JLabel before=findIcon(findButton(panel,"Unobtained"));assertTrue(before.isEnabled());
+			BufferedImage empty=new BufferedImage(36,32,BufferedImage.TYPE_INT_ARGB);before.getIcon().paintIcon(before,empty.getGraphics(),0,0);assertEquals(0,empty.getRGB(5,5));
+			// Simulate completion of an asynchronous sprite after its first paint.
+			java.awt.Graphics2D graphics=sprite.createGraphics();graphics.setColor(java.awt.Color.ORANGE);graphics.fillRect(0,0,36,32);graphics.dispose();
+			for(int mode=0;mode<2;mode++)
+			{
+				findButton(panel,"Unobtained").doClick();viewport.doLayout();layoutChildren(panel);
+				javax.swing.JLabel icon=findIcon(findButton(panel,"Unobtained"));assertTrue(icon.isEnabled());
+				BufferedImage result=new BufferedImage(36,32,BufferedImage.TYPE_INT_ARGB);java.awt.Graphics2D target=result.createGraphics();icon.getIcon().paintIcon(icon,target,0,0);target.dispose();
+				java.awt.Color color=new java.awt.Color(result.getRGB(5,5),true);assertEquals(255,color.getRed());assertTrue(color.getGreen()>190);assertEquals(0,color.getBlue());assertTrue(color.getAlpha()>=160&&color.getAlpha()<=170);
+				assertNull(findLabel(findButton(panel,"Unobtained"),"0"));assertNull(findLabel(findButton(panel,"Unobtained"),"x0"));
+				if(mode==0) { findButton(panel,"Switch to list view").doClick();viewport.doLayout();layoutChildren(panel); }
+			}
+			viewport.removeNotify();
+		});
+	}
 	@Test public void virtualGridSelectsDetailsBelowIconsAndReturnsToList() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{

@@ -188,12 +188,29 @@ public final class LootLuckPanel extends PluginPanel
 		});
 		return group;
 	}
+	private javax.swing.Icon itemIcon(PanelState.Item item)
+	{
+		javax.swing.Icon sprite=item.icon!=null?item.icon:item.id>0?icons.apply(item.id,item.quantity):null;
+		if(sprite==null||item.quantity>0) { return sprite; }
+		// Paint the live icon rather than caching a disabled copy of an asynchronous image.
+		return new javax.swing.Icon()
+		{
+			public int getIconWidth() { return sprite.getIconWidth(); }
+			public int getIconHeight() { return sprite.getIconHeight(); }
+			public void paintIcon(java.awt.Component component,java.awt.Graphics graphics,int x,int y)
+			{
+				java.awt.Graphics2D faded=(java.awt.Graphics2D)graphics.create();
+				try { faded.setComposite(java.awt.AlphaComposite.SrcOver.derive(0.65f));sprite.paintIcon(component,faded,x,y); }
+				finally { faded.dispose(); }
+			}
+		};
+	}
 	private JButton gridItem(PanelState.Item item)
 	{
 		JButton button=new JButton();button.setLayout(new BorderLayout());button.setBackground(ROW);button.setMargin(new java.awt.Insets(0,0,0,0));
 		button.setBorder(BorderFactory.createLineBorder(item.key.equals(expanded)?GOLD:BG,2));
-		JLabel icon=new JLabel(item.icon!=null?item.icon:item.id>0?icons.apply(item.id,item.quantity):null);icon.setHorizontalAlignment(JLabel.CENTER);icon.setEnabled(item.quantity>0);if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.CENTER);
-		JLabel quantity=label(net.runelite.client.util.QuantityFormatter.quantityToStackSize(item.quantity),item.quantity==0?MUTED:Color.YELLOW);quantity.setHorizontalAlignment(JLabel.CENTER);if(!state.iconQuantities||item.quantity==0) { button.add(quantity,BorderLayout.SOUTH); }
+		JLabel icon=new JLabel(itemIcon(item));icon.setHorizontalAlignment(JLabel.CENTER);if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.CENTER);
+		JLabel quantity=label(net.runelite.client.util.QuantityFormatter.quantityToStackSize(item.quantity),item.quantity==0?MUTED:Color.YELLOW);quantity.setHorizontalAlignment(JLabel.CENTER);if(!state.iconQuantities&&item.quantity>0) { button.add(quantity,BorderLayout.SOUTH); }
 		button.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);button.getAccessibleContext().setAccessibleDescription(item.rate+(item.key.equals(expanded)?", expanded":", collapsed"));
 		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;gridReveal=expanded;render();});makeRowClickable(button,button);return button;
 	}
@@ -246,14 +263,14 @@ public final class LootLuckPanel extends PluginPanel
 	{
 		JPanel holder=new JPanel(new BorderLayout());holder.setOpaque(false);holder.setAlignmentX(LEFT_ALIGNMENT);
 		JButton button=new JButton();button.setLayout(new BorderLayout(5,0));button.setBackground(item.key.equals(expanded)?new Color(56,49,39):ROW);button.setBorder(BorderFactory.createMatteBorder(0,0,1,0,BG));
-		JLabel icon=new JLabel(item.icon!=null?item.icon:item.id>0?icons.apply(item.id,item.quantity):null);icon.setHorizontalAlignment(JLabel.CENTER);icon.setBorder(BorderFactory.createEmptyBorder(0,2,0,2));icon.setPreferredSize(new Dimension(40,36));if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.WEST);
+		JLabel icon=new JLabel(itemIcon(item));icon.setHorizontalAlignment(JLabel.CENTER);icon.setBorder(BorderFactory.createEmptyBorder(0,2,0,2));icon.setPreferredSize(new Dimension(40,36));if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.WEST);
 		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.setBorder(BorderFactory.createEmptyBorder(4,0,4,0));
 		JLabel name=label(item.name+(item.worldMarker.isEmpty()?"":" "+item.worldMarker),item.quantity==0?MUTED:Color.LIGHT_GRAY);text.add(name);
 		java.util.Set<String> shownRates=new java.util.LinkedHashSet<>();
 		if(state.showAllRates) { for(PanelState.RateOption option:item.rateOptions) { if(!option.historical&&shownRates.add(option.rate)) { JLabel rate=rateLabel(option.rate,option.color);text.add(rate); } } }
 		String summary=item.rate.startsWith("Variants:")||item.rate.equals("Multiple published rates")?"Multiple published rates"+(item.rate.contains("*")?" *":""):item.rate;
 		if(shownRates.isEmpty()) { JLabel rate=rateLabel(summary,item.rarity);text.add(rate); }button.add(text,BorderLayout.CENTER);
-		button.add(itemCounts(item),BorderLayout.EAST);
+		if(item.quantity>0) { button.add(itemCounts(item),BorderLayout.EAST); }
 
 		button.getAccessibleContext().setAccessibleName(item.name+", "+item.rate+", quantity "+item.quantity+", "+(item.key.equals(expanded)?"expanded":"collapsed"));
 		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;render();JButton current=itemButtons.get(item.key);if(current!=null) { current.requestFocusInWindow(); }});makeRowClickable(button,button);holder.add(button);holder.setMaximumSize(new Dimension(Integer.MAX_VALUE,Math.max(44,button.getPreferredSize().height)));return holder;
