@@ -5,13 +5,24 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.Set;
 
-/** Serializable aggregates. No account names or unbounded event history. */
+/** JSON observation aggregates and optionally bounded collection history; no account names. */
 public final class Ledger
 {
-	public int schema = 2;
+	public int schema = 3;
 	public Map<String, Source> sources = new LinkedHashMap<>();
 	public java.util.List<CollectionRecord> history=new java.util.ArrayList<>();
 	public long historyStarted;
+	/** Schema 3 stores one source family, retaining each original context beneath it. */
+	public java.util.List<Source> sourceVariants()
+	{
+		java.util.List<Source> variants=new java.util.ArrayList<>();
+		for(Source source:sources.values()) { variants.addAll(source.variants.values()); }
+		return variants;
+	}
+	public Source source(SourceIdentity identity)
+	{
+		Source family=sources.get(identity.family().key());return family==null?null:family.variants.get(identity.key());
+	}
 	public static final class CollectionRecord
 	{
 		public SourceIdentity source;
@@ -26,6 +37,8 @@ public final class Ledger
 		public Map<Integer, Item> items = new LinkedHashMap<>();
 		public Map<String, Segment> segments = new LinkedHashMap<>();
 		public String activeSegment;
+		/** Only populated on a source-family container; leaves hold observations. */
+		public Map<String,Source> variants=new LinkedHashMap<>();
 	}
 	public static final class Item
 	{

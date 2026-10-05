@@ -27,7 +27,8 @@ public final class LedgerEngine
 	private void apply(Ledger ledger, Observation o, AttemptAdapter.Assessment a, java.util.List<com.lootluck.rates.RateRow> knownRates)
 	{
 		Ledger.CollectionRecord record=new Ledger.CollectionRecord();record.source=o.source;record.timestamp=o.timestamp;record.reportedAmount=o.reportedAmount;record.quantities.putAll(o.quantities);record.names.putAll(o.names);ledger.history.add(record);if(ledger.historyStarted==0) { ledger.historyStarted=o.timestamp; }trimHistory(ledger);
-		Ledger.Source s = ledger.sources.computeIfAbsent(o.source.key(), key -> { Ledger.Source n = new Ledger.Source(); n.identity = o.source; return n; });
+		Ledger.Source family=ledger.sources.computeIfAbsent(o.source.family().key(),key->{Ledger.Source parent=new Ledger.Source();parent.identity=o.source.family();return parent;});
+		Ledger.Source s = family.variants.computeIfAbsent(o.source.key(), key -> { Ledger.Source n = new Ledger.Source(); n.identity = o.source; return n; });
 		s.notifications = Math.addExact(s.notifications, 1);
 		s.reportedAmount = Math.addExact(s.reportedAmount, o.reportedAmount);
 		s.lastReceived = Math.max(s.lastReceived, o.timestamp);

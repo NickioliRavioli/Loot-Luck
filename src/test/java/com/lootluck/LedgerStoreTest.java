@@ -12,12 +12,6 @@ import static org.junit.Assert.*;
 
 public class LedgerStoreTest
 {
-	@Test public void legacySchemaUpgradesWithoutInventingRateHistory() throws Exception
-	{
-		Filepath path=Filepath.Unchecked.getRooted(folder.getRoot().toPath());
-		path.joinSegment(WikiParser.hash("legacy")+".json").write("{\"schema\":1,\"sources\":{}}");
-		LedgerStore store=new LedgerStore(path,new Gson());Ledger ledger=store.load("legacy");assertEquals(2,ledger.schema);assertTrue(ledger.sources.isEmpty());store.save("legacy",ledger);assertEquals(2,store.load("legacy").schema);
-	}
 	@Rule public TemporaryFolder folder=new TemporaryFolder();
 	@Test public void exportsRoundTripAndRejectOtherProfilesOrMalformedFiles() throws Exception
 	{
@@ -49,3 +43,4 @@ public class LedgerStoreTest
 		Filepath path=Filepath.Unchecked.getRooted(folder.getRoot().toPath());path.joinSegment(WikiParser.hash("A")+".json").write("null");new LedgerStore(path,new Gson()).load("A");
 	}
 }
+

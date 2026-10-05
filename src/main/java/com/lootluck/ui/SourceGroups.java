@@ -7,17 +7,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Display-only grouping. Persisted source identities and certified segments stay separate. */
+/** One visible source family; nested variant contexts retain their own certified segments. */
 final class SourceGroups
 {
 	private SourceGroups() { }
 	static Map<String,Ledger.Source> build(Ledger ledger)
 	{
 		Map<String,List<Ledger.Source>> groups=new LinkedHashMap<>();
-		for(Ledger.Source source:ledger.sources.values())
+		for(Ledger.Source source:ledger.sourceVariants())
 		{
 			SourceIdentity id=source.identity;
-			String key=new SourceIdentity(id.type,id.name,"display-group",id.context).key();
+			String key=id.family().key();
 			groups.computeIfAbsent(key,k->new ArrayList<>()).add(source);
 		}
 		Map<String,Ledger.Source> display=new LinkedHashMap<>();
@@ -27,7 +27,7 @@ final class SourceGroups
 	private static Ledger.Source combine(List<Ledger.Source> members)
 	{
 		Ledger.Source combined=new Ledger.Source();SourceIdentity first=members.get(0).identity;
-		combined.identity=new SourceIdentity(first.type,first.name,"Combined "+members.size()+" variants: "+members.stream().map(s->s.identity.variant).collect(java.util.stream.Collectors.joining("; ")),first.context);
+		combined.identity=new SourceIdentity(first.type,first.name,"Combined "+members.size()+" variants: "+members.stream().map(s->s.identity.variant).collect(java.util.stream.Collectors.joining("; ")),members.stream().map(s->s.identity.context).distinct().collect(java.util.stream.Collectors.joining("; ")));
 		for(Ledger.Source source:members)
 		{
 			combined.notifications=Math.addExact(combined.notifications,source.notifications);

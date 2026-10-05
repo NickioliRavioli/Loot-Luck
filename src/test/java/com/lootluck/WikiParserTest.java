@@ -16,7 +16,7 @@ public class WikiParserTest
 	@Test public void numericGoblinVariantsShowTheirRates() throws Exception
 	{
 		List<RateRow> rates=WikiParser.parse(new Gson(),Files.readString(Path.of("tools/wiki-inputs/Goblin.json")),"Goblin","2026-10-02T00:00:00Z");
-		Ledger ledger=new Ledger();Ledger.Source source=new Ledger.Source();source.identity=new SourceIdentity("NPC","Goblin","combat=2;metadata=unresolved","normal");Ledger.Item hammer=new Ledger.Item();hammer.id=2347;hammer.name="Hammer";hammer.quantity=1;hammer.occurrences=1;source.notifications=1;source.items.put(hammer.id,hammer);ledger.sources.put(source.identity.key(),source);
+		Ledger ledger=new Ledger();Ledger.Source source=new Ledger.Source();source.identity=new SourceIdentity("NPC","Goblin","combat=2;metadata=unresolved","normal");Ledger.Item hammer=new Ledger.Item();hammer.id=2347;hammer.name="Hammer";hammer.quantity=1;hammer.occurrences=1;source.notifications=1;source.items.put(hammer.id,hammer);Ledger.Source family=new Ledger.Source();family.identity=source.identity.family();family.variants.put(source.identity.key(),source);ledger.sources.put(family.identity.key(),family);
 		RateProvider provider=new RateProvider() { public List<RateRow> rows(SourceIdentity s) { return rates; }public void refresh(SourceIdentity s,boolean force) {} };
 		PanelState.Item item=ViewBuilder.build(ledger,provider,false,Map.of()).sources.get(0).items.get(0);assertEquals("Variants: 1/8.5, 1/14.2",item.rate);assertTrue(item.rateTooltip.contains("15/128"));assertTrue(item.rateTooltip.contains("9/128"));assertEquals(2,item.rateOptions.size());assertEquals(1,item.unresolvedOccurrences);assertNull(item.rateOptions.get(0).quantity);assertNull(item.attempts);
 	}
@@ -41,10 +41,11 @@ public class WikiParserTest
 	}
 	@Test public void unvalidatedRowsHaveNoDerivedStatistics()
 	{
-		Ledger ledger=new Ledger();Ledger.Source source=new Ledger.Source();source.identity=new SourceIdentity("NPC","Goblin","unknown","normal");ledger.sources.put(source.identity.key(),source);
+		Ledger ledger=new Ledger();Ledger.Source source=new Ledger.Source();source.identity=new SourceIdentity("NPC","Goblin","unknown","normal");Ledger.Source family=new Ledger.Source();family.identity=source.identity.family();family.variants.put(source.identity.key(),source);ledger.sources.put(family.identity.key(),family);
 		RateRow row=new RateRow();row.itemName="Unobtained";row.rawRate="1/100";row.quantity="1";row.variant="Goblin";row.conditions="";row.fetchedAt="now";row.url="wiki";
 		RateProvider provider=new RateProvider() { public List<RateRow> rows(SourceIdentity s) { return List.of(row); }public void refresh(SourceIdentity s,boolean force) { } };
 		PanelState state=ViewBuilder.build(ledger,provider,true,Map.of());assertEquals(1,state.sources.get(0).items.size());assertNull(state.sources.get(0).items.get(0).attempts);assertNull(state.sources.get(0).items.get(0).dryness);
 	}
 }
+
 

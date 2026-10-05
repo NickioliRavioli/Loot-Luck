@@ -59,7 +59,7 @@ public final class ViewBuilder
 		}
 		state.sources.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());
 		Map<Integer,PanelState.Item> totals=new LinkedHashMap<>();
-		for(Ledger.Source source:ledger.sources.values()) { for(Ledger.Item item:source.items.values()) { PanelState.Item total=totals.computeIfAbsent(item.id,id->{PanelState.Item i=new PanelState.Item();i.id=id;i.key="all:"+id;i.name=item.name;return i;});total.quantity=Math.addExact(total.quantity,item.quantity);total.occurrences=Math.addExact(total.occurrences,item.occurrences);total.lastReceived=Math.max(total.lastReceived,item.lastReceived); } }
+		for(Ledger.Source source:ledger.sourceVariants()) { for(Ledger.Item item:source.items.values()) { PanelState.Item total=totals.computeIfAbsent(item.id,id->{PanelState.Item i=new PanelState.Item();i.id=id;i.key="all:"+id;i.name=item.name;return i;});total.quantity=Math.addExact(total.quantity,item.quantity);total.occurrences=Math.addExact(total.occurrences,item.occurrences);total.lastReceived=Math.max(total.lastReceived,item.lastReceived); } }
 		state.allItems.addAll(totals.values());state.allItems.sort(Comparator.comparingLong((PanelState.Item i)->i.lastReceived).reversed());
 		for(int index=ledger.history.size()-1;index>=0;index--)
 		{
@@ -121,5 +121,6 @@ public final class ViewBuilder
 		if(seg.streakValid) { row.dry=d;row.noDrop=Statistics.dryProbability(d,p);row.dryness=Statistics.dryness(d,p); }
 	}
 }
+
 
 

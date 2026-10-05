@@ -44,3 +44,14 @@ Until these checks pass, keep the source observable with its probability statist
 - Export, delete, restart, and confirm old data is not restored by the recovery
   snapshot. Import the saved export to restore the test observations.
 - Check that the history limit applies on import, while lifetime totals remain.
+
+## Grouped source storage
+
+- Start fresh with Data settings > Delete data after upgrading to schema 3.
+- Loot several cosmetic cow variants. Confirm one Cow header and one top-level
+  Cow entry in the export, with variants nested underneath and correct totals.
+- Loot goblins in multiple locations. Confirm one Goblin header while distinct
+  contexts/recorded rate tables remain preserved in the export.
+- Compare By source, All items and Recent collections for double counting.
+- Export/import and restart: family totals, histories and nested contexts must
+  survive. Mixed variant/world contexts must not gain a shared certified statistic.

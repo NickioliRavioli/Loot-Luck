@@ -106,7 +106,7 @@ public class LootLuckPlugin extends Plugin
 		submit(r->{
 			r.profile=key;r.engine=null;
 			try { if(key!=null&&r.store!=null) { r.engine=new LedgerEngine(r.store.load(key));r.engine.setHistoryLimit(config.historyLimit());r.error=""; } }
-			catch(Exception ex) { r.error="Profile snapshot could not be recovered; tracking paused.";log.warn(r.error,ex); }
+			catch(Exception ex) { r.error="Profile data unavailable. Use Data settings to delete old test data or import a current export.";log.warn(r.error,ex); }
 			publishOnWorker(r,token);
 		});
 	}
@@ -234,7 +234,7 @@ public class LootLuckPlugin extends Plugin
 				{
 					r.rates.refreshCatalogue(true);
 					r.rates.status="Wiki catalogue refresh queued";
-					r.engine.lifetime().sources.values().forEach(s->r.rates.refresh(s.identity,true));
+					r.engine.lifetime().sourceVariants().forEach(s->r.rates.refresh(s.identity,true));
 				}
 			}
 			publishOnWorker(r,generation.get());
@@ -283,5 +283,6 @@ public class LootLuckPlugin extends Plugin
 	}
 	@Provides LootLuckConfig provideConfig(ConfigManager manager) { return manager.getConfig(LootLuckConfig.class); }
 }
+
 
 

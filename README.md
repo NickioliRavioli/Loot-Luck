@@ -97,3 +97,12 @@ saved in a separate `<profile-hash>.before-import.json` export before replacemen
 Delete resets lifetime and session data and removes the active/recovery snapshots;
 exports, including the pre-import export, are kept. These operations require
 confirmation where data is replaced or removed and run on the storage worker.
+
+Source storage now uses schema 3: one source family per loot type and source name,
+with original NPC variants/world contexts nested in `variants`. Item observations,
+recorded rates and statistical segments remain on those nested records. The sidebar
+combines family totals without combining certified segments across contexts. The
+All items view and raw history still count each collection once. Compatibility
+migration was intentionally omitted for this private test build: old snapshots and
+old exports cannot load. Use Data settings > Delete data to start fresh; old files
+are not erased automatically. Current exports/imports use the grouped format.

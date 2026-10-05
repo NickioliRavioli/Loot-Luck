@@ -22,7 +22,8 @@ public class NotedRatesTest
 		engine.observe(new Observation(source,1,1,Map.of(1,1L,2,3L),Map.of(1,"Raw t-bone steak",2,"Raw t-bone steak (noted)"),Map.of(1,1,2,2)),AttemptAdapter.Assessment.unsupported("pending"),rates);
 		RateProvider provider=new RateProvider() { public List<RateRow> rows(SourceIdentity s) { return rates; }public void refresh(SourceIdentity s,boolean force) {} };
 		PanelState view=ViewBuilder.build(engine.lifetime(),provider,false,Map.of());assertEquals(2,view.sources.get(0).items.size());PanelState.Item raw=view.sources.get(0).items.stream().filter(i->i.id==1).findFirst().get(),noted=view.sources.get(0).items.stream().filter(i->i.id==2).findFirst().get();
-		assertEquals("Always",raw.rate);assertEquals(1,raw.quantity);assertEquals(1,raw.rateOptions.size());assertEquals(3,noted.quantity);assertEquals(1,noted.rateOptions.size());assertTrue(noted.rateTooltip.contains("10/81"));assertFalse(raw.rateTooltip.contains("10/81"));assertEquals(0,raw.unresolvedOccurrences);assertEquals(0,noted.unresolvedOccurrences);assertEquals(1,engine.lifetime().sources.get(source.key()).items.get(1).recordedRates.values().iterator().next().rows.size());
+		assertEquals("Always",raw.rate);assertEquals(1,raw.quantity);assertEquals(1,raw.rateOptions.size());assertEquals(3,noted.quantity);assertEquals(1,noted.rateOptions.size());assertTrue(noted.rateTooltip.contains("10/81"));assertFalse(raw.rateTooltip.contains("10/81"));assertEquals(0,raw.unresolvedOccurrences);assertEquals(0,noted.unresolvedOccurrences);assertEquals(1,engine.lifetime().source(source).items.get(1).recordedRates.values().iterator().next().rows.size());
 	}
 }
+
 

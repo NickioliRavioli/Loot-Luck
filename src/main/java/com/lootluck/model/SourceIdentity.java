@@ -14,4 +14,5 @@ public final class SourceIdentity
 		this.context = Objects.requireNonNull(context);
 	}
 	public String key() { return type + "\u001f" + name + "\u001f" + variant + "\u001f" + context; }
+	public SourceIdentity family() { return new SourceIdentity(type,name,"",""); }
 }

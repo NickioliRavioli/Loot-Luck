@@ -23,9 +23,9 @@ public class ScrollBoxRatesTest
 		PanelState.Item item=view.sources.get(0).items.stream().filter(row->row.id==1).findFirst().get();
 		assertEquals("Scroll box (easy)",item.name);assertEquals("1/128",item.rate);assertTrue(item.rateTooltip.contains("Members world only"));assertTrue(item.rateTooltip.contains("Rate unknown at collection"));assertNull(item.attempts);
 		assertEquals(1,view.sources.get(0).items.stream().filter(row->ItemRateMatcher.lookupName(row.name).equals("clue scroll (easy)")).count());
-		assertTrue(engine.lifetime().sources.get(source.key()).items.get(1).recordedRates.get("unknown").rows.isEmpty());
+		assertTrue(engine.lifetime().source(source).items.get(1).recordedRates.get("unknown").rows.isEmpty());
 		engine.observe(observation,AttemptAdapter.Assessment.unsupported("pending"),rates);
-		assertTrue(engine.lifetime().sources.get(source.key()).items.get(1).recordedRates.values().stream().anyMatch(history->history.rows.size()==2&&history.rows.stream().allMatch(row->row.itemName.equals("Clue scroll (easy)"))));
+		assertTrue(engine.lifetime().source(source).items.get(1).recordedRates.values().stream().anyMatch(history->history.rows.size()==2&&history.rows.stream().allMatch(row->row.itemName.equals("Clue scroll (easy)"))));
 	}
 	@Test public void aliasIsTierSpecificAndDoesNotMatchRewardContainers()
 	{
@@ -34,3 +34,4 @@ public class ScrollBoxRatesTest
 		RateRow row=new RateRow();row.rawRate="1/128";row.conditions="<sub title=\"Members-only\" style=\"cursor:help\">(m)</sub> Requires a quest";assertEquals("Conditional",row.display());
 	}
 }
+

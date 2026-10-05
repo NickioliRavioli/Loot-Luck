@@ -70,10 +70,15 @@ public final class LedgerStore
 	}
 	public static void validate(Ledger ledger)
 	{
-		if (ledger == null || (ledger.schema != 1&&ledger.schema!=2) || ledger.sources == null) { throw new IllegalArgumentException("Unknown snapshot schema"); }
+		if (ledger == null || ledger.schema != 3 || ledger.sources == null) { throw new IllegalArgumentException("Unsupported snapshot format. Delete test data to start fresh."); }
 		if(ledger.history==null) { ledger.history=new java.util.ArrayList<>(); }
 		for(Ledger.CollectionRecord record:ledger.history) { if(record==null||record.source==null||record.timestamp<0||record.reportedAmount<0||record.quantities==null||record.names==null) { throw new IllegalArgumentException("Invalid collection history"); }record.quantities.forEach((id,quantity)->{if(id<=0||quantity<=0) { throw new IllegalArgumentException("Invalid collection quantity"); }}); }
-		ledger.sources.forEach((key,s) -> {
+		ledger.sources.forEach((key,family)->{
+			if(family==null||family.identity==null||!key.equals(family.identity.family().key())||!key.equals(family.identity.key())||family.variants==null||family.items==null||!family.items.isEmpty()||family.segments==null||!family.segments.isEmpty()||family.activeSegment!=null||family.notifications!=0||family.reportedAmount!=0||family.excluded!=0||family.lastReceived!=0) { throw new IllegalArgumentException("Invalid source family"); }
+			family.variants.forEach((variantKey,variant)->{ if(variant==null||variant.identity==null||!variantKey.equals(variant.identity.key())||!key.equals(variant.identity.family().key())||variant.variants==null||!variant.variants.isEmpty()) { throw new IllegalArgumentException("Invalid nested variant identity"); } });
+		});
+		for(Ledger.Source s:ledger.sourceVariants()) {
+			String key=s.identity.key();
 			if (s == null || s.identity == null || !key.equals(s.identity.key()) || s.notifications < 0 || s.reportedAmount < 0 || s.excluded < 0 || s.items == null || s.segments == null) { throw new IllegalArgumentException("Invalid source aggregate"); }
 			s.items.forEach((id,i) -> {
 				if(i == null || id != i.id || i.quantity < 0 || i.occurrences < 0 || i.occurrences > s.notifications || i.originalIds == null) { throw new IllegalArgumentException("Invalid item aggregate"); }
@@ -82,8 +87,7 @@ public final class LedgerStore
 			});
 			s.segments.forEach((id,seg) -> { if (seg == null || seg.attempts < 0 || seg.probabilities == null || seg.occurrences == null || seg.dry == null || seg.quantities == null) { throw new IllegalArgumentException("Invalid segment"); } seg.probabilities.forEach((item,p)->com.lootluck.stats.Statistics.validate(seg.attempts,seg.occurrences.getOrDefault(item,0L),p)); });
 			if (s.activeSegment != null && !s.segments.containsKey(s.activeSegment)) { throw new IllegalArgumentException("Missing active segment"); }
-		});
-		ledger.schema=2;
+		}
 	}
 	public void save(String key, Ledger ledger) throws IOException
 	{
