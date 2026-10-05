@@ -16,6 +16,8 @@ public interface LootLuckConfig extends Config
 	default boolean wikiRefresh() { return false; }
 	@ConfigItem(keyName="includeUnobtained",name="Include unobtained",description="Include known source-table items with no observations. Always enabled for driest sorting.")
 	default boolean includeUnobtained() { return false; }
+	@ConfigItem(keyName="hideUnobtainedOtherWorld",name="Hide unobtained from other world type",description="Hide unobtained members-only items on free worlds and free-to-play-only items on members worlds. Obtained items remain visible.")
+	default boolean hideUnobtainedOtherWorld() { return true; }
 	@ConfigItem(keyName="showAllRates",name="Show all known rates",description="Show known published rate alternatives beneath item names. Full table and recorded-rate breakdowns remain in expanded details.")
 	default boolean showAllRates() { return false; }
 	@ConfigItem(keyName="showWikiLinks",name="Show source Wiki links",description="Show a Wiki button in source headers. Clicking opens the source page in your browser.")

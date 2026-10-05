@@ -71,6 +71,7 @@ public class LootLuckPlugin extends Plugin
 	private java.util.concurrent.CompletableFuture<Void> ioTail=java.util.concurrent.CompletableFuture.completedFuture(null);
 	private final java.util.concurrent.atomic.AtomicInteger pendingTasks=new java.util.concurrent.atomic.AtomicInteger();
 	private volatile String activeProfile;
+	private volatile Boolean membersWorld;
 	private volatile boolean running,session,all,lootTrackerEnabled;
 	private final AtomicLong generation=new AtomicLong();
 	private final ValidationRegistry validation=new ValidationRegistry();
@@ -100,7 +101,7 @@ public class LootLuckPlugin extends Plugin
 			}
 			catch(Exception ex) { r.error="Storage/rate initialization failed; tracking paused.";log.warn(r.error,ex); }
 		});
-		clientThread.invoke(()->{if(running&&run==runtime) { checkPrerequisite();activate(configManager.getRSProfileKey());startIdentityScan(); }});
+		clientThread.invoke(()->{if(running&&run==runtime) { updateWorldType();checkPrerequisite();activate(configManager.getRSProfileKey());startIdentityScan(); }});
 	}
 	private void activate(String key)
 	{
@@ -116,8 +117,14 @@ public class LootLuckPlugin extends Plugin
 	@Subscribe public void onRuneScapeProfileChanged(RuneScapeProfileChanged event) { activate(event.getNewProfile()); }
 	@Subscribe public void onGameStateChanged(GameStateChanged event)
 	{
+		updateWorldType();
 		if(event.getGameState()!=GameState.LOGGED_IN) { mysteryBoxes.clear(); }
 		if(event.getGameState()==GameState.LOGGED_IN||event.getGameState()==GameState.LOGIN_SCREEN) { checkPrerequisite();startIdentityScan();publish(); }
+	}
+	private void updateWorldType()
+	{
+		if(client.getGameState()==GameState.LOGGED_IN) { membersWorld=client.getWorldType().contains(net.runelite.api.WorldType.MEMBERS); }
+		else if(client.getGameState()==GameState.LOGIN_SCREEN) { membersWorld=null; }
 	}
 	@Subscribe public void onPluginChanged(PluginChanged event) { checkPrerequisite();publish(); }
 	private void checkPrerequisite() { lootTrackerEnabled=pluginManager.getPlugins().stream().anyMatch(p->p instanceof LootTrackerPlugin&&pluginManager.isPluginEnabled(p)); }
@@ -286,7 +293,7 @@ public class LootLuckPlugin extends Plugin
 	private void publishOnWorker(RuntimeData r,long token)
 	{
 		if(r!=runtime || token!=generation.get()) { return; }
-		PanelState view=r.engine==null||r.rates==null?new PanelState():ViewBuilder.build(session?r.engine.session():r.engine.lifetime(),r.rates,all||config.includeUnobtained(),new LinkedHashMap<>(identities));
+		PanelState view=r.engine==null||r.rates==null?new PanelState():ViewBuilder.build(session?r.engine.session():r.engine.lifetime(),r.rates,all||config.includeUnobtained(),new LinkedHashMap<>(identities),config.hideUnobtainedOtherWorld(),membersWorld);
 		view.showGe=config.showGe();view.showHa=config.showHa();view.luckColors=config.luckColors();view.showAllRates=config.showAllRates();
 		view.showWikiLinks=config.showWikiLinks();
 		view.includeUnobtained=config.includeUnobtained();

@@ -25,6 +25,7 @@ final class LootLuckSettingsPanel extends JPanel
 		setOpaque(false);setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		toggle("Allow Wiki refresh","wikiRefresh",config::wikiRefresh,"Refresh public drop tables from the OSRS Wiki.",changed);
 		toggle("Include unobtained","includeUnobtained",config::includeUnobtained,"Driest sorting always includes unobtained items.",changed);
+		toggle("Hide unobtained from other world type","hideUnobtainedOtherWorld",config::hideUnobtainedOtherWorld,"Hide (m) on free worlds and (f) on members worlds; obtained items stay visible.",changed);
 		toggle("Group by drop table","groupByDropTable",config::groupByDropTable,"Keep table items together without headers.",changed);
 		toggle("Grid view","gridView",config::gridView,"Display source items in an icon grid.",changed);
 		toggle("Show all known rates","showAllRates",config::showAllRates,"Show published rate alternatives beneath item names.",changed);

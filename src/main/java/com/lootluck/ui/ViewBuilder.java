@@ -25,6 +25,10 @@ public final class ViewBuilder
 	}
 	public static PanelState build(Ledger ledger,RateProvider rates,boolean unobtained,Map<String,Integer> identities)
 	{
+		return build(ledger,rates,unobtained,identities,false,null);
+	}
+	public static PanelState build(Ledger ledger,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld)
+	{
 		PanelState state=new PanelState();state.notice="";
 		for(Map.Entry<String,Ledger.Source> entry:SourceGroups.build(ledger).entrySet())
 		{
@@ -61,7 +65,9 @@ public final class ViewBuilder
 					boolean obtained=display.values().stream().anyMatch(i->(id!=null&&i.id==id)||com.lootluck.rates.ItemRateMatcher.lookupName(i.name).equals(group.getKey()));
 					if(obtained) { continue; }
 					PanelState.Item row=new PanelState.Item();row.id=id==null?0:id;RateRow first=group.getValue().get(0);row.name=first.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(first)?" (noted)":"");row.key=source.key+":rate:"+group.getKey();
-					applyRate(row,group.getValue());applySegment(row,s);display.put("rate:"+group.getKey(),row);
+					applyRate(row,group.getValue());
+					if(hideOtherWorld&&membersWorld!=null&&(membersWorld?"(f)":"(m)").equals(row.worldMarker)) { continue; }
+					applySegment(row,s);display.put("rate:"+group.getKey(),row);
 				}
 			}
 			Map<String,Integer> tables=new LinkedHashMap<>(),positions=new LinkedHashMap<>();
