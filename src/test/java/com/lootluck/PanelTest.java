@@ -14,6 +14,18 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void virtualGridSelectsDetailsBelowIconsAndReturnsToList() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			PanelState state=new PanelState();state.notice="";state.iconQuantities=false;PanelState.Source source=new PanelState.Source();source.key="test";source.name="Grid source";
+			for(int i=0;i<10000;i++) { PanelState.Item item=new PanelState.Item();item.id=i+1;item.key="grid:"+i;item.name=String.format(java.util.Locale.ROOT,"Reward %05d",i);item.rate="1/128";item.quantity=i==0?12:0;source.items.add(item); }
+			state.sources.add(source);java.util.concurrent.atomic.AtomicInteger icons=new java.util.concurrent.atomic.AtomicInteger();LootLuckPanel panel=new LootLuckPanel(id->{icons.incrementAndGet();return null;},value->{},value->{},()->{},()->{});panel.update(state);
+			javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,400);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);icons.set(0);
+			findButton(panel,"Switch to grid view").doClick();viewport.doLayout();layoutChildren(panel);assertTrue(icons.get()<100);assertNotNull(findButton(panel,"Reward 00000"));assertNull(findButton(panel,"Reward 09999"));assertNull(findLabel(panel,"Expected"));
+			JButton icon=findButton(panel,"Reward 00000");icon.doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Expected"));assertNotNull(findLabel(panel,"Reward 00000"));assertEquals(new java.awt.Color(223,192,113),((javax.swing.border.LineBorder)findButton(panel,"Reward 00000").getBorder()).getLineColor());assertNoTooltips(panel);
+			findButton(panel,"Reward 00000").doClick();viewport.doLayout();layoutChildren(panel);assertNull(findLabel(panel,"Expected"));findButton(panel,"Switch to list view").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"1/128"));viewport.removeNotify();
+		});
+	}
 	@Test public void largeRewardSourcesLoadVisibleIconsAndToggleAllHeaders() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{

@@ -26,6 +26,7 @@ final class LootLuckSettingsPanel extends JPanel
 		toggle("Allow Wiki refresh","wikiRefresh",config::wikiRefresh,"Refresh public drop tables from the OSRS Wiki.",changed);
 		toggle("Include unobtained","includeUnobtained",config::includeUnobtained,"Driest sorting always includes unobtained items.",changed);
 		toggle("Group by drop table","groupByDropTable",config::groupByDropTable,"Keep table items together without headers.",changed);
+		toggle("Grid view","gridView",config::gridView,"Display source items in an icon grid.",changed);
 		toggle("Show all known rates","showAllRates",config::showAllRates,"Show published rate alternatives beneath item names.",changed);
 		toggle("Show source Wiki links","showWikiLinks",config::showWikiLinks,"Show Wiki buttons in source headers.",changed);
 		JLabel styles=new JLabel("Item style");styles.setForeground(Color.LIGHT_GRAY);styles.setAlignmentX(LEFT_ALIGNMENT);add(styles);

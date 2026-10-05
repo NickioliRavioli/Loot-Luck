@@ -49,8 +49,11 @@ public final class LootLuckPanel extends PluginPanel
 	private final Consumer<String> openWiki;
 	private final Set<String> collapsed=new HashSet<>();
 	private final JButton toggleSources=new JButton();
+	private final JButton toggleGrid=new JButton();
+	private Consumer<Boolean> gridChanged=value->{};
 	private PanelState state=new PanelState();
 	private String expanded;
+	private String gridReveal;
 	private final java.util.Map<String,JButton> itemButtons=new java.util.HashMap<>();
 	public LootLuckPanel(IntFunction<Icon> icons,Consumer<Boolean> scopeChanged,Consumer<Boolean> allChanged,Runnable reset,Runnable refresh)
 	{
@@ -72,7 +75,9 @@ public final class LootLuckPanel extends PluginPanel
 		JPanel heading=new JPanel(new BorderLayout());heading.setOpaque(false);
 		JLabel title=new JLabel("Loot Luck");title.setForeground(GOLD);title.setFont(FontManager.getRunescapeFont());heading.add(title,BorderLayout.CENTER);
 		JButton settingsButton=new JButton("⚙");settingsButton.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,18));settingsButton.getAccessibleContext().setAccessibleName("Settings");top.add(heading);
-		JPanel headerActions=new JPanel(new GridLayout(1,2,4,0));headerActions.setOpaque(false);headerActions.add(toggleSources);headerActions.add(settingsButton);heading.add(headerActions,BorderLayout.EAST);
+		JPanel headerActions=new JPanel(new GridLayout(1,3,4,0));headerActions.setOpaque(false);headerActions.add(toggleGrid);headerActions.add(toggleSources);headerActions.add(settingsButton);heading.add(headerActions,BorderLayout.EAST);
+		toggleGrid.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,16));toggleGrid.setMargin(new java.awt.Insets(2,4,2,4));
+		toggleGrid.addActionListener(e->{state.gridView=!state.gridView;gridChanged.accept(state.gridView);render();});
 		toggleSources.addActionListener(e->{boolean collapse=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));for(PanelState.Source source:state.sources) { if(collapse) { collapsed.add(source.key); }else { collapsed.remove(source.key); } }render();});
 		settings.setOpaque(false);JButton back=new JButton("← Back to loot");settings.add(back);settings.add(label("Settings",GOLD));
 		settingsButton.addActionListener(e->showSettings(true));back.addActionListener(e->showSettings(false));
@@ -94,6 +99,7 @@ public final class LootLuckPanel extends PluginPanel
 	public boolean session() { return scope.getSelectedIndex()==1; }
 	public void setSettings(com.lootluck.LootLuckConfig config,java.util.function.BiConsumer<String,Object> changed,java.util.function.Function<Boolean,Icon> previewIcons)
 	{
+		state.gridView=config.gridView();gridChanged=value->changed.accept("gridView",value);
 		configSettings=new LootLuckSettingsPanel(config,changed,previewIcons);settings.add(configSettings);settings.setLayout(new javax.swing.BoxLayout(settings,javax.swing.BoxLayout.Y_AXIS));
 		for(java.awt.Component child:settings.getComponents()) { if(child instanceof javax.swing.JComponent) { ((javax.swing.JComponent)child).setAlignmentX(LEFT_ALIGNMENT);((javax.swing.JComponent)child).setMaximumSize(new Dimension(Integer.MAX_VALUE,child.getPreferredSize().height)); } }
 	}
@@ -118,6 +124,7 @@ public final class LootLuckPanel extends PluginPanel
 	private void render()
 	{
 		content.removeAll();itemButtons.clear();
+		toggleGrid.setText(state.gridView?"☰":"▦");toggleGrid.getAccessibleContext().setAccessibleName(state.gridView?"Switch to list view":"Switch to grid view");toggleGrid.setEnabled(view.getSelectedIndex()==0);
 		boolean anyExpanded=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));toggleSources.setText(anyExpanded?"▴":"▾");toggleSources.getAccessibleContext().setAccessibleName(anyExpanded?"Collapse all sources":"Expand all sources");toggleSources.setEnabled(view.getSelectedIndex()==0&&!state.sources.isEmpty());
 		dataSettings.setEnabled(state.canManageData);
 		if(configSettings!=null) { configSettings.sync(); }
@@ -143,7 +150,8 @@ public final class LootLuckPanel extends PluginPanel
 				JPanel rows=new JPanel();rows.setOpaque(false);rows.setLayout(new javax.swing.BoxLayout(rows,javax.swing.BoxLayout.Y_AXIS));
 				ArrayList<PanelState.Item> ordered=new ArrayList<>(source.items);
 				ordered.sort(ItemOrdering.comparator(sort.getSelectedIndex(),state.groupByDropTable));
-				if(ordered.size()>100) { group.add(virtualSourceItems(ordered),BorderLayout.CENTER); }
+				if(state.gridView) { group.add(sourceGrid(ordered),BorderLayout.CENTER); }
+				else if(ordered.size()>100) { group.add(virtualSourceItems(ordered),BorderLayout.CENTER); }
 				else { for(PanelState.Item item:ordered) { rows.add(itemRow(item));if(item.key.equals(expanded)) { rows.add(details(item)); } }group.add(rows,BorderLayout.CENTER); }
 			}
 			group.setMaximumSize(new Dimension(Integer.MAX_VALUE,group.getPreferredSize().height));content.add(group);content.add(javax.swing.Box.createVerticalStrut(5));
@@ -164,6 +172,30 @@ public final class LootLuckPanel extends PluginPanel
 		return new VirtualItemList(heights,index->{
 			PanelState.Item item=items.get(index);JPanel row=new JPanel(new BorderLayout());row.setOpaque(false);row.add(itemRow(item),BorderLayout.NORTH);if(item.key.equals(expanded)&&disclosure!=null) { row.add(disclosure,BorderLayout.CENTER); }return row;
 		},index->itemButtons.remove(items.get(index).key));
+	}
+	private JPanel sourceGrid(java.util.List<PanelState.Item> items)
+	{
+		final int columns=5;int rowCount=(items.size()+columns-1)/columns;
+		JPanel group=new JPanel(new BorderLayout(0,4));group.setOpaque(false);
+		VirtualItemList grid=new VirtualItemList(java.util.Collections.nCopies(rowCount,54),index->{
+			JPanel row=new JPanel(new GridLayout(1,columns,2,0));row.setOpaque(false);
+			for(int column=0;column<columns;column++) { int position=index*columns+column;if(position<items.size()) { row.add(gridItem(items.get(position))); }else { JPanel space=new JPanel();space.setOpaque(false);row.add(space); } }return row;
+		},index->{for(int column=0;column<columns&&index*columns+column<items.size();column++) { itemButtons.remove(items.get(index*columns+column).key); }});
+		group.add(grid,BorderLayout.CENTER);
+		items.stream().filter(item->item.key.equals(expanded)).findFirst().ifPresent(item->{
+			JPanel disclosure=new JPanel(new BorderLayout(0,3));disclosure.setOpaque(false);JPanel title=new JPanel(new GridLayout(0,1));title.setOpaque(false);title.add(label(item.name+(item.worldMarker.isEmpty()?"":" "+item.worldMarker),GOLD));title.add(rateLabel(item.rate,item.rarity));disclosure.add(title,BorderLayout.NORTH);disclosure.add(details(item),BorderLayout.CENTER);group.add(disclosure,BorderLayout.SOUTH);
+			if(item.key.equals(gridReveal)) { gridReveal=null;SwingUtilities.invokeLater(()->{if(disclosure.isShowing()) { disclosure.scrollRectToVisible(new java.awt.Rectangle(0,0,disclosure.getWidth(),disclosure.getHeight())); }}); }
+		});
+		return group;
+	}
+	private JButton gridItem(PanelState.Item item)
+	{
+		JButton button=new JButton();button.setLayout(new BorderLayout());button.setBackground(ROW);button.setMargin(new java.awt.Insets(0,0,0,0));
+		button.setBorder(BorderFactory.createLineBorder(item.key.equals(expanded)?GOLD:BG,2));
+		JLabel icon=new JLabel(item.icon!=null?item.icon:item.id>0?icons.apply(item.id,item.quantity):null);icon.setHorizontalAlignment(JLabel.CENTER);icon.setEnabled(item.quantity>0);if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.CENTER);
+		JLabel quantity=label(net.runelite.client.util.QuantityFormatter.quantityToStackSize(item.quantity),item.quantity==0?MUTED:Color.YELLOW);quantity.setHorizontalAlignment(JLabel.CENTER);if(!state.iconQuantities||item.quantity==0) { button.add(quantity,BorderLayout.SOUTH); }
+		button.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);button.getAccessibleContext().setAccessibleDescription(item.rate+(item.key.equals(expanded)?", expanded":", collapsed"));
+		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;gridReveal=expanded;render();});makeRowClickable(button,button);return button;
 	}
 	private void renderObservations()
 	{
