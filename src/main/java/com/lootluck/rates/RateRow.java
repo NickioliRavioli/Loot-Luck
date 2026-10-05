@@ -54,14 +54,21 @@ public final class RateRow
 			(variant==null||variant.isBlank()?"":"\nTable: "+variant)+(conditions==null||conditions.isBlank()?"":"\nConditions: "+readableConditions())+
 			"\nFetched: " + fetchedAt + "\nSource: " + url;
 	}
-	private String withoutMembershipMarker()
+	private static String stripWorldMarker(String text,String title,String marker)
 	{
-		return conditions==null?"":conditions.replaceAll("(?i)<sub\\b[^>]*title\\s*=\\s*[\"']Members-only[\"'][^>]*>\\s*\\(m\\)\\s*</sub>","").trim();
+		return text.replaceAll("(?i)<sub\\b[^>]*title\\s*=\\s*[\"']"+title+"[\"'][^>]*>\\s*\\("+marker+"\\)\\s*</sub>","").trim();
 	}
-	private boolean hasUnresolvedConditions() { String other=withoutMembershipMarker();return !other.isBlank()&&!"Never".equalsIgnoreCase(other); }
+	private String withoutWorldMarkers()
+	{
+		return stripWorldMarker(stripWorldMarker(conditions==null?"":conditions,"Members-only","m"),"Free-to-play-only","f");
+	}
+	private boolean hasUnresolvedConditions() { String other=withoutWorldMarkers();return !other.isBlank()&&!"Never".equalsIgnoreCase(other); }
 	private String readableConditions()
 	{
-		String other=withoutMembershipMarker();String prefix=other.equals(conditions.trim())?"":"Members world only";
+		String original=conditions==null?"":conditions.trim();String other=withoutWorldMarkers();
+		String prefix="";
+		if(!stripWorldMarker(original,"Members-only","m").equals(original)) { prefix="Members world only"; }
+		if(!stripWorldMarker(original,"Free-to-play-only","f").equals(original)) { prefix+=(prefix.isEmpty()?"":"; ")+"Free-to-play world only"; }
 		return prefix+(prefix.isEmpty()||other.isEmpty()?"":"; ")+other.replaceAll("<[^>]*>","");
 	}
 }
