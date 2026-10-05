@@ -41,7 +41,7 @@ public class PanelTest
 			PanelState.Item item=new PanelState.Item();item.key="hammer";item.name="Hammer";item.rate="Variants: 1/8.5, 1/14.2";item.rateTooltip="Published variants";item.reason="Unresolved";item.quantity=1;item.occurrences=1;item.unresolvedQuantity=1;item.unresolvedOccurrences=1;item.rarity=java.awt.Color.GREEN;
 			for(String rate:new String[]{"1/8.5","1/14.2"}) { PanelState.RateOption option=new PanelState.RateOption();option.table="Table "+(item.rateOptions.size()+1);option.rate=rate;option.color=java.awt.Color.GREEN;item.rateOptions.add(option); }
 			source.items.add(item);state.sources.add(source);LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);
-			assertNotNull(findLabel(panel,"Multiple published rates"));assertTrue(((javax.swing.JLabel)findLabel(panel,"Multiple published rates")).getToolTipText().contains("color='#00ff00'"));assertTrue(((javax.swing.JLabel)findLabel(panel,"Multiple published rates")).getToolTipText().contains("1/14.2"));assertNull(findLabel(panel,"1/8.5"));state.showAllRates=true;panel.update(state);assertNotNull(findLabel(panel,"1/8.5"));assertNotNull(findLabel(panel,"1/14.2"));assertFalse(((javax.swing.JLabel)findLabel(panel,"1/8.5")).getToolTipText().contains("1/14.2"));
+			assertNotNull(findLabel(panel,"Multiple published rates"));assertNull(((javax.swing.JLabel)findLabel(panel,"Multiple published rates")).getToolTipText());assertNull(findLabel(panel,"1/8.5"));state.showAllRates=true;panel.update(state);assertNotNull(findLabel(panel,"1/8.5"));assertNotNull(findLabel(panel,"1/14.2"));assertNull(((javax.swing.JLabel)findLabel(panel,"1/8.5")).getToolTipText());
 			findButton(panel,"Hammer").doClick();assertNotNull(findLabel(panel,"Unknown table    x1"));layout(panel,230);assertTrue(panel.getPreferredSize().width<=280);
 		});
 	}
@@ -56,16 +56,25 @@ public class PanelTest
 			item.id=1;BufferedImage sprite=new BufferedImage(36,32,BufferedImage.TYPE_INT_ARGB);java.awt.Graphics2D spriteGraphics=sprite.createGraphics();spriteGraphics.setColor(java.awt.Color.ORANGE);spriteGraphics.fillRect(0,0,36,32);spriteGraphics.dispose();item.icon=new javax.swing.ImageIcon(sprite);
 			LootLuckPanel panel=new LootLuckPanel(id->null,session->{},all->{},()->{},()->{});panel.update(state);
 			assertNull(findLabel(panel,"Expected"));JButton button=findButton(panel,"Cotton seed");assertNotNull(button);button.doClick();assertNotNull(findLabel(panel,"Expected"));
-			String tooltip=button.getToolTipText();assertEquals("Cotton seed x22\nOccurrences x7\nRate 1/443.6\nGE 5.1k (150 ea)\nHA 3.3k (100 ea)",tooltip.replace("<br>","\n").replaceAll("<[^>]*>",""));assertTrue(tooltip.contains("color='#ffc800'"));assertTrue(tooltip.contains("color='#dfc071'"));assertTrue(tooltip.contains("color='#9db5cf'"));assertFalse(tooltip.contains("5/2218"));assertFalse(tooltip.contains("Fixture certified segment"));assertNotNull(findButton(panel,"Item information: Cotton seed"));
+			assertNull(button.getToolTipText());assertNotNull(findButton(panel,"Item information: Cotton seed"));
 			assertNotNull(findLabel(panel,"A/E"));findButton(panel,"Cotton seed").doClick();assertNull(findLabel(panel,"Expected"));
 			assertNotNull(findLabel(panel,"x7"));state.iconQuantities=false;panel.update(state);assertNotNull(findLabel(panel,"x22"));state.iconQuantities=true;panel.update(state);assertNotNull(findLabel(panel,"x7"));
-			state.stackCounts=true;panel.update(state);assertNotNull(findLabel(panel,"x22"));assertEquals(java.awt.Color.YELLOW,((javax.swing.JLabel)findLabel(panel,"x22")).getForeground());assertNotNull(findLabel(panel,"7 occ."));item.quantity=7;panel.update(state);assertNull(findLabel(panel,"7 occ."));item.quantity=22;state.stackCounts=false;panel.update(state);
+			state.stackCounts=true;panel.update(state);clickLabel(panel,"1/443.6");assertNotNull(findLabel(panel,"Expected"));clickLabel(panel,"7 occ.");assertNull(findLabel(panel,"Expected"));assertNoTooltips(panel);assertNotNull(findLabel(panel,"x22"));assertEquals(java.awt.Color.YELLOW,((javax.swing.JLabel)findLabel(panel,"x22")).getForeground());assertNotNull(findLabel(panel,"7 occ."));item.quantity=7;panel.update(state);assertNull(findLabel(panel,"7 occ."));item.quantity=22;state.stackCounts=false;panel.update(state);
 			findButton(panel,"Cotton seed").doClick();layout(panel,230);assertTrue(panel.getPreferredSize().width<=280);
 			javax.swing.JLabel icon=findIcon(panel);assertNotNull(icon);assertTrue(icon.getWidth()-icon.getInsets().left-icon.getInsets().right>=36);
 			BufferedImage image=new BufferedImage(230,panel.getPreferredSize().height,BufferedImage.TYPE_INT_ARGB);panel.paint(image.getGraphics());
 			try { java.io.File out=new java.io.File("build/ui-check.png");out.getParentFile().mkdirs();ImageIO.write(image,"png",out); } catch(Exception e) { throw new IllegalStateException(e); }
 			findButton(panel,"Large salvage").doClick();assertNull(findButton(panel,"Cotton seed"));findButton(panel,"Large salvage").doClick();assertNotNull(findButton(panel,"Cotton seed"));
 		});
+	}
+	private static void clickLabel(Container panel,String text)
+	{
+		Component label=findLabel(panel,text);assertNotNull(label);
+		label.dispatchEvent(new java.awt.event.MouseEvent(label,java.awt.event.MouseEvent.MOUSE_CLICKED,0,0,1,1,1,false,java.awt.event.MouseEvent.BUTTON1));
+	}
+	private static void assertNoTooltips(Container container)
+	{
+		for(Component child:container.getComponents()) { if(child instanceof javax.swing.JComponent) { assertNull(((javax.swing.JComponent)child).getToolTipText()); }if(child instanceof Container) { assertNoTooltips((Container)child); } }
 	}
 	private static Component findLabel(Container c,String text) { for(Component child:c.getComponents()) { if(child instanceof javax.swing.JLabel && text.equals(((javax.swing.JLabel)child).getText())) { return child; } if(child instanceof Container) { Component found=findLabel((Container)child,text);if(found!=null) { return found; } } }return null; }
 	private static javax.swing.JLabel findIcon(Container c) { for(Component child:c.getComponents()) { if(child instanceof javax.swing.JLabel&&((javax.swing.JLabel)child).getIcon()!=null) { return (javax.swing.JLabel)child; }if(child instanceof Container) { javax.swing.JLabel found=findIcon((Container)child);if(found!=null) { return found; } } }return null; }

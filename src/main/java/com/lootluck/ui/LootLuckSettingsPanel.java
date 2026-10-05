@@ -41,7 +41,7 @@ final class LootLuckSettingsPanel extends JPanel
 			});
 		}
 		JLabel history=new JLabel("Collection history limit");history.setForeground(Color.LIGHT_GRAY);history.setAlignmentX(LEFT_ALIGNMENT);add(history);
-		JSpinner limit=new JSpinner(new SpinnerNumberModel(Math.max(0,config.historyLimit()),0,Integer.MAX_VALUE,1000));limit.setAlignmentX(LEFT_ALIGNMENT);limit.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));limit.setToolTipText("0 means unlimited. Lowering this prunes oldest history; lifetime totals stay intact.");add(limit);
+		JSpinner limit=new JSpinner(new SpinnerNumberModel(Math.max(0,config.historyLimit()),0,Integer.MAX_VALUE,1000));limit.setAlignmentX(LEFT_ALIGNMENT);limit.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));add(limit);
 		limit.addChangeListener(e->{if(!syncing) { changed.accept("historyLimit",limit.getValue()); }});updates.add(()->limit.setValue(Math.max(0,config.historyLimit())));
 		toggle("Luck colors","luckColors",config::luckColors,"Color actual/expected ratios; colors do not indicate statistical significance.",changed);
 		toggle("Show GE values","showGe",config::showGe,"Current GE totals in source headers and expanded items.",changed);
@@ -50,7 +50,7 @@ final class LootLuckSettingsPanel extends JPanel
 	}
 	private void toggle(String title,String key,BooleanSupplier value,String help,BiConsumer<String,Object> changed)
 	{
-		JCheckBox box=new JCheckBox("<html><body style='width:165px'>"+title+"</body></html>");box.getAccessibleContext().setAccessibleName(title);box.setOpaque(false);box.setForeground(Color.LIGHT_GRAY);box.setToolTipText(help);box.setAlignmentX(LEFT_ALIGNMENT);box.setMaximumSize(new Dimension(Integer.MAX_VALUE,box.getPreferredSize().height+6));add(box);
+		JCheckBox box=new JCheckBox("<html><body style='width:165px'>"+title+"</body></html>");box.getAccessibleContext().setAccessibleName(title);box.setOpaque(false);box.setForeground(Color.LIGHT_GRAY);box.setAlignmentX(LEFT_ALIGNMENT);box.setMaximumSize(new Dimension(Integer.MAX_VALUE,box.getPreferredSize().height+6));add(box);
 		box.addActionListener(e->{
 			if(syncing) { return; }
 			if("wikiRefresh".equals(key)&&box.isSelected()&&JOptionPane.showConfirmDialog(this,"This feature submits your IP address to a 3rd-party server not controlled or verified by RuneLite developers","Allow Wiki refresh",JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE)!=JOptionPane.OK_OPTION) { box.setSelected(false);return; }
