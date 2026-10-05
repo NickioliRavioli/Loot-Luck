@@ -298,6 +298,7 @@ public class LootLuckPlugin extends Plugin
 		view.showWikiLinks=config.showWikiLinks();
 		view.includeUnobtained=config.includeUnobtained();
 		view.groupByDropTable=config.groupByDropTable();
+		view.hideUnobtainedOtherWorld=config.hideUnobtainedOtherWorld();
 		view.gridView=config.gridView();
 		view.canManageData=r.store!=null&&activeProfile!=null&&activeProfile.equals(r.profile);
 		view.stackCounts=config.stackCounts();view.iconQuantities=config.iconQuantities()&&!config.stackCounts()&&!view.stackCounts;

@@ -183,7 +183,7 @@ public final class LootLuckPanel extends PluginPanel
 		},index->{for(int column=0;column<columns&&index*columns+column<items.size();column++) { itemButtons.remove(items.get(index*columns+column).key); }});
 		group.add(grid,BorderLayout.CENTER);
 		items.stream().filter(item->item.key.equals(expanded)).findFirst().ifPresent(item->{
-			JPanel disclosure=new JPanel(new BorderLayout(0,3));disclosure.setOpaque(false);JPanel title=new JPanel(new GridLayout(0,1));title.setOpaque(false);title.add(label(item.name+(item.worldMarker.isEmpty()?"":" "+item.worldMarker),GOLD));title.add(rateLabel(item.rate,item.rarity));disclosure.add(title,BorderLayout.NORTH);disclosure.add(details(item),BorderLayout.CENTER);group.add(disclosure,BorderLayout.SOUTH);
+			JPanel disclosure=new JPanel(new BorderLayout(0,3));disclosure.setOpaque(false);JPanel title=new JPanel(new GridLayout(0,1));title.setOpaque(false);title.add(label(item.name+(!state.hideUnobtainedOtherWorld&&!item.worldMarker.isEmpty()?" "+item.worldMarker:""),GOLD));title.add(rateLabel(item.rate,item.rarity));disclosure.add(title,BorderLayout.NORTH);disclosure.add(details(item),BorderLayout.CENTER);group.add(disclosure,BorderLayout.SOUTH);
 			if(item.key.equals(gridReveal)) { gridReveal=null;SwingUtilities.invokeLater(()->{if(disclosure.isShowing()) { disclosure.scrollRectToVisible(new java.awt.Rectangle(0,0,disclosure.getWidth(),disclosure.getHeight())); }}); }
 		});
 		return group;
@@ -265,7 +265,7 @@ public final class LootLuckPanel extends PluginPanel
 		JButton button=new JButton();button.setLayout(new BorderLayout(5,0));button.setBackground(item.key.equals(expanded)?new Color(56,49,39):ROW);button.setBorder(BorderFactory.createMatteBorder(0,0,1,0,BG));
 		JLabel icon=new JLabel(itemIcon(item));icon.setHorizontalAlignment(JLabel.CENTER);icon.setBorder(BorderFactory.createEmptyBorder(0,2,0,2));icon.setPreferredSize(new Dimension(40,36));if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.WEST);
 		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.setBorder(BorderFactory.createEmptyBorder(4,0,4,0));
-		JLabel name=label(item.name+(item.worldMarker.isEmpty()?"":" "+item.worldMarker),item.quantity==0?MUTED:Color.LIGHT_GRAY);text.add(name);
+		JLabel name=label(item.name+(!state.hideUnobtainedOtherWorld&&!item.worldMarker.isEmpty()?" "+item.worldMarker:""),item.quantity==0?MUTED:Color.LIGHT_GRAY);text.add(name);
 		java.util.Set<String> shownRates=new java.util.LinkedHashSet<>();
 		if(state.showAllRates) { for(PanelState.RateOption option:item.rateOptions) { if(!option.historical&&shownRates.add(option.rate)) { JLabel rate=rateLabel(option.rate,option.color);text.add(rate); } } }
 		String summary=item.rate.startsWith("Variants:")||item.rate.equals("Multiple published rates")?"Multiple published rates"+(item.rate.contains("*")?" *":""):item.rate;
@@ -313,6 +313,7 @@ public final class LootLuckPanel extends PluginPanel
 	private JPanel details(PanelState.Item item)
 	{
 		JPanel wrap=new JPanel(new BorderLayout(0,4));wrap.setBackground(new Color(24,24,24));wrap.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,2,0,0,new Color(119,100,69)),BorderFactory.createEmptyBorder(7,8,8,8)));wrap.setAlignmentX(LEFT_ALIGNMENT);
+		if(!item.worldMarker.isEmpty()) { wrap.add(label("(m)".equals(item.worldMarker)?"Members worlds only":"Free-to-play worlds only",MUTED),BorderLayout.NORTH); }
 		JPanel grid=new JPanel(new GridLayout(0,2,8,4));grid.setOpaque(false);
 		stat(grid,"Quantity",NUMBER.format(item.quantity),"All recorded units; separate from occurrences.",null);
 		stat(grid,"Occurrences",NUMBER.format(item.occurrences),"Recorded notifications containing the item, including excluded/batched observations.",null);

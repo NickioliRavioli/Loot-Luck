@@ -12,6 +12,7 @@ public final class PanelState
 	public boolean showWikiLinks=true;
 	public boolean includeUnobtained;
 	public boolean groupByDropTable;
+	public boolean hideUnobtainedOtherWorld;
 	public boolean gridView;
 	public boolean canManageData;
 	public boolean iconQuantities=true;
