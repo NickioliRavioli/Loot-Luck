@@ -14,6 +14,15 @@ import java.awt.Color;
 public final class ViewBuilder
 {
 	private ViewBuilder() { }
+	static String sourceWikiUrl(String owner)
+	{
+		String normalized=owner.toLowerCase(java.util.Locale.ROOT);
+		if(normalized.matches("clue scroll \\((beginner|easy|medium|hard|elite|master)\\)"))
+		{
+			owner="Clue scroll"+normalized.substring("clue scroll".length());
+		}
+		return "https://oldschool.runescape.wiki/w/"+java.net.URLEncoder.encode(owner.replace(' ','_'),java.nio.charset.StandardCharsets.UTF_8).replace("+","%20");
+	}
 	public static PanelState build(Ledger ledger,RateProvider rates,boolean unobtained,Map<String,Integer> identities)
 	{
 		PanelState state=new PanelState();state.notice="";
@@ -22,7 +31,7 @@ public final class ViewBuilder
 			Ledger.Source s=entry.getValue();PanelState.Source source=new PanelState.Source();source.key=entry.getKey();source.name=s.identity.name;
 			List<RateRow> sourceRates=rates.rows(s.identity);
 			String wikiOwner=sourceRates.isEmpty()?s.identity.name:sourceRates.get(0).owner;
-			source.wikiUrl="https://oldschool.runescape.wiki/w/"+java.net.URLEncoder.encode((wikiOwner==null?s.identity.name:wikiOwner).replace(' ','_'),java.nio.charset.StandardCharsets.UTF_8).replace("+","%20");
+			source.wikiUrl=sourceWikiUrl(wikiOwner==null?s.identity.name:wikiOwner);
 			source.count=s.notifications;source.lastReceived=s.lastReceived;
 			source.countTooltip="Recorded loot notifications: "+s.notifications+"; client-reported amount: "+s.reportedAmount+"; excluded notifications: "+s.excluded+". Not automatically verified kills/openings. Context: "+s.identity.context+"; variant: "+s.identity.variant;
 			Map<String,List<RateRow>> byName=new LinkedHashMap<>();
