@@ -23,7 +23,7 @@ final class EffectButton extends JButton
 		this.effect=effect==null?ItemEffect.NONE:effect;this.rarity=rarity==null?new Color(160,160,160):rarity;
 		addHierarchyListener(event->{if((event.getChangeFlags()&HierarchyEvent.SHOWING_CHANGED)!=0) { updateClock(); }});
 	}
-	@Override public void addNotify() { super.addNotify();if(effect!=ItemEffect.NONE) { BUTTONS.add(this); }updateClock(); }
+	@Override public void addNotify() { super.addNotify();if(effect!=ItemEffect.NONE&&effect!=ItemEffect.RARITY_FADE) { BUTTONS.add(this); }updateClock(); }
 	@Override public void removeNotify() { BUTTONS.remove(this);updateClock();super.removeNotify(); }
 	private static void updateClock()
 	{
@@ -82,8 +82,30 @@ final class EffectButton extends JButton
 			case RARITY_OPAL:
 				wash(g,width,height,rarity,65);double motion=seconds*.3;
 				for(int i=0;i<6;i++) { double x=width*((i*.213+motion*.08)%1),y=height*(.5+.5*Math.sin(motion+i));g.setColor(alpha(i%3==0?neighbor(rarity,.04f):rarity,30+i%3*15));Path2D facet=new Path2D.Double();facet.moveTo(x-width*.3,y);facet.lineTo(x,y-height);facet.lineTo(x+width*.3,y);facet.lineTo(x,y+height);facet.closePath();g.fill(facet); }edge(g,width,height,rarity,95);break;
+			case RARITY_FADE:
+				iconFade(g,width,height,rarity,90);break;
+			case RARITY_PULSE:
+				iconFade(g,width,height,rarity,(int)(75+30*Math.sin(seconds*1.6)));break;
+			case RARITY_DUST:
+				iconFade(g,width,height,rarity,85);
+				for(int i=0;i<8;i++)
+				{
+					double age=(seconds*.16+i*.137)%1,x=iconCenter(width)+age*width*.65,y=height*(.2+(i*.213)% .65)+Math.sin(seconds+i)*2;
+					g.setColor(alpha(rarity,(int)(140*(1-age)*(1-age))));g.fill(new Ellipse2D.Double(x,y,i%3==0?3:2,i%3==0?3:2));
+				}break;
+			case RARITY_SHEEN:
+				iconFade(g,width,height,rarity,85);float light=(float)(phase*width*1.4-width*.2);
+				int intensity=(int)(55*Math.pow(Math.max(0,1-Math.max(0,light)/width),2));
+				g.setPaint(new LinearGradientPaint(light-width*.15f,0,light+width*.15f,height,new float[]{0,.5f,1},new Color[]{alpha(rarity,0),alpha(neighbor(rarity,0),intensity),alpha(rarity,0)}));g.fillRect(0,0,width,height);break;
 			default:break;
 		}
+	}
+	private static float iconCenter(int width) { return width<80?width*.5f:22f; }
+	private static void iconFade(Graphics2D g,int width,int height,Color rarity,int opacity)
+	{
+		float center=iconCenter(width);
+		g.setPaint(new LinearGradientPaint(0,0,Math.max(1,width),0,new float[]{0,center/width,1},new Color[]{alpha(rarity,(int)(opacity*.7)),alpha(rarity,opacity),alpha(rarity,0)}));
+		g.fillRect(0,0,width,height);
 	}
 	private static Color neighbor(Color color,float offset)
 	{

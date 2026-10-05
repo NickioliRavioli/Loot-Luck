@@ -27,10 +27,18 @@ public class ItemEffectTest
 		{
 			BufferedImage row=frame(effect,Color.RED,1.25,210,44),later=frame(effect,Color.RED,2.75,210,44),grid=frame(effect,Color.RED,1.25,42,54);
 			assertEquals(new Color(30,30,30).getRGB(),row.getRGB(0,0));assertEquals(new Color(30,30,30).getRGB(),grid.getRGB(41,53));
-			if(effect!=ItemEffect.NONE) { assertTrue(effect.title,different(row,later));assertTrue(effect.title,different(row,frame(ItemEffect.NONE,Color.RED,1.25,210,44))); }
+			if(effect!=ItemEffect.NONE) { if(effect!=ItemEffect.RARITY_FADE) { assertTrue(effect.title,different(row,later)); }assertTrue(effect.title,different(row,frame(ItemEffect.NONE,Color.RED,1.25,210,44))); }
 			output.setColor(Color.LIGHT_GRAY);output.drawString(effect.title,8,index*80+15);output.drawImage(row,8,index*80+22,null);output.drawImage(later,230,index*80+22,null);output.drawImage(grid,410,index*80+19,null);index++;
 		}
 		output.dispose();Path path=Path.of("build","effect-previews.png");java.nio.file.Files.createDirectories(path.getParent());ImageIO.write(sheet,"png",path.toFile());
+	}
+	@Test public void rarityFadeIsStrongestBehindIconAndFadesRight()
+	{
+		for(ItemEffect effect:new ItemEffect[]{ItemEffect.RARITY_FADE,ItemEffect.RARITY_PULSE,ItemEffect.RARITY_DUST,ItemEffect.RARITY_SHEEN})
+		{
+			BufferedImage image=frame(effect,Color.RED,2,210,44);Color icon=new Color(image.getRGB(22,20)),right=new Color(image.getRGB(205,20));assertTrue(effect.title,icon.getRed()>right.getRed()+30);assertTrue(effect.title,right.getRed()<40);
+		}
+		assertFalse(different(frame(ItemEffect.RARITY_FADE,Color.RED,1,210,44),frame(ItemEffect.RARITY_FADE,Color.RED,4,210,44)));
 	}
 	@Test public void previewButtonsPersistAndSyncSelectedEffect() throws Exception
 	{
@@ -44,7 +52,7 @@ public class ItemEffectTest
 	}
 	@Test public void rarityAuraUsesTheItemColor()
 	{
-		for(ItemEffect effect:new ItemEffect[]{ItemEffect.RARITY,ItemEffect.RARITY_PRISM,ItemEffect.RARITY_AURORA,ItemEffect.RARITY_OPAL})
+		for(ItemEffect effect:new ItemEffect[]{ItemEffect.RARITY,ItemEffect.RARITY_PRISM,ItemEffect.RARITY_AURORA,ItemEffect.RARITY_OPAL,ItemEffect.RARITY_FADE,ItemEffect.RARITY_PULSE,ItemEffect.RARITY_DUST,ItemEffect.RARITY_SHEEN})
 		{
 			BufferedImage red=frame(effect,Color.RED,2,210,44),blue=frame(effect,Color.BLUE,2,210,44);
 			assertTrue(effect.title,different(red,blue));Color redPixel=new Color(red.getRGB(100,20)),bluePixel=new Color(blue.getRGB(100,20));assertTrue(effect.title,redPixel.getRed()>redPixel.getBlue());assertTrue(effect.title,bluePixel.getBlue()>bluePixel.getRed());
