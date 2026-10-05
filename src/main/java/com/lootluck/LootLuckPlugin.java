@@ -300,6 +300,7 @@ public class LootLuckPlugin extends Plugin
 		view.groupByDropTable=config.groupByDropTable();
 		view.hideUnobtainedOtherWorld=config.hideUnobtainedOtherWorld();
 		view.gridView=config.gridView();
+		view.itemEffect=config.itemEffect();
 		view.canManageData=r.store!=null&&activeProfile!=null&&activeProfile.equals(r.profile);
 		view.stackCounts=config.stackCounts();view.iconQuantities=config.iconQuantities()&&!config.stackCounts()&&!view.stackCounts;
 		view.notice=!r.error.isEmpty()?r.error:!lootTrackerEnabled?"Enable RuneLite Loot Tracker to receive loot.":activeProfile==null?"Log in to select an account profile.":view.sources.isEmpty()?"No loot recorded yet.":"";

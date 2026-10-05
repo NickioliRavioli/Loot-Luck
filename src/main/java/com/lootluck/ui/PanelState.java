@@ -14,6 +14,7 @@ public final class PanelState
 	public boolean groupByDropTable;
 	public boolean hideUnobtainedOtherWorld;
 	public boolean gridView;
+	public ItemEffect itemEffect=ItemEffect.SHIMMER;
 	public boolean canManageData;
 	public boolean iconQuantities=true;
 	public boolean stackCounts=false;

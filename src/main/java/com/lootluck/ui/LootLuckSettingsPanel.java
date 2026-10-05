@@ -30,6 +30,17 @@ final class LootLuckSettingsPanel extends JPanel
 		toggle("Grid view","gridView",config::gridView,"Display source items in an icon grid.",changed);
 		toggle("Show all known rates","showAllRates",config::showAllRates,"Show published rate alternatives beneath item names.",changed);
 		toggle("Show source Wiki links","showWikiLinks",config::showWikiLinks,"Show Wiki buttons in source headers.",changed);
+		JLabel effects=new JLabel("Background effects (all items preview)");effects.setForeground(Color.LIGHT_GRAY);effects.setAlignmentX(LEFT_ALIGNMENT);add(effects);
+		javax.swing.ButtonGroup effectsGroup=new javax.swing.ButtonGroup();
+		for(ItemEffect effect:ItemEffect.values())
+		{
+			javax.swing.JButton button=new EffectButton(effect,new Color(227,104,98));button.setLayout(new java.awt.BorderLayout(6,0));button.setBackground(new Color(30,30,30));
+			JLabel icon=new JLabel(previewIcons.apply(false));button.add(icon,java.awt.BorderLayout.WEST);
+			JLabel name=new JLabel(effect.title);name.setForeground(Color.LIGHT_GRAY);button.add(name,java.awt.BorderLayout.CENTER);
+			button.setAlignmentX(LEFT_ALIGNMENT);button.setPreferredSize(new Dimension(210,44));button.setMaximumSize(new Dimension(Integer.MAX_VALUE,44));button.getAccessibleContext().setAccessibleName("Preview effect: "+effect.title);LootLuckPanel.makeRowClickable(button,button);effectsGroup.add(button);add(button);add(javax.swing.Box.createVerticalStrut(4));
+			button.addActionListener(event->{if(!syncing) { changed.accept("itemEffect",effect);sync(); }});
+			updates.add(()->{boolean selected=config.itemEffect()==effect;button.setSelected(selected);button.setBorder(javax.swing.BorderFactory.createLineBorder(selected?new Color(223,192,113):new Color(65,65,65),2));});
+		}
 		JLabel styles=new JLabel("Item style");styles.setForeground(Color.LIGHT_GRAY);styles.setAlignmentX(LEFT_ALIGNMENT);add(styles);
 		javax.swing.ButtonGroup styleGroup=new javax.swing.ButtonGroup();
 		for(ItemDisplayStyle style:ItemDisplayStyle.values())

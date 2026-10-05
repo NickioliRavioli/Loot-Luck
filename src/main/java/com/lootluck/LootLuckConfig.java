@@ -8,6 +8,8 @@ import net.runelite.client.config.ConfigItem;
 public interface LootLuckConfig extends Config
 {
 	String GROUP="loot-luck";
+	@ConfigItem(keyName="itemEffect",name="Item background effect (preview)",description="Preview the selected animated background on every item, regardless of rarity. Celebration repeats for preview.")
+	default com.lootluck.ui.ItemEffect itemEffect() { return com.lootluck.ui.ItemEffect.SHIMMER; }
 	@ConfigItem(keyName="gridView",name="Grid view",description="Display source items as a compact icon grid with selected-item details below the grid.")
 	default boolean gridView() { return false; }
 	@ConfigItem(keyName="groupByDropTable",name="Group by drop table",description="Keep items from the same published table together without table headers. Sorting applies within each table.")

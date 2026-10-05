@@ -24,7 +24,7 @@ public class ItemDisplayStyleTest
 			};
 			LootLuckSettingsPanel panel=new LootLuckSettingsPanel(config,saved::put,flag->null);
 			Map<String,JButton> buttons=new HashMap<>();
-			for(Component child:panel.getComponents()) { if(child instanceof JButton) { JButton button=(JButton)child;buttons.put(button.getAccessibleContext().getAccessibleName(),button); } }
+			for(Component child:panel.getComponents()) { if(child instanceof JButton) { JButton button=(JButton)child;if(!button.getAccessibleContext().getAccessibleName().startsWith("Preview effect:")) { buttons.put(button.getAccessibleContext().getAccessibleName(),button); } } }
 			assertEquals(ItemDisplayStyle.values().length,buttons.size());
 			assertTrue(buttons.get(ItemDisplayStyle.RIGHT_COUNTS.title).isSelected());
 			for(ItemDisplayStyle style:ItemDisplayStyle.values())
