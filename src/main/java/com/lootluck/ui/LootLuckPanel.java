@@ -33,18 +33,19 @@ public final class LootLuckPanel extends PluginPanel
 	private static final DecimalFormat NUMBER=new DecimalFormat("#,##0.#",DecimalFormatSymbols.getInstance(Locale.US));
 	private static final DecimalFormat DECIMAL=new DecimalFormat("0.00",DecimalFormatSymbols.getInstance(Locale.US));
 	private final JPanel content=new JPanel();
+	private final JPanel top=new JPanel(new GridLayout(0,1,0,4));
+	private final JPanel settings=new JPanel(new GridLayout(0,1,0,6));
+	private LootLuckSettingsPanel configSettings;
 	private final JComboBox<String> scope=new JComboBox<>(new String[]{"Lifetime","Session"});
 	private final JComboBox<String> sort=new JComboBox<>(new String[]{"Most recent","Rarest first","Driest first"});
 	private final java.util.function.BiFunction<Integer,Long,Icon> icons;
 	private final JComboBox<String> view=new JComboBox<>(new String[]{"By source","Recent collections","All items"});
 	private final JComboBox<String> itemSort=new JComboBox<>(new String[]{"Most recent","Most occurrences","Most quantity"});
 	private final JPanel controls=new JPanel(new GridLayout(1,2,4,0));
-	private final javax.swing.JCheckBox unobtained=new javax.swing.JCheckBox("Include unobtained");
 	private final JButton dataSettings=new JButton("Data settings");
 	private Consumer<String> dataAction=action->{};
 	private int historyPage;
 	private final Consumer<Boolean> scopeChanged;
-	private final Consumer<Boolean> allChanged;
 	private final Consumer<String> openWiki;
 	private final Set<String> collapsed=new HashSet<>();
 	private PanelState state=new PanelState();
@@ -64,18 +65,20 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	public LootLuckPanel(java.util.function.BiFunction<Integer,Long,Icon> icons,Consumer<Boolean> scopeChanged,Consumer<Boolean> allChanged,Runnable reset,Runnable refresh,Consumer<String> openWiki)
 	{
-		this.icons=icons;this.scopeChanged=scopeChanged;this.allChanged=allChanged;this.openWiki=openWiki;
+		this.icons=icons;this.scopeChanged=scopeChanged;this.openWiki=openWiki;
 		setLayout(new BorderLayout(0,5));setBackground(BG);setBorder(BorderFactory.createEmptyBorder(7,6,7,6));
-		JPanel top=new JPanel(new GridLayout(0,1,0,4));top.setOpaque(false);
-		JLabel title=new JLabel("Loot Luck");title.setForeground(GOLD);title.setFont(FontManager.getRunescapeFont());top.add(title);
+		top.setOpaque(false);
+		JPanel heading=new JPanel(new BorderLayout());heading.setOpaque(false);
+		JLabel title=new JLabel("Loot Luck");title.setForeground(GOLD);title.setFont(FontManager.getRunescapeFont());heading.add(title,BorderLayout.CENTER);
+		JButton settingsButton=new JButton("⚙");settingsButton.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,18));settingsButton.setToolTipText("Settings");settingsButton.getAccessibleContext().setAccessibleName("Settings");heading.add(settingsButton,BorderLayout.EAST);top.add(heading);
+		settings.setOpaque(false);JButton back=new JButton("← Back to loot");settings.add(back);settings.add(label("Settings",GOLD));
+		settingsButton.addActionListener(e->showSettings(true));back.addActionListener(e->showSettings(false));
 		top.add(view);
 		controls.setOpaque(false);controls.add(scope);controls.add(sort);top.add(controls);
-		unobtained.setOpaque(false);unobtained.setForeground(MUTED);unobtained.setFont(FontManager.getRunescapeSmallFont());unobtained.setToolTipText("Show known drops with no recorded collections.\nDriest first always includes these items.");top.add(unobtained);
-		unobtained.addActionListener(e->allChanged.accept(unobtained.isSelected()));
 		JPanel actions=new JPanel(new GridLayout(1,2,4,0));actions.setOpaque(false);
 		JButton refreshButton=new JButton("Refresh"),resetButton=new JButton("Reset session");refreshButton.setToolTipText("Opt-in Wiki refresh; enable in Loot Luck configuration first.");resetButton.setText("Reset");resetButton.setToolTipText("Reset session counters only; lifetime observations remain.");
-		actions.add(refreshButton);actions.add(resetButton);top.add(actions);add(top,BorderLayout.NORTH);
-		dataSettings.setToolTipText("Export, import or delete this account's Loot Luck observations.");top.add(dataSettings);dataSettings.addActionListener(e->{
+		actions.add(refreshButton);actions.add(resetButton);settings.add(actions);add(top,BorderLayout.NORTH);
+		dataSettings.setToolTipText("Export, import or delete this account's Loot Luck observations.");settings.add(dataSettings);dataSettings.addActionListener(e->{
 			javax.swing.JPopupMenu menu=new javax.swing.JPopupMenu();
 			for(String action:new String[]{"Export data","Import data","Delete data"}) { javax.swing.JMenuItem entry=new javax.swing.JMenuItem(action);entry.addActionListener(event->dataAction.accept(action));menu.add(entry); }
 			menu.show(dataSettings,0,dataSettings.getHeight());
@@ -86,6 +89,26 @@ public final class LootLuckPanel extends PluginPanel
 		view.addActionListener(e->{historyPage=0;controls.removeAll();controls.setLayout(new GridLayout(1,view.getSelectedIndex()==1?1:2,4,0));controls.add(scope);if(view.getSelectedIndex()==0) { controls.add(sort); }else if(view.getSelectedIndex()==2) { controls.add(itemSort); }controls.revalidate();controls.repaint();render();});itemSort.addActionListener(e->render());
 	}
 	public boolean session() { return scope.getSelectedIndex()==1; }
+	public void setSettings(com.lootluck.LootLuckConfig config,java.util.function.BiConsumer<String,Object> changed,java.util.function.Function<Boolean,Icon> previewIcons)
+	{
+		configSettings=new LootLuckSettingsPanel(config,changed,previewIcons);settings.add(configSettings);settings.setLayout(new javax.swing.BoxLayout(settings,javax.swing.BoxLayout.Y_AXIS));
+		for(java.awt.Component child:settings.getComponents()) { if(child instanceof javax.swing.JComponent) { ((javax.swing.JComponent)child).setAlignmentX(LEFT_ALIGNMENT);((javax.swing.JComponent)child).setMaximumSize(new Dimension(Integer.MAX_VALUE,child.getPreferredSize().height)); } }
+	}
+	static JButton stylePreview(ItemDisplayStyle style,Icon icon)
+	{
+		LootLuckPanel preview=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});
+		preview.state.iconQuantities=style.iconQuantities;preview.state.stackCounts=style.stackCounts;
+		PanelState.Item item=new PanelState.Item();item.key="preview";item.name="Coins";item.rate="1/128";item.quantity=12500;item.occurrences=7;item.icon=icon;item.rarity=GOLD;
+		JPanel row=preview.itemRow(item);JButton button=(JButton)row.getComponent(0);
+		for(java.awt.event.ActionListener listener:button.getActionListeners()) { button.removeActionListener(listener); }
+		row.remove(button);button.setAlignmentX(LEFT_ALIGNMENT);button.setMaximumSize(new Dimension(Integer.MAX_VALUE,58));button.setPreferredSize(new Dimension(210,58));
+		button.setToolTipText(style.title);button.getAccessibleContext().setAccessibleName(style.title);return button;
+	}
+	private void showSettings(boolean visible)
+	{
+		if(configSettings!=null) { configSettings.sync(); }
+		removeAll();add(visible?settings:top,BorderLayout.NORTH);if(!visible) { add(content,BorderLayout.CENTER); }revalidate();repaint();
+	}
 	public void setDataAction(Consumer<String> action) { dataAction=action; }
 	public boolean driest() { return sort.getSelectedIndex()==2; }
 	public void update(PanelState state) { if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); } this.state=state;render(); }
@@ -93,7 +116,7 @@ public final class LootLuckPanel extends PluginPanel
 	{
 		content.removeAll();itemButtons.clear();
 		dataSettings.setEnabled(state.canManageData);
-		unobtained.setVisible(view.getSelectedIndex()==0);unobtained.setSelected(state.includeUnobtained||driest());unobtained.setEnabled(!driest());
+		if(configSettings!=null) { configSettings.sync(); }
 		if(!state.notice.isEmpty()) { JLabel notice=label(state.notice,MUTED);notice.setToolTipText(state.notice);content.add(notice); }
 		if(view.getSelectedIndex()!=0) { renderObservations();content.revalidate();content.repaint();return; }
 		for(PanelState.Source source:state.sources)

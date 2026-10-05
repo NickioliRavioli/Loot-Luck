@@ -86,6 +86,7 @@ public class LootLuckPlugin extends Plugin
 			if(!running||run!=runtime) { return; }
 			panel=new LootLuckPanel((id,quantity)->observationIcon(id,quantity),value->{session=value;all=panel.driest();publish();},value->{configManager.setConfiguration(LootLuckConfig.GROUP,"includeUnobtained",value);publish();},this::resetSession,this::refresh);
 			panel.setDataAction(this::manageData);
+			panel.setSettings(config,(key,value)->configManager.setConfiguration(LootLuckConfig.GROUP,key,value),this::previewIcon);
 			BufferedImage image=new BufferedImage(16,16,BufferedImage.TYPE_INT_ARGB);java.awt.Graphics2D g=image.createGraphics();g.setColor(new Color(223,192,113));g.drawString("LL",0,12);g.dispose();
 			navigation=NavigationButton.builder().tooltip("Loot Luck").icon(image).priority(6).panel(panel).build();toolbar.addNavigation(navigation);publish();
 		});
@@ -168,6 +169,12 @@ public class LootLuckPlugin extends Plugin
 		int quantity=(int)Math.max(1,Math.min(Integer.MAX_VALUE,item.quantity));
 		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(item.id,quantity,config.iconQuantities()&&!config.stackCounts()&&item.quantity>0);if(image==null) { return; }item.icon=new ImageIcon(image);
 		image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));
+	}
+	private javax.swing.Icon previewIcon(boolean quantity)
+	{
+		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(net.runelite.api.gameval.ItemID.COINS,12500,quantity);
+		if(image==null) { return null; }
+		image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));return new ImageIcon(image);
 	}
 	private javax.swing.Icon observationIcon(int id,long quantity)
 	{
