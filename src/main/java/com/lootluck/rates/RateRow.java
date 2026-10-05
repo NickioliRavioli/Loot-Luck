@@ -33,6 +33,7 @@ public final class RateRow
 	}
 	public String display()
 	{
+		if(rawRate!=null&&"Varies".equalsIgnoreCase(rawRate.trim())) { return "Varies"; }
 		if (hasUnresolvedConditions()) { return "Conditional"; }
 		Double p = publishedProbability();
 		if (p == null) { return conditions != null && !conditions.isBlank()?"Conditional":"Rate unknown"; }

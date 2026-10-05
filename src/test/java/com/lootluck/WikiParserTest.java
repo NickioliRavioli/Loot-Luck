@@ -35,7 +35,7 @@ public class WikiParserTest
 	@Test(expected=IllegalArgumentException.class) public void emptyResponseIsNotZeroProbability() { WikiParser.parse(new Gson(),"{\"bucket\":[]}","Goblin","2026-10-02T00:00:00Z"); }
 	@Test public void unknownConditionalAndGuaranteed()
 	{
-		RateRow row=new RateRow();row.rawRate="Always";assertEquals("Always",row.display());row.rawRate="Varies";assertNull(row.publishedProbability());assertEquals("Rate unknown",row.display());
+		RateRow row=new RateRow();row.rawRate="Always";assertEquals("Always",row.display());row.rawRate="Varies";assertNull(row.publishedProbability());assertEquals("Varies",row.display());
 		row.rawRate="1/100";row.conditions="Requires a ring";assertEquals("Conditional",row.display());assertEquals(0.01,row.publishedProbability(),0);assertTrue(row.tooltip().contains("Requires a ring"));
 		assertNull(WikiRateProvider.owner(new SourceIdentity("PLAYER","Goblin","","")));
 	}

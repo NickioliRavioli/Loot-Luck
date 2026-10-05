@@ -8,6 +8,8 @@ import net.runelite.client.config.ConfigItem;
 public interface LootLuckConfig extends Config
 {
 	String GROUP="loot-luck";
+	@ConfigItem(keyName="groupByDropTable",name="Group by drop table",description="Keep items from the same published table together without table headers. Sorting applies within each table.")
+	default boolean groupByDropTable() { return false; }
 	@ConfigItem(keyName="wikiRefresh",name="Allow Wiki refresh",description="Refresh the full public drop catalogue and source tables from the OSRS Wiki. Sends IP and game-content queries; never account names or loot history.",warning="This feature submits your IP address to a 3rd-party server not controlled or verified by RuneLite developers")
 	default boolean wikiRefresh() { return false; }
 	@ConfigItem(keyName="includeUnobtained",name="Include unobtained",description="Include known source-table items with no observations. Always enabled for driest sorting.")

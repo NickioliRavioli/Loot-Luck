@@ -64,6 +64,9 @@ public final class ViewBuilder
 					applyRate(row,group.getValue());applySegment(row,s);display.put("rate:"+group.getKey(),row);
 				}
 			}
+			Map<String,Integer> tables=new LinkedHashMap<>(),positions=new LinkedHashMap<>();
+			for(int index=0;index<sourceRates.size();index++) { RateRow rate=sourceRates.get(index);tables.computeIfAbsent(com.lootluck.rates.DropTableGroups.table(rate),key->tables.size());positions.putIfAbsent(com.lootluck.rates.ItemRateMatcher.lookupName(rate.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(rate)?" (noted)":"")),index); }
+			for(PanelState.Item item:display.values()) { item.tableOrder=tables.getOrDefault(item.dropTable,Integer.MAX_VALUE);item.wikiOrder=positions.getOrDefault(com.lootluck.rates.ItemRateMatcher.lookupName(item.name),Integer.MAX_VALUE); }
 			source.items.addAll(display.values());state.sources.add(source);
 		}
 		state.sources.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());
@@ -84,6 +87,8 @@ public final class ViewBuilder
 	{
 		row.rarity=new Color(160,160,160);row.rate="Rate unknown";row.rateTooltip="No resolved Wiki drop rate. Unknown is not zero.";
 		if(rates==null||rates.isEmpty()) { return; }
+		row.dropTable=com.lootluck.rates.DropTableGroups.table(rates.get(0));
+		row.publishedRarity=rates.stream().map(RateRow::publishedProbability).filter(java.util.Objects::nonNull).max(Double::compare).orElse(null);
 		String marker=rates.get(0).worldMarker();
 		if(rates.stream().allMatch(rate->marker.equals(rate.worldMarker()))) { row.worldMarker=marker; }
 		for(RateRow rate:rates) { addRateOption(row,rate,false); }
@@ -95,6 +100,7 @@ public final class ViewBuilder
 			boolean numeric=rates.stream().allMatch(r->r.display().startsWith("1/")||r.display().equals("Always"));
 			List<String> alternatives=rates.stream().map(RateRow::display).distinct().collect(java.util.stream.Collectors.toList());
 			row.rate=same?rates.get(0).display():numeric&&alternatives.size()<=3?"Variants: "+String.join(", ",alternatives):numeric?"Multiple published rates":"Conditional / variants";
+			if(!same&&rates.stream().anyMatch(rate->"Varies".equals(rate.display()))&&rates.stream().allMatch(rate->rate.publishedProbability()!=null||"Varies".equals(rate.display()))) { row.rate="Varies"; }
 			boolean sameColor=rates.stream().allMatch(r->r.color().equals(rates.get(0).color()));
 			row.rarity=same||numeric&&sameColor?rates.get(0).color():numeric?new Color(160,160,160):new Color(205,143,183);
 			if(!same) { row.rateTooltip="Different source tables; applicable variant unresolved.\n\n"+row.rateTooltip; }

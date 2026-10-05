@@ -37,7 +37,7 @@ public final class LootLuckPanel extends PluginPanel
 	private final JPanel settings=new JPanel(new GridLayout(0,1,0,6));
 	private LootLuckSettingsPanel configSettings;
 	private final JComboBox<String> scope=new JComboBox<>(new String[]{"Lifetime","Session"});
-	private final JComboBox<String> sort=new JComboBox<>(new String[]{"Most recent","Rarest first","Driest first"});
+	private final JComboBox<String> sort=new JComboBox<>(new String[]{"Most recent","Rarest first","Driest first","Commonest first","Wiki order"});
 	private final java.util.function.BiFunction<Integer,Long,Icon> icons;
 	private final JComboBox<String> view=new JComboBox<>(new String[]{"By source","Recent collections","All items"});
 	private final JComboBox<String> itemSort=new JComboBox<>(new String[]{"Most recent","Most occurrences","Most quantity"});
@@ -142,9 +142,7 @@ public final class LootLuckPanel extends PluginPanel
 			{
 				JPanel rows=new JPanel();rows.setOpaque(false);rows.setLayout(new javax.swing.BoxLayout(rows,javax.swing.BoxLayout.Y_AXIS));
 				ArrayList<PanelState.Item> ordered=new ArrayList<>(source.items);
-				if(sort.getSelectedIndex()==0) { ordered.sort(Comparator.comparingLong((PanelState.Item i)->i.lastReceived).reversed().thenComparing(i->i.name)); }
-				if(sort.getSelectedIndex()==1) { ordered.sort(Comparator.comparingDouble((PanelState.Item i)->publishedOrder(i)).thenComparing(i->i.name)); }
-				if(driest()) { ordered.sort(Comparator.comparingDouble((PanelState.Item i)->i.dryness==null?Double.NEGATIVE_INFINITY:i.dryness).reversed().thenComparing(i->i.name)); }
+				ordered.sort(ItemOrdering.comparator(sort.getSelectedIndex(),state.groupByDropTable));
 				if(ordered.size()>100) { group.add(virtualSourceItems(ordered),BorderLayout.CENTER); }
 				else { for(PanelState.Item item:ordered) { rows.add(itemRow(item));if(item.key.equals(expanded)) { rows.add(details(item)); } }group.add(rows,BorderLayout.CENTER); }
 			}
@@ -152,11 +150,6 @@ public final class LootLuckPanel extends PluginPanel
 		}
 		if(state.sources.isEmpty()) { JLabel empty=label("No loot recorded in this view.",MUTED);empty.setBorder(BorderFactory.createEmptyBorder(12,0,12,0));content.add(empty); }
 		JLabel status=label(state.dataStatus,MUTED);content.add(status);content.revalidate();content.repaint();
-	}
-	private static double publishedOrder(PanelState.Item item)
-	{
-		try { return "Always".equals(item.rate)?1:item.rate.startsWith("1/")?1/Double.parseDouble(item.rate.substring(2).replace(",","")):Double.POSITIVE_INFINITY; }
-		catch(NumberFormatException e) { return Double.POSITIVE_INFINITY; }
 	}
 	private JPanel virtualSourceItems(java.util.List<PanelState.Item> items)
 	{

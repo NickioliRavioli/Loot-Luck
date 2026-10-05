@@ -11,6 +11,7 @@ public final class PanelState
 	public boolean showGe=true, showHa=false, luckColors=true, showAllRates=false;
 	public boolean showWikiLinks=true;
 	public boolean includeUnobtained;
+	public boolean groupByDropTable;
 	public boolean canManageData;
 	public boolean iconQuantities=true;
 	public boolean stackCounts=false;
@@ -27,6 +28,9 @@ public final class PanelState
 	{
 		public String key,name,rate,rateTooltip,reason;
 		public String worldMarker="";
+		public String dropTable="";
+		public int tableOrder=Integer.MAX_VALUE,wikiOrder=Integer.MAX_VALUE;
+		public Double publishedRarity;
 		public int id;
 		public long quantity,occurrences,lastReceived;
 		public Long attempts,dry;
