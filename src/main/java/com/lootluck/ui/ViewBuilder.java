@@ -28,10 +28,10 @@ public final class ViewBuilder
 		PanelState state=new PanelState();state.notice="";
 		for(Map.Entry<String,Ledger.Source> entry:SourceGroups.build(ledger).entrySet())
 		{
-			Ledger.Source s=entry.getValue();PanelState.Source source=new PanelState.Source();source.key=entry.getKey();source.name=s.identity.name;
+			Ledger.Source s=entry.getValue();PanelState.Source source=new PanelState.Source();source.key=entry.getKey();source.name=com.lootluck.rates.RewardSources.displayName(s.identity);
 			List<RateRow> sourceRates=rates.rows(s.identity);
-			String wikiOwner=sourceRates.isEmpty()?s.identity.name:sourceRates.get(0).owner;
-			source.wikiUrl=sourceWikiUrl(wikiOwner==null?s.identity.name:wikiOwner);
+			String wikiOwner=sourceRates.isEmpty()?com.lootluck.rates.RewardSources.wikiOwner(s.identity):sourceRates.get(0).owner;
+			source.wikiUrl=sourceWikiUrl(wikiOwner==null?com.lootluck.rates.RewardSources.wikiOwner(s.identity):wikiOwner);
 			source.count=s.notifications;source.lastReceived=s.lastReceived;
 			source.countTooltip="Recorded loot notifications: "+s.notifications+"; client-reported amount: "+s.reportedAmount+"; excluded notifications: "+s.excluded+". Not automatically verified kills/openings. Context: "+s.identity.context+"; variant: "+s.identity.variant;
 			Map<String,List<RateRow>> byName=new LinkedHashMap<>();
@@ -72,7 +72,7 @@ public final class ViewBuilder
 		state.allItems.addAll(totals.values());state.allItems.sort(Comparator.comparingLong((PanelState.Item i)->i.lastReceived).reversed());
 		for(int index=ledger.history.size()-1;index>=0;index--)
 		{
-			Ledger.CollectionRecord record=ledger.history.get(index);PanelState.Source collection=new PanelState.Source();collection.key="collection:"+index;collection.name=record.source.name;collection.count=record.reportedAmount;collection.lastReceived=record.timestamp;collection.countTooltip="One recorded notification; reported amount "+record.reportedAmount+". Not automatically individual attempts.";
+			Ledger.CollectionRecord record=ledger.history.get(index);PanelState.Source collection=new PanelState.Source();collection.key="collection:"+index;collection.name=com.lootluck.rates.RewardSources.displayName(record.source);collection.count=record.reportedAmount;collection.lastReceived=record.timestamp;collection.countTooltip="One recorded notification; reported amount "+record.reportedAmount+". Not automatically individual attempts.";
 			for(Map.Entry<Integer,Long> item:record.quantities.entrySet()) { PanelState.Item row=new PanelState.Item();row.id=item.getKey();row.key=collection.key+":"+row.id;row.name=record.names.getOrDefault(row.id,"Item "+row.id);row.quantity=item.getValue();row.occurrences=1;row.lastReceived=record.timestamp;collection.items.add(row); }
 			state.collections.add(collection);
 		}

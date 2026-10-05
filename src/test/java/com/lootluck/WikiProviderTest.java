@@ -22,6 +22,30 @@ import static org.junit.Assert.*;
 
 public class WikiProviderTest
 {
+	@Test public void rewardAliasesResolveBundledTablesWithoutChangingHistory() throws Exception
+	{
+		try(WikiRateProvider provider=new WikiRateProvider(new Gson(),new OkHttpClient(),Filepath.Unchecked.getRooted(folder.getRoot().toPath()),()->false,()->{}))
+		{
+			provider.initialize();
+			java.util.Map<String,String> aliases=new java.util.LinkedHashMap<>();
+			for(String tier:new String[]{"beginner","easy","medium","hard","elite","master"}) { aliases.put("Clue Scroll ("+tier.substring(0,1).toUpperCase(java.util.Locale.ROOT)+tier.substring(1)+")","Reward casket ("+tier+")"); }
+			aliases.put("Reward cart (Wintertodt)","Reward Cart");aliases.put("Reward pool (Tempoross)","Reward pool");aliases.put("Casket (Tempoross)","Casket (Reward pool)");aliases.put("Guardians of the Rift","Rewards Guardian");
+			for(java.util.Map.Entry<String,String> alias:aliases.entrySet())
+			{
+				SourceIdentity reward=new SourceIdentity("EVENT",alias.getKey(),"","normal");
+				assertEquals(alias.getValue(),WikiRateProvider.owner(reward));assertFalse(provider.rows(reward).isEmpty());assertTrue(provider.rows(reward).stream().allMatch(row->alias.getValue().equals(row.owner)));
+				com.lootluck.model.Ledger ledger=new com.lootluck.model.Ledger();com.lootluck.tracking.LedgerEngine engine=new com.lootluck.tracking.LedgerEngine(ledger);
+				engine.observe(new com.lootluck.model.Observation(reward,1,1,java.util.Map.of(1,1L),java.util.Map.of(1,"Test item"),java.util.Map.of(1,1)),com.lootluck.tracking.AttemptAdapter.Assessment.unsupported("pending"));
+				com.lootluck.ui.PanelState view=com.lootluck.ui.ViewBuilder.build(engine.lifetime(),provider,false,java.util.Map.of());
+				assertEquals(alias.getValue(),view.sources.get(0).name);assertEquals(alias.getValue(),view.collections.get(0).name);assertEquals(alias.getKey(),engine.lifetime().source(reward).identity.name);assertEquals(1,view.sources.get(0).count);
+				assertEquals(alias.getValue().replace(' ','_'),java.net.URLDecoder.decode(view.sources.get(0).wikiUrl.substring("https://oldschool.runescape.wiki/w/".length()),java.nio.charset.StandardCharsets.UTF_8));
+			}
+			for(String name:new String[]{"Intricate pouch","Extra supply crate","Supply crate (Wintertodt)","Supply crate (Mahogany Homes)","Casket"}) { assertEquals(name,WikiRateProvider.owner(new SourceIdentity("EVENT",name,"","normal"))); }
+			assertFalse(provider.rows(new SourceIdentity("EVENT","Intricate pouch","","normal")).isEmpty());
+			assertEquals("Clue Scroll (Easy)",WikiRateProvider.owner(new SourceIdentity("NPC","Clue Scroll (Easy)","","normal")));
+			assertNull(WikiRateProvider.owner(new SourceIdentity("PLAYER","Guardians of the Rift","","normal")));
+		}
+	}
 	@Test public void broadOfflineCoverageAndMalformedWholeRefresh() throws Exception
 	{
 		CompletableFuture<Void> done=new CompletableFuture<>();

@@ -96,7 +96,7 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 	public static String owner(SourceIdentity source)
 	{
 		if("PLAYER".equals(source.type)) { return null; }
-		return source.name==null||source.name.isBlank()||source.name.length()>200||source.name.chars().anyMatch(Character::isISOControl)?null:source.name;
+		return source.name==null||source.name.isBlank()||source.name.length()>200||source.name.chars().anyMatch(Character::isISOControl)?null:RewardSources.wikiOwner(source);
 	}
 	public void refreshCatalogue(boolean force)
 	{
