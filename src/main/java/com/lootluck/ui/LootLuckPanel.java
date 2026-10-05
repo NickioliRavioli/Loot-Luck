@@ -214,8 +214,14 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private static void makeRowClickable(java.awt.Container container,JButton button)
 	{
+		if(container==button)
+		{
+			button.setRolloverEnabled(true);
+			button.addMouseListener(rowHover(button));
+		}
 		for(java.awt.Component child:container.getComponents())
 		{
+			child.addMouseListener(rowHover(button));
 			child.addMouseListener(new java.awt.event.MouseAdapter()
 			{
 				@Override public void mouseClicked(java.awt.event.MouseEvent event)
@@ -225,6 +231,21 @@ public final class LootLuckPanel extends PluginPanel
 			});
 			if(child instanceof java.awt.Container) { makeRowClickable((java.awt.Container)child,button); }
 		}
+	}
+	private static java.awt.event.MouseAdapter rowHover(JButton button)
+	{
+		return new java.awt.event.MouseAdapter()
+		{
+			@Override public void mouseEntered(java.awt.event.MouseEvent event)
+			{
+				button.getModel().setRollover(button.isEnabled());
+			}
+			@Override public void mouseExited(java.awt.event.MouseEvent event)
+			{
+				java.awt.Point point=SwingUtilities.convertPoint(event.getComponent(),event.getPoint(),button);
+				button.getModel().setRollover(button.isEnabled()&&button.contains(point));
+			}
+		};
 	}
 	private JPanel details(PanelState.Item item)
 	{

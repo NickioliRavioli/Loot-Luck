@@ -67,6 +67,21 @@ public class PanelTest
 			findButton(panel,"Large salvage").doClick();assertNull(findButton(panel,"Cotton seed"));findButton(panel,"Large salvage").doClick();assertNotNull(findButton(panel,"Cotton seed"));
 		});
 	}
+	@Test public void hoverRemainsActiveAcrossItemLabelsAndClearsOutsideRow() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			PanelState state=new PanelState();PanelState.Source source=new PanelState.Source();source.key="test";source.name="Test";
+			PanelState.Item item=new PanelState.Item();item.key="coins";item.name="Coins";item.rate="1/5.4";item.quantity=70;item.occurrences=2;source.items.add(item);state.sources.add(source);
+			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);layout(panel,230);
+			JButton row=findButton(panel,"Coins");Component rate=findLabel(row,"1/5.4");Component count=findLabel(row,"x2");
+			rate.dispatchEvent(new java.awt.event.MouseEvent(rate,java.awt.event.MouseEvent.MOUSE_ENTERED,0,0,1,1,0,false));assertTrue(row.getModel().isRollover());
+			java.awt.Point inside=SwingUtilities.convertPoint(row,new java.awt.Point(1,1),rate);
+			rate.dispatchEvent(new java.awt.event.MouseEvent(rate,java.awt.event.MouseEvent.MOUSE_EXITED,0,0,inside.x,inside.y,0,false));assertTrue(row.getModel().isRollover());
+			count.dispatchEvent(new java.awt.event.MouseEvent(count,java.awt.event.MouseEvent.MOUSE_ENTERED,0,0,1,1,0,false));assertTrue(row.getModel().isRollover());
+			java.awt.Point outside=SwingUtilities.convertPoint(row,new java.awt.Point(-1,-1),count);
+			count.dispatchEvent(new java.awt.event.MouseEvent(count,java.awt.event.MouseEvent.MOUSE_EXITED,0,0,outside.x,outside.y,0,false));assertFalse(row.getModel().isRollover());
+		});
+	}
 	private static void clickLabel(Container panel,String text)
 	{
 		Component label=findLabel(panel,text);assertNotNull(label);
