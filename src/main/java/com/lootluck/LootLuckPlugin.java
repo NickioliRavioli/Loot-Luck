@@ -12,7 +12,6 @@ import com.lootluck.tracking.ValidationRegistry;
 import com.lootluck.ui.LootLuckPanel;
 import com.lootluck.ui.PanelState;
 import com.lootluck.ui.ViewBuilder;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -41,6 +40,7 @@ import net.runelite.client.plugins.loottracker.LootTrackerPlugin;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.util.Filepath;
+import net.runelite.client.util.ImageUtil;
 import okhttp3.OkHttpClient;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,7 +93,7 @@ public class LootLuckPlugin extends Plugin
 			panel.setDataAction(this::manageData);
 			panel.setValidationAction(this::confirmGameplay);
 			panel.setSettings(config,(key,value)->configManager.setConfiguration(LootLuckConfig.GROUP,key,value),this::previewIcon);
-			BufferedImage image=new BufferedImage(16,16,BufferedImage.TYPE_INT_ARGB);java.awt.Graphics2D g=image.createGraphics();g.setColor(new Color(223,192,113));g.drawString("LL",0,12);g.dispose();
+			BufferedImage image=ImageUtil.loadImageResource(LootLuckPlugin.class,"icon.png");
 			navigation=NavigationButton.builder().tooltip("Loot Luck").icon(image).priority(6).panel(panel).build();toolbar.addNavigation(navigation);publish();
 		});
 		submit(r->{
