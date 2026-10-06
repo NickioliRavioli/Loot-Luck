@@ -382,10 +382,14 @@ public final class LootLuckPanel extends PluginPanel
 					JLabel occurrences=label(NUMBER.format(option.occurrences==null?0:option.occurrences)+" occ.",Color.YELLOW);occurrences.setHorizontalAlignment(JLabel.RIGHT);line.add(occurrences);breakdown.add(line);
 				}
 			}
-			if(item.unresolvedOccurrences>0) { JLabel unknown=label("Unknown table    "+NUMBER.format(item.unresolvedOccurrences)+" occ.",MUTED);breakdown.add(unknown); }
+			if(item.unresolvedOccurrences>0)
+			{
+				JPanel unknown=new JPanel(new BorderLayout(4,0));unknown.setOpaque(false);unknown.add(label("Unknown table",GOLD),BorderLayout.CENTER);
+				JLabel occurrences=label(NUMBER.format(item.unresolvedOccurrences)+" occ.",Color.YELLOW);occurrences.setHorizontalAlignment(JLabel.RIGHT);unknown.add(occurrences,BorderLayout.EAST);breakdown.add(unknown);
+			}
 			body.add(breakdown);
 		}
-		else { body.add(label("Unknown table",MUTED)); }
+		else { body.add(label("Unknown table",GOLD)); }
 		wrap.add(body);
 		JPanel footer=new JPanel(new BorderLayout(4,0));footer.setOpaque(false);
 		if(PanelState.LUCK_STATISTICS_VISIBLE) { footer.add(label(item.attempts==null?"Model pending":"Validated segment",MUTED),BorderLayout.CENTER); }
