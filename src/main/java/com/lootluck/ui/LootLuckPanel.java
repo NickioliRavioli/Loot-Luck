@@ -242,6 +242,10 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private javax.swing.Icon itemIcon(PanelState.Item item)
 	{
+		return itemIcon(item,true);
+	}
+	private javax.swing.Icon itemIcon(PanelState.Item item,boolean quantityOverlay)
+	{
 		javax.swing.Icon sprite=item.icon!=null?item.icon:item.id>0?icons.apply(item.id,item.quantity):null;
 		if(sprite==null) { return null; }
 		// Paint the live icon rather than caching a disabled copy of an asynchronous image.
@@ -256,7 +260,7 @@ public final class LootLuckPanel extends PluginPanel
 				{
 					if(item.quantity==0) { faded.setComposite(java.awt.AlphaComposite.SrcOver.derive(0.65f)); }
 					sprite.paintIcon(component,faded,x,y);
-					if(item.quantity>0&&state.iconQuantities&&!state.stackCounts)
+					if(quantityOverlay&&item.quantity>0&&state.iconQuantities&&!state.stackCounts)
 					{
 						faded.setFont(FontManager.getRunescapeSmallFont());String count=CountFormat.compact(item.quantity);int baseline=y+faded.getFontMetrics().getAscent();
 						faded.setColor(Color.BLACK);faded.drawString(count,x+3,baseline+1);faded.setColor(Color.YELLOW);faded.drawString(count,x+2,baseline);
@@ -269,11 +273,24 @@ public final class LootLuckPanel extends PluginPanel
 	private JButton gridItem(PanelState.Item item)
 	{
 		JButton button=new EffectButton(item.quantity>0?state.itemEffect:ItemEffect.NONE,effectColor(item)) {
-			@Override public void doLayout() { for(java.awt.Component child:getComponents()) { if("count".equals(child.getName())) { child.setBounds(2,getHeight()-14,getWidth()-4,12); }else { child.setBounds(2,2,getWidth()-4,getHeight()-4); } } }
+			@Override public void doLayout() { for(java.awt.Component child:getComponents()) { child.setBounds(2,2,getWidth()-4,getHeight()-4); } }
+			@Override protected void paintChildren(java.awt.Graphics graphics)
+			{
+				super.paintChildren(graphics);
+				if(item.quantity>0)
+				{
+					java.awt.Graphics2D count=(java.awt.Graphics2D)graphics.create();
+					try
+					{
+						count.setFont(FontManager.getRunescapeSmallFont());String text=CountFormat.compact(item.quantity);int baseline=4+count.getFontMetrics().getAscent();
+						count.setColor(Color.BLACK);count.drawString(text,5,baseline+1);count.setColor(Color.YELLOW);count.drawString(text,4,baseline);
+					}
+					finally { count.dispose(); }
+				}
+			}
 		};button.setLayout(null);button.setBackground(ROW);button.setMargin(new java.awt.Insets(0,0,0,0));
 		button.setBorder(BorderFactory.createLineBorder(item.key.equals(expanded)?GOLD:BG,2));
-		JLabel icon=new JLabel(itemIcon(item));icon.setHorizontalAlignment(JLabel.CENTER);if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.CENTER);
-		JLabel quantity=label(CountFormat.compact(item.quantity),item.quantity==0?MUTED:Color.YELLOW);quantity.setName("count");quantity.setHorizontalAlignment(JLabel.RIGHT);if(!state.iconQuantities&&item.quantity>0) { button.add(quantity,BorderLayout.SOUTH); }
+		JLabel icon=new JLabel(itemIcon(item,false));icon.setHorizontalAlignment(JLabel.CENTER);if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.CENTER);
 		button.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);button.getAccessibleContext().setAccessibleDescription(item.rate+(item.key.equals(expanded)?", expanded":", collapsed"));
 		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;gridReveal=expanded;render();});makeRowClickable(button,button);return button;
 	}

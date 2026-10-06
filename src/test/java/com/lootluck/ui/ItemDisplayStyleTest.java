@@ -13,6 +13,37 @@ import static org.junit.Assert.*;
 
 public class ItemDisplayStyleTest
 {
+	@Test public void everyGridStylePaintsQuantityAboveAnOpaqueIconAtTopLeft() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			java.awt.image.BufferedImage sprite=new java.awt.image.BufferedImage(36,32,java.awt.image.BufferedImage.TYPE_INT_ARGB);
+			java.awt.Graphics2D fill=sprite.createGraphics();fill.setColor(Color.CYAN);fill.fillRect(0,0,36,32);fill.dispose();
+			int[] previous=null;java.awt.image.BufferedImage sheet=new java.awt.image.BufferedImage(150,50,java.awt.image.BufferedImage.TYPE_INT_ARGB);int position=0;
+			for(ItemDisplayStyle style:ItemDisplayStyle.values())
+			{
+				PanelState state=new PanelState();state.gridView=true;state.iconQuantities=style.iconQuantities;state.stackCounts=style.stackCounts;state.itemEffect=ItemEffect.NONE;
+				PanelState.Source source=new PanelState.Source();source.key="test";source.name="Grid";
+				PanelState.Item item=new PanelState.Item();item.id=1;item.key="coins";item.name="Coins";item.rate="1/128";item.quantity=12500;item.icon=new javax.swing.ImageIcon(sprite);source.items.add(item);state.sources.add(source);
+				LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);
+				javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,400);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layout(panel);
+				JButton button=findButton(panel,"Coins, quantity");assertNotNull(button);
+				java.awt.image.BufferedImage image=new java.awt.image.BufferedImage(button.getWidth(),button.getHeight(),java.awt.image.BufferedImage.TYPE_INT_ARGB);button.paint(image.getGraphics());
+				int yellow=0;for(int y=0;y<image.getHeight();y++) { for(int x=0;x<image.getWidth();x++) { if(image.getRGB(x,y)==Color.YELLOW.getRGB()) { yellow++;assertTrue(x>=4&&y>=4&&y<20); } } }assertTrue(style.title,yellow>10);
+				int[] pixels=image.getRGB(0,0,image.getWidth(),image.getHeight(),null,0,image.getWidth());if(previous!=null) { assertArrayEquals(previous,pixels); }previous=pixels;
+				java.awt.Graphics2D graphics=sheet.createGraphics();graphics.drawImage(image,position*50,0,null);graphics.dispose();position++;viewport.removeNotify();
+			}
+			try { javax.imageio.ImageIO.write(sheet,"png",new java.io.File("build/grid-count-styles.png")); } catch(java.io.IOException ex) { throw new IllegalStateException(ex); }
+		});
+	}
+	private static JButton findButton(java.awt.Container parent,String prefix)
+	{
+		for(Component child:parent.getComponents())
+		{
+			if(child instanceof JButton&&((JButton)child).getAccessibleContext().getAccessibleName().startsWith(prefix)) { return (JButton)child; }
+			if(child instanceof java.awt.Container) { JButton found=findButton((java.awt.Container)child,prefix);if(found!=null) { return found; } }
+		}
+		return null;
+	}
 	@Test public void previewsUseCompactRowsAndRenderYellowCounts() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
