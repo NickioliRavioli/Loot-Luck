@@ -65,6 +65,7 @@ public class LootLuckPlugin extends Plugin
 		WikiRateProvider rates;
 		LedgerStore store;
 		LedgerEngine engine;
+		ValidationRegistry validation;
 		String profile,error="";
 	}
 	private volatile RuntimeData runtime;
@@ -74,7 +75,6 @@ public class LootLuckPlugin extends Plugin
 	private volatile Boolean membersWorld;
 	private volatile boolean running,session,all,lootTrackerEnabled;
 	private final AtomicLong generation=new AtomicLong();
-	private final ValidationRegistry validation=new ValidationRegistry();
 	private final Map<String,Integer> identities=new ConcurrentHashMap<>();
 	private int scanCursor;
 	private boolean scanning;
@@ -88,6 +88,7 @@ public class LootLuckPlugin extends Plugin
 			if(!running||run!=runtime) { return; }
 			panel=new LootLuckPanel((id,quantity)->observationIcon(id,quantity),value->{session=value;all=panel.driest();publish();},value->{configManager.setConfiguration(LootLuckConfig.GROUP,"includeUnobtained",value);publish();},this::resetSession,this::refresh);
 			panel.setDataAction(this::manageData);
+			panel.setValidationAction(this::confirmGameplay);
 			panel.setSettings(config,(key,value)->configManager.setConfiguration(LootLuckConfig.GROUP,key,value),this::previewIcon);
 			BufferedImage image=new BufferedImage(16,16,BufferedImage.TYPE_INT_ARGB);java.awt.Graphics2D g=image.createGraphics();g.setColor(new Color(223,192,113));g.drawString("LL",0,12);g.dispose();
 			navigation=NavigationButton.builder().tooltip("Loot Luck").icon(image).priority(6).panel(panel).build();toolbar.addNavigation(navigation);publish();
@@ -95,7 +96,9 @@ public class LootLuckPlugin extends Plugin
 		submit(r->{
 			try
 			{
-				Filepath directory=getPluginDirectory();r.store=new LedgerStore(directory.joinSegment("profiles"),gson);
+				// Fresh ledger namespace: pre-audit data is not migrated into validated tracking.
+				Filepath directory=getPluginDirectory();r.store=new LedgerStore(directory.joinSegment("profiles-wiki-v1"),gson);
+				r.validation=new ValidationRegistry(gson);
 				r.rates=new WikiRateProvider(gson,http,directory.joinSegment("wiki-cache"),config::wikiRefresh,()->{if(r==runtime&&running) { publish(); }});r.rates.initialize();
 				if(!running||r!=runtime) { r.rates.close(); }
 			}
@@ -109,7 +112,7 @@ public class LootLuckPlugin extends Plugin
 		activeProfile=key;long token=generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.cancelRequests(); }
 		submit(r->{
 			r.profile=key;r.engine=null;
-			try { if(key!=null&&r.store!=null) { r.engine=new LedgerEngine(r.store.load(key));r.engine.setHistoryLimit(config.historyLimit());r.error=""; } }
+			try { if(key!=null&&r.store!=null) { r.engine=new LedgerEngine(r.store.load(key));r.engine.interruptCoverage();r.engine.setHistoryLimit(config.historyLimit());r.error=""; } }
 			catch(Exception ex) { r.error="Profile data unavailable. Use Data settings to delete old test data or import a current export.";log.warn(r.error,ex); }
 			publishOnWorker(r,token);
 		});
@@ -119,6 +122,8 @@ public class LootLuckPlugin extends Plugin
 	{
 		updateWorldType();
 		if(event.getGameState()!=GameState.LOGGED_IN) { mysteryBoxes.clear(); }
+		if(event.getGameState()==GameState.LOGIN_SCREEN||event.getGameState()==GameState.HOPPING||event.getGameState()==GameState.CONNECTION_LOST)
+		{ submit(r->{if(r.engine!=null) { r.engine.interruptCoverage(); }}); }
 		if(event.getGameState()==GameState.LOGGED_IN||event.getGameState()==GameState.LOGIN_SCREEN) { checkPrerequisite();startIdentityScan();publish(); }
 	}
 	private void updateWorldType()
@@ -126,7 +131,7 @@ public class LootLuckPlugin extends Plugin
 		if(client.getGameState()==GameState.LOGGED_IN) { membersWorld=client.getWorldType().contains(net.runelite.api.WorldType.MEMBERS); }
 		else if(client.getGameState()==GameState.LOGIN_SCREEN) { membersWorld=null; }
 	}
-	@Subscribe public void onPluginChanged(PluginChanged event) { checkPrerequisite();publish(); }
+	@Subscribe public void onPluginChanged(PluginChanged event) { checkPrerequisite();if(!lootTrackerEnabled) { submit(r->{if(r.engine!=null) { r.engine.interruptCoverage(); }}); }publish(); }
 	private void checkPrerequisite() { lootTrackerEnabled=pluginManager.getPlugins().stream().anyMatch(p->p instanceof LootTrackerPlugin&&pluginManager.isPluginEnabled(p)); }
 	@Subscribe public void onConfigChanged(ConfigChanged event)
 	{
@@ -151,17 +156,43 @@ public class LootLuckPlugin extends Plugin
 			ItemComposition original=itemManager.getItemComposition(stack.getId());
 			int id=stack.getId();boolean noted=original.getNote()!=-1;
 			ItemComposition canonical=noted?itemManager.getItemComposition(original.getLinkedNoteId()):original;String name=canonical.getName()+(noted?" (noted)":"");
-			quantities.merge(id,(long)stack.getQuantity(),Math::addExact);itemNames.put(id,name);originals.put(stack.getId(),id);
+			quantities.merge(id,(long)stack.getQuantity(),Math::addExact);itemNames.put(id,name);originals.put(stack.getId(),noted?original.getLinkedNoteId():id);
 			identities.putIfAbsent(ViewBuilder.normalize(name),id);
 		} }
 		Observation observation=new Observation(source,System.currentTimeMillis(),amount,quantities,itemNames,originals);
-		RuntimeData current=runtime;java.util.List<com.lootluck.rates.RateRow> recordedRates=current==null||current.rates==null?java.util.List.of():current.rates.rows(source);
+		RuntimeData current=runtime;java.util.List<com.lootluck.rates.RateRow> modelRates=current==null||current.rates==null?java.util.List.of():current.rates.rows(source);
+		java.util.List<com.lootluck.rates.RateRow> recordedRates=com.lootluck.rates.TableResolver.resolve(source,modelRates).rows;
 		submit(r->{
 			// Ordered activation precedes its events; a queued old-profile event cannot write into the new profile.
 			if(r.engine==null||!profile.equals(r.profile)) { return; }
-			try { r.engine.observe(observation,validation.assess(observation),recordedRates);r.store.save(profile,r.engine.lifetime()); }
+			try
+			{
+				r.engine.observe(observation,r.validation.assess(observation,modelRates,approval(profile,source)),recordedRates);r.store.save(profile,r.engine.lifetime());
+			}
 			catch(Exception ex) { r.error="Observation save failed; tracking paused. Check RuneLite logs.";log.warn(r.error,ex);r.engine=null; }
 			if(r.rates!=null) { r.rates.refresh(source,false); }publishOnWorker(r,token);
+		});
+	}
+	private String approval(String profile,SourceIdentity source)
+	{
+		return configManager.getConfiguration(LootLuckConfig.GROUP,"verified-"+com.lootluck.rates.WikiParser.hash(profile+"|"+source.family().key()));
+	}
+	private void confirmGameplay(String sourceKey)
+	{
+		String profile=activeProfile;RuntimeData selected=runtime;long token=generation.get();
+		if(profile==null||selected==null) { return; }
+		int choice=javax.swing.JOptionPane.showConfirmDialog(panel,
+			"Confirm only after testing this source in-game:\nCount several kills against recorded outcomes, including empty loot.\nCheck item quantities, repeats, NPC variants and world type.\n\nEnable its reviewed luck models for future attempts?",
+			"Confirm gameplay validation",javax.swing.JOptionPane.YES_NO_OPTION);
+		if(choice!=javax.swing.JOptionPane.YES_OPTION) { return; }
+		submit(r->{
+			if(r!=selected||token!=generation.get()||r.engine==null||!profile.equals(r.profile)) { return; }
+			Ledger.Source family=r.engine.lifetime().sources.get(sourceKey);
+			if(family==null) { return; }
+			String contract=r.validation.contract(family.identity,r.rates.rows(family.identity));
+			if(contract.isEmpty()) { return; }
+			configManager.setConfiguration(LootLuckConfig.GROUP,"verified-"+com.lootluck.rates.WikiParser.hash(profile+"|"+family.identity.key()),contract);
+			r.engine.interruptCoverage();publishOnWorker(r,token);
 		});
 	}
 	@Subscribe public void onMenuOptionClicked(net.runelite.api.events.MenuOptionClicked event)
@@ -305,6 +336,13 @@ public class LootLuckPlugin extends Plugin
 		view.stackCounts=config.stackCounts();view.iconQuantities=config.iconQuantities()&&!config.stackCounts()&&!view.stackCounts;
 		view.notice=!r.error.isEmpty()?r.error:!lootTrackerEnabled?"Enable RuneLite Loot Tracker to receive loot.":activeProfile==null?"Log in to select an account profile.":view.sources.isEmpty()?"No loot recorded yet.":"";
 		view.dataStatus=r.rates==null?"Rate catalogue loading":r.rates.status+(config.wikiRefresh()?" · refresh enabled":" · offline mode");
+		if(r.rates!=null&&r.validation!=null) { for(PanelState.Source source:view.sources)
+		{
+			Ledger.Source family=r.engine==null?null:r.engine.lifetime().sources.get(source.key);
+			if(family==null) { continue; }
+			String contract=r.validation.contract(family.identity,r.rates.rows(family.identity));
+			source.validationAvailable=!contract.isEmpty();source.validationApproved=source.validationAvailable&&contract.equals(approval(r.profile,family.identity));
+		} }
 		clientThread.invoke(()->{
 			if(!running||token!=generation.get()) { return; }
 			for(PanelState.Source source:view.sources)
@@ -324,7 +362,7 @@ public class LootLuckPlugin extends Plugin
 	private synchronized void submit(java.util.function.Consumer<RuntimeData> task)
 	{
 		RuntimeData r=runtime;if(r==null||!running) { return; }
-		if(pendingTasks.incrementAndGet()>1024) { pendingTasks.decrementAndGet();r.error="Processing queue full; coverage interrupted. Restart plugin after resolving disk issues.";log.warn(r.error);return; }
+		if(pendingTasks.incrementAndGet()>1024) { pendingTasks.decrementAndGet();r.error="Processing queue full; tracking paused. Restart plugin after resolving disk issues.";running=false;log.warn(r.error);return; }
 		ioTail=ioTail.handle((ignored,failure)->null).thenRunAsync(()->{try { task.accept(r); } finally { pendingTasks.decrementAndGet(); }},executor);
 	}
 	@Override protected void shutDown()

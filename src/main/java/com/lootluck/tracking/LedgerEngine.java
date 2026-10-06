@@ -13,6 +13,14 @@ public final class LedgerEngine
 	public LedgerEngine(Ledger lifetime) { this.lifetime = Objects.requireNonNull(lifetime); }
 	public Ledger lifetime() { return lifetime; }
 	public Ledger session() { return session; }
+	/** A logout, plugin stop, queue failure or confirmation change ends known coverage. */
+	public void interruptCoverage()
+	{
+		for (Ledger ledger : java.util.List.of(lifetime, session)) { for (Ledger.Source source : ledger.sourceVariants())
+		{
+			if (source.activeSegment != null) { Ledger.Segment segment = source.segments.get(source.activeSegment); segment.streakValid = false; source.activeSegment = null; }
+		} }
+	}
 	public void resetSession() { session = new Ledger(); }
 	public void setHistoryLimit(int limit) { if(limit<0) { throw new IllegalArgumentException("Negative history limit"); }historyLimit=limit;trimHistory(lifetime);trimHistory(session); }
 	private void trimHistory(Ledger ledger) { if(historyLimit>0&&ledger.history.size()>historyLimit) { ledger.history.subList(0,ledger.history.size()-historyLimit).clear(); } }
@@ -37,8 +45,7 @@ public final class LedgerEngine
 			item.quantity = Math.addExact(item.quantity, qty); item.occurrences = Math.addExact(item.occurrences, 1);
 			item.lastReceived = Math.max(item.lastReceived, o.timestamp);
 			String observedName=o.names.getOrDefault(id,item.name);
-			String baseName=com.lootluck.rates.ItemRateMatcher.lookupName(com.lootluck.rates.ItemRateMatcher.baseName(observedName),o.source);
-			java.util.List<com.lootluck.rates.RateRow> candidates=knownRates.stream().filter(rate->com.lootluck.ui.ViewBuilder.normalize(rate.itemName).equals(baseName)).collect(java.util.stream.Collectors.toList());
+			java.util.List<com.lootluck.rates.RateRow> candidates=com.lootluck.rates.ItemRateMatcher.item(id,o.originalIds.getOrDefault(id,id),observedName,o.source,knownRates);
 			java.util.List<com.lootluck.rates.RateRow> matching=com.lootluck.rates.ItemRateMatcher.matchCollection(o.names.getOrDefault(id,item.name),candidates,qty,o.reportedAmount);
 			String version=matching.isEmpty()?"unknown":com.lootluck.rates.WikiParser.hash(matching.stream().map(rate->rate.hash+"@"+rate.fetchedAt).sorted().collect(java.util.stream.Collectors.joining("|")));
 			Ledger.RecordedRate recorded=item.recordedRates.computeIfAbsent(version,key->{Ledger.RecordedRate v=new Ledger.RecordedRate();v.hash=key;matching.forEach(rate->v.rows.add(rate.snapshot()));v.firstReceived=o.timestamp;return v;});

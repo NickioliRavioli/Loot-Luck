@@ -30,6 +30,7 @@ final class SourceGroups
 		combined.identity=new SourceIdentity(first.type,first.name,"Combined "+members.size()+" variants: "+members.stream().map(s->s.identity.variant).collect(java.util.stream.Collectors.joining("; ")),members.stream().map(s->s.identity.context).distinct().collect(java.util.stream.Collectors.joining("; ")));
 		for(Ledger.Source source:members)
 		{
+			for(Map.Entry<String,Ledger.Segment> segment:source.segments.entrySet()) { combined.segments.put(source.identity.key()+"/"+segment.getKey(),segment.getValue()); }
 			combined.notifications=Math.addExact(combined.notifications,source.notifications);
 			combined.reportedAmount=Math.addExact(combined.reportedAmount,source.reportedAmount);
 			combined.excluded=Math.addExact(combined.excluded,source.excluded);
@@ -44,7 +45,9 @@ final class SourceGroups
 				}); }
 			}
 		}
-		// A combined view cannot assert one homogeneous probability model or dry streak.
+		// A streak belongs only to the latest unambiguous variant; overall expectations can use all segments.
+		List<Ledger.Source> latest=members.stream().filter(source->source.lastReceived==combined.lastReceived).collect(java.util.stream.Collectors.toList());
+		if(latest.size()==1&&latest.get(0).activeSegment!=null) { combined.activeSegment=latest.get(0).identity.key()+"/"+latest.get(0).activeSegment; }
 		return combined;
 	}
 }

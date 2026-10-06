@@ -1,0 +1,7 @@
+{
+  "Cow": {"items": ["cowhide", "raw beef", "bones"], "exclusiveItems": []},
+  "Chicken": {"items": ["bones", "raw chicken", "feather"], "exclusiveItems": ["feather"]},
+  "Giant rat": {"items": ["bones", "raw rat meat"], "exclusiveItems": []},
+  "Vorkath": {"items": ["dragonbone necklace", "draconic visage", "skeletal visage", "jar of decay"], "exclusiveItems": []},
+  "Zulrah": {"items": ["tanzanite fang", "magic fang", "serpentine visage", "uncut onyx", "jar of swamp"], "exclusiveItems": []}
+}

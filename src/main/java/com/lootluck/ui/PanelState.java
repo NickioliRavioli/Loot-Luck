@@ -25,6 +25,7 @@ public final class PanelState
 	{
 		public String key,name,countTooltip,value,wikiUrl;
 		public long count,lastReceived;
+		public boolean validationAvailable,validationApproved;
 		public List<Item> items=new ArrayList<>();
 	}
 	public static final class Item

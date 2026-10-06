@@ -36,6 +36,8 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 	private static final long TTL = TimeUnit.DAYS.toMillis(7);
 	private static final int LIMIT = 4*1024*1024;
 	private final Gson gson;
+	private final WikiEvidence evidence;
+	private final WikiItemIndex itemIndex;
 	private final OkHttpClient http;
 	private final Filepath cache;
 	private final BooleanSupplier enabled;
@@ -58,6 +60,7 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 	public WikiRateProvider(Gson gson, OkHttpClient http, Filepath cache, BooleanSupplier enabled, Runnable changed)
 	{
 		this.gson=gson; this.http=http.newBuilder().callTimeout(15,TimeUnit.SECONDS).build(); this.cache=cache; this.enabled=enabled; this.changed=changed;
+		evidence = new WikiEvidence(gson); itemIndex = new WikiItemIndex(gson);
 	}
 	public void initialize() throws IOException
 	{
@@ -91,8 +94,10 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 			}
 			catch(RuntimeException|IOException ex) { log.debug("Ignoring invalid Wiki cache for {}",owner,ex); }
 		}
+		catalogue.values().forEach(this::enrich);
 		refreshCatalogue(false);
 	}
+	private void enrich(List<RateRow> rows) { evidence.apply(rows); itemIndex.apply(rows); }
 	public static String owner(SourceIdentity source)
 	{
 		if("PLAYER".equals(source.type)) { return null; }
@@ -153,13 +158,15 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 			while((n=response.body().source().read(buffer,Math.min(8192,LIMIT+1-count)))!=-1) { count+=n; if(count>LIMIT) { throw new IOException("Wiki response limit"); } }
 			String body=buffer.readString(StandardCharsets.UTF_8), fetched=Instant.now().toString();
 			List<RateRow> rows=WikiParser.parse(gson,body,owner,fetched);
+			enrich(rows);
 			if(rows.size()==500) { throw new IOException("Potentially truncated source table"); }
 			if(closed||!enabled.getAsBoolean()) { return; }
 			CacheEntry entry=new CacheEntry();entry.body=body;entry.fetchedAt=fetched;
 			Filepath temp=cache.createTempFile("wiki-",".tmp");
 			try { temp.write(gson.toJson(entry));temp.moveTo(cache.joinSegment(WikiParser.hash(owner)+".json"),StandardCopyOption.REPLACE_EXISTING); }
 			finally { temp.deleteIfExists(); }
-			catalogue.put(owner,Collections.unmodifiableList(rows));saveCatalogue(catalogue);status="Wiki refreshed "+owner;changed.run();
+			// The source response is already persisted above. Do not rewrite 40k rows for one lookup.
+			catalogue.put(owner,Collections.unmodifiableList(rows));status="Wiki refreshed "+owner;changed.run();
 			lookupRetryAfter.remove(owner);
 		}
 		catch(IOException|RuntimeException ex)
@@ -202,7 +209,7 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 			{
 				int prior=catalogue.values().stream().mapToInt(List::size).sum();
 				if(catalogueOffset<prior*0.8) { throw new IOException("Catalogue unexpectedly shrank; last-good retained for review"); }
-				validateCatalogue(staging);saveCatalogue(staging);
+				validateCatalogue(staging);staging.values().forEach(this::enrich);saveCatalogue(staging);
 				staging.forEach((owner,rows)->catalogue.put(owner,Collections.unmodifiableList(new ArrayList<>(rows))));
 				status="Wiki catalogue refreshed: "+staging.size()+" sources";
 				catalogueRetryAfter=0;

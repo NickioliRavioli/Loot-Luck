@@ -11,9 +11,25 @@ public final class ItemRateMatcher
 	/** Lookup aliases only: never rewrite stored identities or reward-casket names. */
 	public static String lookupName(String name)
 	{
-		String normalized=name.replace('\u2019','\'').trim().toLowerCase(Locale.ROOT);
+		String normalized=normalize(name);
 		if(normalized.matches("scroll box \\((beginner|easy|medium|hard|elite|master)\\)")) { return "clue scroll"+normalized.substring("scroll box".length()); }
 		return normalized;
+	}
+	public static String normalize(String name)
+	{
+		if (name == null) { return ""; }
+		return java.text.Normalizer.normalize(net.runelite.client.util.Text.removeTags(name), java.text.Normalizer.Form.NFC)
+			.replace("&nbsp;", " ").replace("&#39;", "'").replace("&apos;", "'").replace("&amp;", "&")
+			.replace('\u00a0', ' ').replace('\u2019', '\'').trim().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
+	}
+	/** ID evidence takes precedence; name fallback uses Wiki infobox game names. */
+	public static List<RateRow> item(int id, int canonicalId, String name, com.lootluck.model.SourceIdentity source, List<RateRow> rows)
+	{
+		List<RateRow> byId = rows.stream().filter(row -> row.itemIds.contains(canonicalId) || row.itemIds.contains(id)).collect(Collectors.toList());
+		if (!byId.isEmpty()) { return match(name, byId, false); }
+		String key = lookupName(baseName(name), source);
+		return match(name, rows.stream().filter(row -> key.equals(lookupName(row.itemName)) ||
+			(row.gameName != null && key.equals(lookupName(row.gameName)))).collect(Collectors.toList()), false);
 	}
 	public static String lookupName(String name,com.lootluck.model.SourceIdentity source)
 	{

@@ -33,7 +33,8 @@ public final class ViewBuilder
 		for(Map.Entry<String,Ledger.Source> entry:SourceGroups.build(ledger).entrySet())
 		{
 			Ledger.Source s=entry.getValue();PanelState.Source source=new PanelState.Source();source.key=entry.getKey();source.name=com.lootluck.rates.RewardSources.displayName(s.identity);
-			List<RateRow> sourceRates=rates.rows(s.identity);
+			com.lootluck.rates.TableResolver.Resolution resolution=com.lootluck.rates.TableResolver.resolve(s.identity,rates.rows(s.identity));
+			List<RateRow> sourceRates=resolution.rows;
 			String wikiOwner=sourceRates.isEmpty()?com.lootluck.rates.RewardSources.wikiOwner(s.identity):sourceRates.get(0).owner;
 			source.wikiUrl=sourceWikiUrl(wikiOwner==null?com.lootluck.rates.RewardSources.wikiOwner(s.identity):wikiOwner);
 			source.count=s.notifications;source.lastReceived=s.lastReceived;
@@ -45,9 +46,9 @@ public final class ViewBuilder
 			{
 				PanelState.Item row=new PanelState.Item();row.id=item.id;row.key=source.key+":"+item.id;row.name=item.name;row.quantity=item.quantity;row.occurrences=item.occurrences;row.lastReceived=item.lastReceived;
 				boolean ambiguousNotes=item.originalIds.stream().anyMatch(original->original!=item.id)&&!com.lootluck.rates.ItemRateMatcher.notedName(item.name);
-				List<RateRow> matching=byName.get(com.lootluck.rates.ItemRateMatcher.lookupName(item.name,s.identity));
+				List<RateRow> matching=com.lootluck.rates.ItemRateMatcher.item(item.id,item.id,item.name,s.identity,sourceRates);
 				if(ambiguousNotes) { matching=sourceRates.stream().filter(rate->normalize(rate.itemName).equals(normalize(item.name))).collect(java.util.stream.Collectors.toList()); }
-				applyRate(row,matching);applySegment(row,s);display.put("id:"+item.id,row);
+				applyRate(row,matching);row.rateTooltip+="\n\n"+resolution.reason;applySegment(row,s);display.put("id:"+item.id,row);
 				if(ambiguousNotes) { row.rateTooltip+="\n\nLegacy aggregate may mix noted and unnoted loot; quantities cannot be split retrospectively."; }
 				if(item.recordedRates!=null&&!item.recordedRates.isEmpty())
 				{
@@ -61,8 +62,12 @@ public final class ViewBuilder
 			{
 				for(Map.Entry<String,List<RateRow>> group:byName.entrySet())
 				{
-					Integer id=identities.get(group.getKey());
-					boolean obtained=display.values().stream().anyMatch(i->(id!=null&&i.id==id)||com.lootluck.rates.ItemRateMatcher.lookupName(i.name,s.identity).equals(group.getKey()));
+					RateRow identityRow=group.getValue().get(0);
+					String gameKey=normalize((identityRow.gameName==null?identityRow.itemName:identityRow.gameName)+(com.lootluck.rates.ItemRateMatcher.notedRow(identityRow)?" (noted)":""));
+					Integer id=identities.getOrDefault(gameKey,identities.get(group.getKey()));
+					if(id==null&&!com.lootluck.rates.ItemRateMatcher.notedRow(identityRow)&&!identityRow.itemIds.isEmpty()) { id=identityRow.itemIds.get(0); }
+					final Integer resolvedId=id;
+					boolean obtained=display.values().stream().anyMatch(i->(resolvedId!=null&&i.id==resolvedId)||!com.lootluck.rates.ItemRateMatcher.item(i.id,i.id,i.name,s.identity,group.getValue()).isEmpty());
 					if(obtained) { continue; }
 					PanelState.Item row=new PanelState.Item();row.id=id==null?0:id;RateRow first=group.getValue().get(0);row.name=first.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(first)?" (noted)":"");row.key=source.key+":rate:"+group.getKey();
 					applyRate(row,group.getValue());
@@ -87,7 +92,7 @@ public final class ViewBuilder
 		}
 		state.collections.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());return state;
 	}
-	public static String normalize(String name) { return name.replace('\u2019','\'').trim().toLowerCase(java.util.Locale.ROOT); }
+	public static String normalize(String name) { return com.lootluck.rates.ItemRateMatcher.normalize(name); }
 	private static String historyDate(long time) { return java.time.format.DateTimeFormatter.ofPattern("d MMM yyyy HH:mm").withZone(java.time.ZoneId.systemDefault()).format(java.time.Instant.ofEpochMilli(time)); }
 	private static void applyRate(PanelState.Item row,List<RateRow> rates)
 	{
@@ -134,14 +139,27 @@ public final class ViewBuilder
 	private static void applySegment(PanelState.Item row,Ledger.Source source)
 	{
 		row.reason="Attempt boundary and event probability are not certified for this source/context.";
-		Ledger.Segment seg=source.activeSegment==null?null:source.segments.get(source.activeSegment);
-		if(seg==null||!seg.probabilities.containsKey(row.id)||seg.attempts==0) { return; }
-		double p=seg.probabilities.get(row.id);long k=seg.occurrences.getOrDefault(row.id,0L),d=seg.dry.getOrDefault(row.id,0L);
-		if((p==0&&k>0)||(p==1&&k!=seg.attempts)) { row.reason="Probability model / detection mismatch.";return; }
-		row.reason="Certified homogeneous segment only. Model "+seg.modelVersion+"; rate hash "+seg.rateHash+". Segment occurrences "+k+", eligible quantity "+seg.quantities.getOrDefault(row.id,0L)+". Lifetime/raw totals may include excluded outcomes.";
-		row.attempts=seg.attempts;row.probability=p;row.expected=Statistics.expected(seg.attempts,p);row.observed=(double)k/seg.attempts;
-		row.ratio=p==0?null:Statistics.ratio(seg.attempts,k,p);row.upper=Statistics.upper(seg.attempts,k,p);row.lower=Statistics.lower(seg.attempts,k,p);
-		if(seg.streakValid) { row.dry=d;row.noDrop=Statistics.dryProbability(d,p);row.dryness=Statistics.dryness(d,p); }
+		long n=0,k=0;double expected=0;Double common=null;boolean homogeneous=true;int segments=0;
+		for(Ledger.Segment segment:source.segments.values())
+		{
+			if(!segment.probabilities.containsKey(row.id)||segment.attempts==0) { continue; }
+			double p=segment.probabilities.get(row.id);long successes=segment.occurrences.getOrDefault(row.id,0L);
+			if((p==0&&successes>0)||(p==1&&successes!=segment.attempts)) { row.reason="Probability model / detection mismatch.";return; }
+			n=Math.addExact(n,segment.attempts);k=Math.addExact(k,successes);expected+=Statistics.expected(segment.attempts,p);segments++;
+			if(common==null) { common=p; }else if(Double.compare(common,p)!=0) { homogeneous=false; }
+		}
+		if(n==0) { return; }
+		row.attempts=n;row.expected=expected;row.observed=(double)k/n;row.ratio=expected==0?null:k/expected;
+		if(homogeneous) { row.probability=common;row.upper=Statistics.upper(n,k,common);row.lower=Statistics.lower(n,k,common); }
+		row.reason="Overall luck uses "+segments+" validated segments ("+k+" successful attempts). Expected successes sum each segment's applicable probability; raw totals may include excluded outcomes."+
+			(homogeneous?"":" Per-attempt chance varies; a single chance and binomial tails are withheld.");
+		Ledger.Segment active=source.activeSegment==null?null:source.segments.get(source.activeSegment);
+		if(active!=null&&active.streakValid&&active.probabilities.containsKey(row.id))
+		{
+			double p=active.probabilities.get(row.id);long d=active.dry.getOrDefault(row.id,0L);
+			row.dry=d;row.noDrop=Statistics.dryProbability(d,p);row.dryness=Statistics.dryness(d,p);
+			row.reason+=" Dry streak covers only the current validated segment, since its last recorded drop or tracking start; earlier attempts are unknown. Model "+active.modelVersion+"; rate hash "+active.rateHash+".";
+		}
 	}
 }
 

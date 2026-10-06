@@ -44,6 +44,7 @@ public final class LootLuckPanel extends PluginPanel
 	private final JPanel controls=new JPanel(new GridLayout(1,2,4,0));
 	private final JButton dataSettings=new JButton("Data settings");
 	private Consumer<String> dataAction=action->{};
+	private Consumer<String> validationAction=source->{};
 	private int historyPage;
 	private final Consumer<Boolean> scopeChanged;
 	private final Consumer<String> openWiki;
@@ -133,6 +134,7 @@ public final class LootLuckPanel extends PluginPanel
 		removeAll();add(visible?settings:top,BorderLayout.NORTH);if(!visible) { add(content,BorderLayout.CENTER); }revalidate();repaint();
 	}
 	public void setDataAction(Consumer<String> action) { dataAction=action; }
+	public void setValidationAction(Consumer<String> action) { validationAction=action; }
 	public boolean driest() { return sort.getSelectedIndex()==2; }
 	public void update(PanelState state) { if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); } this.state=state;render(); }
 	private void render()
@@ -160,6 +162,12 @@ public final class LootLuckPanel extends PluginPanel
 				JButton wiki=new JButton("W");wiki.setFont(new java.awt.Font("SansSerif",java.awt.Font.BOLD,10));wiki.setForeground(MUTED);wiki.setBackground(new Color(16,16,16));wiki.setBorder(BorderFactory.createEmptyBorder(0,3,0,3));wiki.setPreferredSize(new Dimension(20,26));wiki.getAccessibleContext().setAccessibleName("Open Wiki: "+source.name);wiki.addActionListener(e->openWiki.accept(source.wikiUrl));heading.add(wiki,BorderLayout.EAST);
 			}
 			group.add(heading,BorderLayout.NORTH);
+			if(source.validationAvailable)
+			{
+				JButton validation=new JButton(source.validationApproved?"Luck tracking validated":"Validate luck tracking");
+				validation.setEnabled(!source.validationApproved);validation.setToolTipText("Confirm the source-specific gameplay checks before enabling exact luck statistics.");
+				validation.addActionListener(e->validationAction.accept(source.key));group.add(validation,BorderLayout.SOUTH);
+			}
 			if(!collapsed.contains(source.key))
 			{
 				JPanel rows=new JPanel();rows.setOpaque(false);rows.setLayout(new javax.swing.BoxLayout(rows,javax.swing.BoxLayout.Y_AXIS));
@@ -340,8 +348,9 @@ public final class LootLuckPanel extends PluginPanel
 		JPanel grid=new JPanel(new GridLayout(0,2,8,4));grid.setOpaque(false);
 		stat(grid,"Quantity",NUMBER.format(item.quantity),"All recorded units; separate from occurrences.",null);
 		stat(grid,"Occurrences",NUMBER.format(item.occurrences),"Recorded notifications containing the item, including excluded/batched observations.",null);
-		String availability=item.attempts==null?"\nUnavailable; see item information.":"\nCurrent validated segment.";
+		String availability=item.attempts==null?"\nUnavailable; see item information.":"\nValidated recorded attempts; see item information for coverage.";
 		stat(grid,"Attempts",item.attempts==null?"—":NUMBER.format(item.attempts),"Eligible individual attempts."+availability,null);
+		stat(grid,"Per attempt",percent(item.probability),"Calculated chance of at least one item per kill/opening; the Wiki rate above may be per roll."+availability,null);
 		stat(grid,"Observed",item.observed==null?"—":item.observed==0?"0%":"1/"+NUMBER.format(1/item.observed),"Occurrences ÷ eligible attempts."+availability,null);
 		stat(grid,"Expected",value(item.expected),"Attempts × item-present probability."+availability,null);
 		Color luck=!state.luckColors||item.ratio==null?null:item.ratio<.9?new Color(223,153,140):item.ratio>1.1?new Color(141,195,126):GOLD;

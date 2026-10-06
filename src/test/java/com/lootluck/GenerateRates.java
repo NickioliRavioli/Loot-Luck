@@ -34,6 +34,9 @@ public final class GenerateRates
 			sources.put(owner,rows);System.out.println(owner+": "+rows.size()+" retained rows");
 		}
 		}
+		com.lootluck.rates.WikiEvidence evidence=new com.lootluck.rates.WikiEvidence(gson);
+		com.lootluck.rates.WikiItemIndex items=new com.lootluck.rates.WikiItemIndex(gson);
+		sources.values().forEach(rows->{evidence.apply(rows);items.apply(rows);});
 		Path target=Path.of(args[1]);Files.createDirectories(target.getParent());Files.writeString(target,gson.toJson(sources));
 		System.out.println("Catalogue: "+sources.size()+" sources, "+sources.values().stream().mapToInt(List::size).sum()+" rows");
 	}
