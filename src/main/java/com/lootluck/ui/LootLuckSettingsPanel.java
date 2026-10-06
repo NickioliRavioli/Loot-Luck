@@ -57,7 +57,7 @@ final class LootLuckSettingsPanel extends JPanel
 		JLabel history=new JLabel("Collection history limit");history.setForeground(Color.LIGHT_GRAY);history.setAlignmentX(LEFT_ALIGNMENT);add(history);
 		JSpinner limit=new JSpinner(new SpinnerNumberModel(Math.max(0,config.historyLimit()),0,Integer.MAX_VALUE,1000));limit.setAlignmentX(LEFT_ALIGNMENT);limit.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));add(limit);
 		limit.addChangeListener(e->{if(!syncing) { changed.accept("historyLimit",limit.getValue()); }});updates.add(()->limit.setValue(Math.max(0,config.historyLimit())));
-		toggle("Luck colors","luckColors",config::luckColors,"Color actual/expected ratios; colors do not indicate statistical significance.",changed);
+		if(PanelState.LUCK_STATISTICS_VISIBLE) { toggle("Luck colors","luckColors",config::luckColors,"Color actual/expected ratios; colors do not indicate statistical significance.",changed); }
 		toggle("Show GE values","showGe",config::showGe,"Current GE totals in source headers and expanded items.",changed);
 		toggle("Show HA values","showHa",config::showHa,"High Alchemy totals in expanded items, excluding rune costs.",changed);
 		sync();

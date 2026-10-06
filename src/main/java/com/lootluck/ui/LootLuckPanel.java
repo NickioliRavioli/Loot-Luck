@@ -72,6 +72,7 @@ public final class LootLuckPanel extends PluginPanel
 	public LootLuckPanel(java.util.function.BiFunction<Integer,Long,Icon> icons,Consumer<Boolean> scopeChanged,Consumer<Boolean> allChanged,Runnable reset,Runnable refresh,Consumer<String> openWiki)
 	{
 		this.icons=icons;this.scopeChanged=scopeChanged;this.openWiki=openWiki;
+		if(!PanelState.LUCK_STATISTICS_VISIBLE) { sort.removeItem("Driest first"); }
 		toggleUnobtained.setMargin(new java.awt.Insets(2,3,2,3));toggleUnobtained.setToolTipText("Show unobtained items");toggleUnobtained.getAccessibleContext().setAccessibleName("Show unobtained items");
 		toggleUnobtained.addActionListener(e->{state.includeUnobtained=!state.includeUnobtained;allChanged.accept(state.includeUnobtained);render();});
 		setLayout(new BorderLayout(0,5));setBackground(BG);setBorder(BorderFactory.createEmptyBorder(7,6,7,6));
@@ -135,7 +136,7 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	public void setDataAction(Consumer<String> action) { dataAction=action; }
 	public void setValidationAction(Consumer<String> action) { validationAction=action; }
-	public boolean driest() { return sort.getSelectedIndex()==2; }
+	public boolean driest() { return PanelState.LUCK_STATISTICS_VISIBLE&&sortMode()==2; }
 	public void update(PanelState state) { if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); } this.state=state;render(); }
 	private void render()
 	{
@@ -166,7 +167,7 @@ public final class LootLuckPanel extends PluginPanel
 				JButton wiki=new JButton("W");wiki.setFont(new java.awt.Font("SansSerif",java.awt.Font.BOLD,10));wiki.setForeground(MUTED);wiki.setBackground(new Color(16,16,16));wiki.setBorder(BorderFactory.createEmptyBorder(0,3,0,3));wiki.setPreferredSize(new Dimension(20,26));wiki.getAccessibleContext().setAccessibleName("Open Wiki: "+source.name);wiki.addActionListener(e->openWiki.accept(source.wikiUrl));heading.add(wiki,BorderLayout.EAST);
 			}
 			group.add(heading,BorderLayout.NORTH);
-			if(source.validationAvailable)
+			if(PanelState.LUCK_STATISTICS_VISIBLE&&source.validationAvailable)
 			{
 				JButton validation=new JButton(source.validationApproved?"Luck tracking validated":"Validate luck tracking");
 				validation.setEnabled(!source.validationApproved);validation.setToolTipText("Confirm the source-specific gameplay checks before enabling exact luck statistics.");
@@ -176,7 +177,7 @@ public final class LootLuckPanel extends PluginPanel
 			{
 				JPanel rows=new JPanel();rows.setOpaque(false);rows.setLayout(new javax.swing.BoxLayout(rows,javax.swing.BoxLayout.Y_AXIS));
 				ArrayList<PanelState.Item> ordered=new ArrayList<>(source.items);
-				ordered.sort(ItemOrdering.comparator(sort.getSelectedIndex(),state.groupByDropTable));
+				ordered.sort(ItemOrdering.comparator(sortMode(),state.groupByDropTable));
 				if(state.gridView) { group.add(sourceGrid(ordered),BorderLayout.CENTER); }
 				else if(ordered.size()>100) { group.add(virtualSourceItems(ordered),BorderLayout.CENTER); }
 				else { for(PanelState.Item item:ordered) { rows.add(itemRow(item));if(item.key.equals(expanded)) { rows.add(details(item)); } }group.add(rows,BorderLayout.CENTER); }
@@ -349,6 +350,8 @@ public final class LootLuckPanel extends PluginPanel
 		JPanel grid=new JPanel(new GridLayout(0,2,8,4));grid.setOpaque(false);
 		stat(grid,"Quantity",NUMBER.format(item.quantity),"All recorded units; separate from occurrences.",null);
 		stat(grid,"Occurrences",NUMBER.format(item.occurrences),"Recorded notifications containing the item, including excluded/batched observations.",null);
+		if(PanelState.LUCK_STATISTICS_VISIBLE)
+		{
 		String availability=item.attempts==null?"\nUnavailable; see item information.":"\nValidated recorded attempts; see item information for coverage.";
 		stat(grid,"Attempts",item.attempts==null?"—":NUMBER.format(item.attempts),"Eligible individual attempts."+availability,null);
 		stat(grid,"Per attempt",percent(item.probability),"Calculated chance of at least one item per kill/opening; the Wiki rate above may be per roll."+availability,null);
@@ -360,6 +363,7 @@ public final class LootLuckPanel extends PluginPanel
 		stat(grid,"No drop",percent(item.noDrop),"Chance of this streak without a drop.\nNot the next-drop chance."+availability,null);
 		stat(grid,"P(X ≥ k)",percent(item.upper),"Chance of this many drops or more."+availability,null);
 		stat(grid,"P(X ≤ k)",percent(item.lower),"Chance of this many drops or fewer."+availability,null);
+		}
 		if(state.showGe) { stat(grid,"GE total",item.valueAvailable?money(item.ge):"—","Current RuneLite GE price × recorded quantity; not historical sale proceeds.",null); }
 		if(state.showHa) { stat(grid,"HA total",item.valueAvailable?money(item.ha):"—","High Alchemy total before rune costs.",null); }
 		JPanel body=new JPanel();body.setLayout(new javax.swing.BoxLayout(body,javax.swing.BoxLayout.Y_AXIS));body.setOpaque(false);body.add(grid);
@@ -384,7 +388,7 @@ public final class LootLuckPanel extends PluginPanel
 		else { body.add(label("Unknown table",MUTED)); }
 		wrap.add(body);
 		JPanel footer=new JPanel(new BorderLayout(4,0));footer.setOpaque(false);
-		footer.add(label(item.attempts==null?"Model pending":"Validated segment",MUTED),BorderLayout.CENTER);
+		if(PanelState.LUCK_STATISTICS_VISIBLE) { footer.add(label(item.attempts==null?"Model pending":"Validated segment",MUTED),BorderLayout.CENTER); }
 		JButton information=new JButton("i");information.setFont(new java.awt.Font("SansSerif",java.awt.Font.BOLD,12));information.setForeground(MUTED);information.setBackground(ROW);information.setPreferredSize(new Dimension(22,22));information.setMargin(new java.awt.Insets(0,0,0,0));information.getAccessibleContext().setAccessibleName("Item information: "+item.name);
 		information.addActionListener(e->showInformation(information,item));footer.add(information,BorderLayout.EAST);wrap.add(footer,BorderLayout.SOUTH);
 		wrap.setMaximumSize(new Dimension(Integer.MAX_VALUE,wrap.getPreferredSize().height));return wrap;
@@ -399,7 +403,7 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private void showInformation(JButton anchor,PanelState.Item item)
 	{
-		javax.swing.JTextArea text=new javax.swing.JTextArea(item.name+"\n\n"+item.rateTooltip+"\n\nStatistics\n"+item.reason);
+		javax.swing.JTextArea text=new javax.swing.JTextArea(item.name+"\n\n"+item.rateTooltip+(PanelState.LUCK_STATISTICS_VISIBLE?"\n\nStatistics\n"+item.reason:""));
 		text.setEditable(false);text.setLineWrap(true);text.setWrapStyleWord(true);text.setFont(new java.awt.Font("SansSerif",java.awt.Font.PLAIN,12));text.setForeground(Color.LIGHT_GRAY);text.setBackground(ROW);text.setBorder(BorderFactory.createEmptyBorder(8,8,8,8));text.setCaretPosition(0);
 		javax.swing.JScrollPane scroll=new javax.swing.JScrollPane(text);scroll.setPreferredSize(new Dimension(300,300));scroll.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		javax.swing.JPopupMenu popup=new javax.swing.JPopupMenu();popup.setLayout(new BorderLayout());popup.add(scroll);popup.show(anchor,anchor.getWidth()-300,anchor.getHeight());text.requestFocusInWindow();
@@ -414,6 +418,7 @@ public final class LootLuckPanel extends PluginPanel
 		if(text.endsWith(" *")) { String rate=text.substring(0,text.length()-2).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;");return label("<html>"+rate+" <font color='#ffa3ff'>*</font></html>",color); }
 		return label(text,"Varies".equals(text)||"*".equals(text)?com.lootluck.rates.RateRow.VARIES_COLOR:color);
 	}
+	private int sortMode() { int index=sort.getSelectedIndex();return !PanelState.LUCK_STATISTICS_VISIBLE&&index>=2?index+1:index; }
 	private static String value(Double value) { return value==null?"—":DECIMAL.format(value); }
 	private static String percent(Double p) { return p==null?"—":new DecimalFormat("0.####",DecimalFormatSymbols.getInstance(Locale.US)).format(p*100)+"%"; }
 	private static String date(long time) { return time==0?"Never observed":DateTimeFormatter.ofPattern("d MMM yyyy HH:mm").withZone(ZoneId.systemDefault()).format(Instant.ofEpochMilli(time)); }

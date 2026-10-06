@@ -81,7 +81,9 @@ This private test build starts a fresh ledger in `profiles-wiki-v1`; no previous
 
 ## Important current limitation
 
-**Gameplay validation remains pending.** Reviewed candidate models exist for selected Cow, Chicken, Giant rat, Vorkath and Zulrah items in `source-models.json`. Each account/source requires the sidebar validation action after the user confirms its real tracking boundary. Approval binds the rate/page/model evidence and affects future observations only. Unapproved sources still show quantities, notification occurrences, values and published rates; exact luck remains `—`.
+Dry/luck presentation is temporarily hidden through `PanelState.LUCK_STATISTICS_VISIBLE=false`. This hides validation buttons, luck statistics in list/grid details and item information, driest sorting and luck-color controls. Quantities, occurrences, values and published Wiki rates remain visible. Model code, configuration keys and saved statistics are retained; existing approved tracking continues in the background. The model behavior below describes the retained implementation for later re-enabling.
+
+**Gameplay validation remains pending.** Reviewed candidate models exist for selected Cow, Chicken, Giant rat, Vorkath and Zulrah items in `source-models.json`. Each account/source requires gameplay approval after the user confirms its real tracking boundary; the validation button is currently hidden. Approval binds the rate/page/model evidence and affects future observations only. Unapproved sources still record quantities, notification occurrences, values and published rates.
 
 Success means one eligible kill containing the item, regardless of its quantity. Published per-roll rates remain primary; expanded details show the separately derived per-attempt presence chance. Fixed independent rolls use `1-(1-q)^r`. Mutually exclusive outcomes are combined only under an explicit reviewed rule (Chicken feathers). Variable-roll caskets, salvage gates, batches, unresolved conditions and special worlds remain unsupported for exact production luck. See [gameplay-validation.md](docs/gameplay-validation.md).
 

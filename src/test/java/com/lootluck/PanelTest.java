@@ -76,9 +76,9 @@ public class PanelTest
 			for(int i=0;i<10000;i++) { PanelState.Item item=new PanelState.Item();item.id=i+1;item.key="grid:"+i;item.name=String.format(java.util.Locale.ROOT,"Reward %05d",i);item.rate="1/128";item.quantity=i==0?12:0;source.items.add(item); }
 			state.sources.add(source);java.util.concurrent.atomic.AtomicInteger icons=new java.util.concurrent.atomic.AtomicInteger();LootLuckPanel panel=new LootLuckPanel(id->{icons.incrementAndGet();return null;},value->{},value->{},()->{},()->{});panel.update(state);
 			javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,400);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);icons.set(0);
-			findButton(panel,"Switch to grid view").doClick();viewport.doLayout();layoutChildren(panel);assertTrue(icons.get()<100);assertNotNull(findButton(panel,"Reward 00000"));assertNull(findButton(panel,"Reward 09999"));assertNull(findLabel(panel,"Expected"));
-			JButton icon=findButton(panel,"Reward 00000");assertEquals(icon.getWidth(),icon.getHeight());JButton missing=findButton(panel,"Reward 00001");assertEquals(missing.getWidth(),missing.getHeight());assertEquals(icon.getWidth(),missing.getWidth());icon.doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Expected"));assertNotNull(findLabel(panel,"Reward 00000"));assertEquals(new java.awt.Color(223,192,113),((javax.swing.border.LineBorder)findButton(panel,"Reward 00000").getBorder()).getLineColor());assertNoTooltips(panel);
-			findButton(panel,"Reward 00000").doClick();viewport.doLayout();layoutChildren(panel);assertNull(findLabel(panel,"Expected"));findButton(panel,"Switch to list view").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"1/128"));viewport.removeNotify();
+			findButton(panel,"Switch to grid view").doClick();viewport.doLayout();layoutChildren(panel);assertTrue(icons.get()<100);assertNotNull(findButton(panel,"Reward 00000"));assertNull(findButton(panel,"Reward 09999"));assertNull(findLabel(panel,"Quantity"));
+			JButton icon=findButton(panel,"Reward 00000");assertEquals(icon.getWidth(),icon.getHeight());JButton missing=findButton(panel,"Reward 00001");assertEquals(missing.getWidth(),missing.getHeight());assertEquals(icon.getWidth(),missing.getWidth());icon.doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Quantity"));assertNotNull(findLabel(panel,"Reward 00000"));assertEquals(new java.awt.Color(223,192,113),((javax.swing.border.LineBorder)findButton(panel,"Reward 00000").getBorder()).getLineColor());assertNoTooltips(panel);
+			findButton(panel,"Reward 00000").doClick();viewport.doLayout();layoutChildren(panel);assertNull(findLabel(panel,"Quantity"));findButton(panel,"Switch to list view").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"1/128"));viewport.removeNotify();
 		});
 	}
 	@Test public void largeRewardSourcesLoadVisibleIconsAndToggleAllHeaders() throws Exception
@@ -89,9 +89,9 @@ public class PanelTest
 			for(int i=0;i<10000;i++) { PanelState.Item item=new PanelState.Item();item.id=i+1;item.key="item:"+i;item.name=String.format(java.util.Locale.ROOT,"Item %05d",i);item.rate="1/128";source.items.add(item); }
 			state.sources.add(source);LootLuckPanel panel=new LootLuckPanel(id->{icons.incrementAndGet();return null;},value->{},value->{},()->{},()->{});panel.update(state);javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,400);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);
 			assertTrue(icons.get()<30);assertNotNull(findButton(panel,"Item 00000"));assertNull(findButton(panel,"Item 09999"));
-			findButton(panel,"Item 00000").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Expected"));
+			findButton(panel,"Item 00000").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Quantity"));
 			findButton(panel,"Collapse all sources").doClick();assertNull(findButton(panel,"Item 00000"));
-			findButton(panel,"Expand all sources").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findButton(panel,"Item 00000"));assertNotNull(findLabel(panel,"Expected"));viewport.removeNotify();
+			findButton(panel,"Expand all sources").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findButton(panel,"Item 00000"));assertNotNull(findLabel(panel,"Quantity"));viewport.removeNotify();
 		});
 	}
 	@Test public void observationViewsOmitRatesAndKeepRepeatedRewardsSeparate() throws Exception
@@ -107,7 +107,7 @@ public class PanelTest
 	@Test public void wikiButtonTogglesWithoutCollapsingSource() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
-			PanelState state=new PanelState();state.notice="";PanelState.Source source=new PanelState.Source();source.key="salvage";source.name="Large salvage";source.count=1000;source.value="733k gp";source.countTooltip="Recorded outcomes";source.wikiUrl="https://oldschool.runescape.wiki/w/Large_salvage";
+			PanelState state=new PanelState();state.notice="";PanelState.Source source=new PanelState.Source();source.key="salvage";source.name="Large salvage";source.validationAvailable=true;source.count=1000;source.value="733k gp";source.countTooltip="Recorded outcomes";source.wikiUrl="https://oldschool.runescape.wiki/w/Large_salvage";
 			PanelState.Item item=new PanelState.Item();item.key="plank";item.name="Plank";item.rate="1/17.2";item.rateTooltip="Published rate";item.quantity=1;item.rarity=java.awt.Color.GREEN;source.items.add(item);state.sources.add(source);
 			java.util.List<String> opened=new java.util.ArrayList<>();LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{},opened::add);panel.update(state);
 			JButton wiki=findButton(panel,"Open Wiki: Large salvage");assertNotNull(wiki);wiki.doClick();assertEquals(java.util.List.of(source.wikiUrl),opened);assertNotNull(findButton(panel,"Plank"));layout(panel,230);assertTrue(panel.getPreferredSize().width<=280);
@@ -129,17 +129,17 @@ public class PanelTest
 	{
 		SwingUtilities.invokeAndWait(()->{
 			PanelState state=new PanelState();state.notice="Fixture preview";state.dataStatus="Synthetic test data";
-			PanelState.Source source=new PanelState.Source();source.key="test";source.name="Large salvage";source.count=1000;source.value="733k gp";source.countTooltip="Recorded notifications";
+			PanelState.Source source=new PanelState.Source();source.key="test";source.name="Large salvage";source.validationAvailable=true;source.count=1000;source.value="733k gp";source.countTooltip="Recorded notifications";
 			PanelState.Item item=new PanelState.Item();item.key="cotton";item.name="Cotton seed";item.rate="1/443.6";item.quantity=22;item.occurrences=7;item.reason="Fixture certified segment";item.rarity=java.awt.Color.ORANGE;item.rateTooltip="5/2218";item.attempts=1000L;item.expected=2.254;item.ratio=3.105;item.dry=399L;item.noDrop=.406;
 			source.items.add(item);state.sources.add(source);
 			item.valueAvailable=true;item.ge=5100;item.ha=3300;item.geEach=150;item.haEach=100;
 			item.id=1;BufferedImage sprite=new BufferedImage(36,32,BufferedImage.TYPE_INT_ARGB);java.awt.Graphics2D spriteGraphics=sprite.createGraphics();spriteGraphics.setColor(java.awt.Color.ORANGE);spriteGraphics.fillRect(0,0,36,32);spriteGraphics.dispose();item.icon=new javax.swing.ImageIcon(sprite);
 			LootLuckPanel panel=new LootLuckPanel(id->null,session->{},all->{},()->{},()->{});panel.update(state);
-			assertNull(findLabel(panel,"Expected"));JButton button=findButton(panel,"Cotton seed");assertNotNull(button);button.doClick();assertNotNull(findLabel(panel,"Expected"));
+			assertNull(findLabel(panel,"Quantity"));JButton button=findButton(panel,"Cotton seed");assertNotNull(button);button.doClick();assertNotNull(findLabel(panel,"Quantity"));
 			assertNull(button.getToolTipText());assertNotNull(findButton(panel,"Item information: Cotton seed"));
-			assertNotNull(findLabel(panel,"A/E"));findButton(panel,"Cotton seed").doClick();assertNull(findLabel(panel,"Expected"));
+			assertNull(findLabel(panel,"A/E"));assertNull(findLabel(panel,"Expected"));assertNull(findLabel(panel,"Dry"));assertNull(findLabel(panel,"Per attempt"));assertNull(findLabel(panel,"Validated segment"));assertNull(findButton(panel,"Validate luck tracking"));findButton(panel,"Cotton seed").doClick();assertNull(findLabel(panel,"Quantity"));
 			assertNotNull(findLabel(panel,"x7"));state.iconQuantities=false;panel.update(state);assertNotNull(findLabel(panel,"x22"));state.iconQuantities=true;panel.update(state);assertNotNull(findLabel(panel,"x7"));
-			state.stackCounts=true;panel.update(state);clickLabel(panel,"1/443.6");assertNotNull(findLabel(panel,"Expected"));clickLabel(panel,"7 occ.");assertNull(findLabel(panel,"Expected"));assertNoTooltips(panel);assertNotNull(findLabel(panel,"x22"));assertEquals(java.awt.Color.YELLOW,((javax.swing.JLabel)findLabel(panel,"x22")).getForeground());assertNotNull(findLabel(panel,"7 occ."));item.quantity=7;panel.update(state);assertNull(findLabel(panel,"7 occ."));item.quantity=22;state.stackCounts=false;panel.update(state);
+			state.stackCounts=true;panel.update(state);clickLabel(panel,"1/443.6");assertNotNull(findLabel(panel,"Quantity"));clickLabel(panel,"7 occ.");assertNull(findLabel(panel,"Quantity"));assertNoTooltips(panel);assertNotNull(findLabel(panel,"x22"));assertEquals(java.awt.Color.YELLOW,((javax.swing.JLabel)findLabel(panel,"x22")).getForeground());assertNotNull(findLabel(panel,"7 occ."));item.quantity=7;panel.update(state);assertNull(findLabel(panel,"7 occ."));item.quantity=22;state.stackCounts=false;panel.update(state);
 			findButton(panel,"Cotton seed").doClick();layout(panel,230);assertTrue(panel.getPreferredSize().width<=280);
 			javax.swing.JLabel icon=findIcon(panel);assertNotNull(icon);assertTrue(icon.getWidth()-icon.getInsets().left-icon.getInsets().right>=36);
 			BufferedImage image=new BufferedImage(230,panel.getPreferredSize().height,BufferedImage.TYPE_INT_ARGB);panel.paint(image.getGraphics());

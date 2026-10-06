@@ -94,6 +94,8 @@ Confirm the gameplay results to the developer before considering this validation
 
 ## Condition variants and corrected rates
 
+- While luck UI is temporarily hidden, confirm list and grid details show quantities, occurrences, values and Wiki rate breakdowns without attempts, per-attempt chance, expected drops, A/E, dry streaks or probability tails. Check the information popup also omits statistics, validation buttons are absent, and the sort menu omits Driest first. Luck-model validation checks elsewhere in this document resume after the UI is re-enabled.
+
 - Restart into the development build; an already running JVM cannot load the new code.
 - During Rag and Bone Man II, collect an unpolished Zombie bone and check its published rate is 1/4. Rat bone should remain 1/4. Historical unknown-at-collection entries should remain unchanged.
 - Kill low and high Dark wizards. Expand the main header and confirm items appear directly underneath without subheaders. Check the Earth rune quantity/table alternatives in item details, including 36 at 1/32. Energy potion(2) may legitimately remain unknown.

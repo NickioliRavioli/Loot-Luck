@@ -2,6 +2,8 @@
 
 Updated 6 October 2026 on `codex/wiki-rate-audit`.
 
+Dry/luck UI is temporarily hidden using `PanelState.LUCK_STATISTICS_VISIBLE=false`. Validation controls, derived statistics in expanded list/grid details and information popups, driest sorting and luck-color controls are suppressed. Published rates, quantities, occurrences and values remain visible. No model, configuration key or stored statistic was deleted; previously approved tracking continues. Restoring the presentation switch restores the retained UI.
+
 The full Wiki export contains **39,786 rows / 2,244 source pages**. A frozen 150-page sample preserves source-page revisions, wikitext and rendered drop tables. Independent page comparison covers 4,571 rows; 542 sampled rows remain unmatched and are listed in `tools/wiki-audit/not-compared.json`. No rate conflicts were found among the compared rows. Full catalogue parsing and identity coverage are checked separately. Neither result establishes complete gameplay coverage.
 
 Generic item matching uses Wiki item IDs and game-name aliases. Generic source matching uses unambiguous Wiki NPC IDs, preserving the original event name. Explicit Wiki NPC/level evidence selects variant tables without inspecting received loot. Unresolved or overlapping context retains candidates rather than selecting a guessed table.

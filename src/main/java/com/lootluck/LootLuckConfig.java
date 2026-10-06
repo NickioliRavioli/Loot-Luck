@@ -33,7 +33,7 @@ public interface LootLuckConfig extends Config
 	@net.runelite.client.config.Range(min=0)
 	@ConfigItem(keyName="historyLimit",name="Collection history limit",description="Maximum retained loot notifications per account and session. 0 means unlimited. Lowering this prunes oldest history; lifetime totals stay intact. Unlimited uses increasing disk and memory.")
 	default int historyLimit() { return 10000; }
-	@ConfigItem(keyName="luckColors",name="Luck colors",description="Color actual/expected ratios. Below 0.9x red; 0.9–1.1x neutral; above 1.1x green. Not statistical significance.")
+	@ConfigItem(keyName="luckColors",name="Luck colors",description="Color actual/expected ratios. Below 0.9x red; 0.9–1.1x neutral; above 1.1x green. Not statistical significance.",hidden=!com.lootluck.ui.PanelState.LUCK_STATISTICS_VISIBLE)
 	default boolean luckColors() { return true; }
 	@ConfigItem(keyName="showGe",name="Show GE values",description="Current GE totals in source headers and expanded items.")
 	default boolean showGe() { return true; }

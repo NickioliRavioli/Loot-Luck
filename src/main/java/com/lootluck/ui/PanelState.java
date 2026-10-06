@@ -7,6 +7,8 @@ import java.awt.Color;
 /** Detached render data. Worker-owned ledger objects never reach Swing. */
 public final class PanelState
 {
+	/** Temporary presentation switch; tracking models and persisted statistics are retained. */
+	public static final boolean LUCK_STATISTICS_VISIBLE=false;
 	public String notice="Loading local observations…", dataStatus="Bundled Wiki rates";
 	public boolean showGe=true, showHa=false, luckColors=true, showAllRates=false;
 	public boolean showWikiLinks=true;
