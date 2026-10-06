@@ -14,6 +14,19 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void settingsBackHeaderStaysOutsideTheScrollingContent() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});
+			panel.setSettings(new LootLuckConfig(){},(key,value)->{},value->null);panel.update(new PanelState());findButton(panel,"Settings").doClick();
+			javax.swing.JPanel wrapper=panel.getWrappedPanel();wrapper.setSize(242,400);layoutChildren(wrapper);
+			JButton back=findButton(wrapper,"← Back to loot");assertNotNull(back);assertNull(SwingUtilities.getAncestorOfClass(javax.swing.JViewport.class,back));
+			int before=SwingUtilities.convertPoint(back,0,0,wrapper).y;
+			javax.swing.JScrollPane scroll=(javax.swing.JScrollPane)wrapper.getComponent(0);scroll.getViewport().setViewPosition(new java.awt.Point(0,600));layoutChildren(wrapper);
+			assertEquals(before,SwingUtilities.convertPoint(back,0,0,wrapper).y);assertTrue(scroll.getViewport().getViewPosition().y>0);
+			assertNotNull(findButton(wrapper,"Reset session"));back.doClick();assertNull(findButton(wrapper,"← Back to loot"));assertNotNull(findButton(wrapper,"Settings"));
+		});
+	}
 	@Test public void mainHeaderShowsItemsDirectlyWithoutConditionHeaders() throws Exception
 	{
 		javax.swing.SwingUtilities.invokeAndWait(()->{

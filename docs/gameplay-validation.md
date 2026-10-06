@@ -70,6 +70,7 @@ Until these checks pass, keep the source observable with its probability statist
 ## Data settings controls
 
 - Open settings and check the section titles, wrapped hints and preview controls at the normal sidebar width. Obvious action buttons should have no extra hint paragraphs.
+- Scroll down through settings: Back to loot should remain in the fixed top header and return to the loot view. Reset session should have an inline hint explaining that only session totals and collections are cleared, with lifetime data preserved.
 - With Allow Wiki refresh off, check its explanation and disabled Refresh button. With it on, check the explanation, existing third-party confirmation and enabled Refresh button. Switching it off must retain saved rates and recorded loot. Reset session and Data settings belong under History and data.
 
 - Export the current account, collect more loot, then import the export. Confirm

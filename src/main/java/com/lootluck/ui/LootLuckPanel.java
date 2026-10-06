@@ -35,6 +35,7 @@ public final class LootLuckPanel extends PluginPanel
 	private final JPanel content=new JPanel();
 	private final JPanel top=new JPanel(new GridLayout(0,1,0,4));
 	private final JPanel settings=new JPanel(new GridLayout(0,1,0,6));
+	private final JPanel settingsHeader=new JPanel(new BorderLayout(4,0));
 	private LootLuckSettingsPanel configSettings;
 	private final JComboBox<String> scope=new JComboBox<>(new String[]{"Lifetime","Session"});
 	private final JComboBox<String> sort=new JComboBox<>(new String[]{"Most recent","Rarest first","Driest first","Commonest first","Wiki order"});
@@ -86,7 +87,8 @@ public final class LootLuckPanel extends PluginPanel
 		toggleGrid.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,16));toggleGrid.setMargin(new java.awt.Insets(2,4,2,4));
 		toggleGrid.addActionListener(e->{state.gridView=!state.gridView;gridChanged.accept(state.gridView);render();});
 		toggleSources.addActionListener(e->{boolean collapse=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));for(PanelState.Source source:state.sourceRows()) { if(collapse) { collapsed.add(source.key); }else { collapsed.remove(source.key); } }render();});
-		settings.setOpaque(false);JButton back=new JButton("← Back to loot");settings.add(back);settings.add(label("Settings",GOLD));
+		settings.setOpaque(false);JButton back=new JButton("← Back to loot");back.setForeground(Color.WHITE);
+		settingsHeader.setBackground(BG);settingsHeader.setBorder(BorderFactory.createEmptyBorder(7,6,7,6));settingsHeader.add(back,BorderLayout.WEST);settingsHeader.add(label("Settings",GOLD),BorderLayout.CENTER);
 		settingsButton.addActionListener(e->showSettings(true));back.addActionListener(e->showSettings(false));
 		top.add(view);
 		controls.setOpaque(false);controls.add(scope);controls.add(sort);top.add(controls);
@@ -116,8 +118,8 @@ public final class LootLuckPanel extends PluginPanel
 	public void setSettings(com.lootluck.LootLuckConfig config,java.util.function.BiConsumer<String,Object> changed,java.util.function.Function<Boolean,Icon> previewIcons)
 	{
 		state.includeUnobtained=config.includeUnobtained();state.itemEffect=config.itemEffect();state.gridView=config.gridView();gridChanged=value->changed.accept("gridView",value);
-		JPanel dataActions=new JPanel(new GridLayout(0,1,0,4));dataActions.setOpaque(false);dataActions.add(resetButton);dataActions.add(dataSettings);
-		configSettings=new LootLuckSettingsPanel(config,changed,previewIcons,refreshButton,dataActions);settings.add(configSettings);settings.setLayout(new javax.swing.BoxLayout(settings,javax.swing.BoxLayout.Y_AXIS));
+		dataSettings.setAlignmentX(LEFT_ALIGNMENT);dataSettings.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));
+		configSettings=new LootLuckSettingsPanel(config,changed,previewIcons,refreshButton,resetButton,dataSettings);settings.add(configSettings);settings.setLayout(new javax.swing.BoxLayout(settings,javax.swing.BoxLayout.Y_AXIS));
 		for(java.awt.Component child:settings.getComponents()) { if(child instanceof javax.swing.JComponent) { ((javax.swing.JComponent)child).setAlignmentX(LEFT_ALIGNMENT);((javax.swing.JComponent)child).setMaximumSize(new Dimension(Integer.MAX_VALUE,child.getPreferredSize().height)); } }
 	}
 	static JButton stylePreview(ItemDisplayStyle style,Icon icon)
@@ -133,7 +135,10 @@ public final class LootLuckPanel extends PluginPanel
 	private void showSettings(boolean visible)
 	{
 		if(configSettings!=null) { configSettings.sync(); }
-		removeAll();add(visible?settings:top,BorderLayout.NORTH);if(!visible) { add(content,BorderLayout.CENTER); }revalidate();repaint();
+		removeAll();add(visible?settings:top,BorderLayout.NORTH);if(!visible) { add(content,BorderLayout.CENTER); }
+		getWrappedPanel().remove(settingsHeader);if(visible) { getWrappedPanel().add(settingsHeader,BorderLayout.NORTH); }
+		revalidate();repaint();getWrappedPanel().revalidate();getWrappedPanel().repaint();
+		SwingUtilities.invokeLater(()->getScrollPane().getVerticalScrollBar().setValue(0));
 	}
 	public void setDataAction(Consumer<String> action) { dataAction=action; }
 	public void setValidationAction(Consumer<String> action) { validationAction=action; }

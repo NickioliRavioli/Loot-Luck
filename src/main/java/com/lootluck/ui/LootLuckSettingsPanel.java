@@ -22,9 +22,9 @@ final class LootLuckSettingsPanel extends JPanel
 	private boolean syncing;
 	LootLuckSettingsPanel(LootLuckConfig config,BiConsumer<String,Object> changed,java.util.function.Function<Boolean,javax.swing.Icon> previewIcons)
 	{
-		this(config,changed,previewIcons,null,null);
+		this(config,changed,previewIcons,null,null,null);
 	}
-	LootLuckSettingsPanel(LootLuckConfig config,BiConsumer<String,Object> changed,java.util.function.Function<Boolean,javax.swing.Icon> previewIcons,javax.swing.JButton refresh,javax.swing.JComponent dataActions)
+	LootLuckSettingsPanel(LootLuckConfig config,BiConsumer<String,Object> changed,java.util.function.Function<Boolean,javax.swing.Icon> previewIcons,javax.swing.JButton refresh,javax.swing.JButton reset,javax.swing.JComponent dataActions)
 	{
 		setOpaque(false);setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		section("Wiki updates");
@@ -50,6 +50,11 @@ final class LootLuckSettingsPanel extends JPanel
 		JSpinner limit=new JSpinner(new SpinnerNumberModel(Math.max(0,config.historyLimit()),0,Integer.MAX_VALUE,1000));limit.setAlignmentX(LEFT_ALIGNMENT);limit.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));add(limit);
 		hint("0 keeps unlimited history. Lowering the limit removes the oldest collection entries; lifetime totals stay intact.");
 		limit.addChangeListener(e->{if(!syncing) { changed.accept("historyLimit",limit.getValue()); }});updates.add(()->limit.setValue(Math.max(0,config.historyLimit())));
+		if(reset!=null)
+		{
+			reset.setAlignmentX(LEFT_ALIGNMENT);reset.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));add(reset);
+			hint("Clears the current session's loot totals and collection history. Lifetime data is kept. New loot starts a fresh session.");
+		}
 		if(dataActions!=null) { dataActions.setAlignmentX(LEFT_ALIGNMENT);dataActions.setMaximumSize(new Dimension(Integer.MAX_VALUE,dataActions.getPreferredSize().height));add(dataActions); }
 		section("Item counts");
 		javax.swing.ButtonGroup styleGroup=new javax.swing.ButtonGroup();
