@@ -37,12 +37,12 @@ public final class LootLuckPanel extends PluginPanel
 	private final JPanel settings=new JPanel(new GridLayout(0,1,0,6));
 	private final JPanel settingsHeader=new JPanel(new BorderLayout(4,0));
 	private LootLuckSettingsPanel configSettings;
-	private final JComboBox<String> scope=new JComboBox<>(new String[]{"Lifetime","Session"});
+	private final javax.swing.JToggleButton lifetimeButton=new javax.swing.JToggleButton("Lifetime"),sessionButton=new javax.swing.JToggleButton("Session");
 	private final JComboBox<String> sort=new JComboBox<>(new String[]{"Most recent","Rarest first","Driest first","Commonest first","Wiki order"});
 	private final java.util.function.BiFunction<Integer,Long,Icon> icons;
 	private final JComboBox<String> view=new JComboBox<>(new String[]{"By source","Recent collections","All items"});
 	private final JComboBox<String> itemSort=new JComboBox<>(new String[]{"Most recent","Most occurrences","Most quantity"});
-	private final JPanel controls=new JPanel(new GridLayout(1,2,4,0));
+	private final JPanel controls=new JPanel(new GridLayout(1,1));
 	private final JButton exportData=new JButton("Export data"),importData=new JButton("Import data"),deleteData=new JButton("Delete data");
 	private final JButton refreshButton=new JButton("Refresh"),resetButton=new JButton("Reset session");
 	private Consumer<String> dataAction=action->{};
@@ -90,15 +90,22 @@ public final class LootLuckPanel extends PluginPanel
 		settings.setOpaque(false);JButton back=new JButton("← Back to loot");back.setForeground(Color.WHITE);
 		settingsHeader.setBackground(BG);settingsHeader.setBorder(BorderFactory.createEmptyBorder(7,6,7,6));settingsHeader.add(back,BorderLayout.CENTER);settings.add(label("Settings",GOLD));
 		settingsButton.addActionListener(e->showSettings(true));back.addActionListener(e->showSettings(false));
-		top.add(view);
-		controls.setOpaque(false);controls.add(scope);controls.add(sort);top.add(controls);
+		JPanel scopeSelector=new JPanel(new GridLayout(1,2,0,0));scopeSelector.setOpaque(false);
+		javax.swing.ButtonGroup scopeGroup=new javax.swing.ButtonGroup();scopeGroup.add(lifetimeButton);scopeGroup.add(sessionButton);lifetimeButton.setSelected(true);
+		for(javax.swing.JToggleButton button:java.util.List.of(lifetimeButton,sessionButton))
+		{
+			button.setFocusPainted(false);button.setOpaque(true);button.setMargin(new java.awt.Insets(5,4,5,4));styleScopeButton(button);scopeSelector.add(button);
+			button.addItemListener(event->{styleScopeButton(button);if(event.getStateChange()==java.awt.event.ItemEvent.SELECTED) { scopeChanged.accept(session()); }});
+		}
+		top.add(scopeSelector);top.add(view);
+		controls.setOpaque(false);controls.add(sort);top.add(controls);
 		add(top,BorderLayout.NORTH);
 		for(JButton action:java.util.List.of(exportData,importData,deleteData)) { action.addActionListener(e->dataAction.accept(action.getText())); }
 		deleteData.setBackground(new Color(145,45,45));deleteData.setForeground(Color.WHITE);deleteData.setOpaque(true);
 		content.setLayout(new javax.swing.BoxLayout(content,javax.swing.BoxLayout.Y_AXIS));content.setOpaque(false);add(content,BorderLayout.CENTER);
-		scope.addActionListener(e->scopeChanged.accept(session()));sort.addActionListener(e->{scopeChanged.accept(session());render();});
+		sort.addActionListener(e->{scopeChanged.accept(session());render();});
 		refreshButton.addActionListener(e->refresh.run());resetButton.addActionListener(e->reset.run());
-		view.addActionListener(e->{historyPage=0;controls.removeAll();controls.setLayout(new GridLayout(1,view.getSelectedIndex()==1?1:2,4,0));controls.add(scope);if(view.getSelectedIndex()==0) { controls.add(sort); }else if(view.getSelectedIndex()==2) { controls.add(itemSort); }controls.revalidate();controls.repaint();render();});itemSort.addActionListener(e->render());
+		view.addActionListener(e->{historyPage=0;controls.removeAll();top.remove(controls);if(view.getSelectedIndex()==0) { controls.add(sort);top.add(controls); }else if(view.getSelectedIndex()==2) { controls.add(itemSort);top.add(controls); }top.revalidate();top.repaint();render();});itemSort.addActionListener(e->render());
 	}
 	private static Icon eyeIcon(boolean slashed)
 	{
@@ -111,7 +118,12 @@ public final class LootLuckPanel extends PluginPanel
 			}
 		};
 	}
-	public boolean session() { return scope.getSelectedIndex()==1; }
+	private static void styleScopeButton(javax.swing.JToggleButton button)
+	{
+		button.setBackground(button.isSelected()?new Color(56,49,39):ROW);button.setForeground(button.isSelected()?GOLD:MUTED);
+		button.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(button.isSelected()?GOLD:new Color(65,65,65)),BorderFactory.createEmptyBorder(5,4,5,4)));
+	}
+	public boolean session() { return sessionButton.isSelected(); }
 	public void setSettings(com.lootluck.LootLuckConfig config,java.util.function.BiConsumer<String,Object> changed,java.util.function.Function<Boolean,Icon> previewIcons)
 	{
 		state.includeUnobtained=config.includeUnobtained();state.itemEffect=config.itemEffect();state.gridView=config.gridView();gridChanged=value->changed.accept("gridView",value);

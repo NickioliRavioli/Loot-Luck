@@ -14,6 +14,22 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void segmentedScopeSitsAboveViewsAndKeepsItsSelection() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			java.util.List<Boolean> changes=new java.util.ArrayList<>();LootLuckPanel panel=new LootLuckPanel(id->null,changes::add,value->{},()->{},()->{});panel.update(new PanelState());layout(panel,230);
+			javax.swing.JToggleButton lifetime=findScopeButton(panel,"Lifetime"),session=findScopeButton(panel,"Session");JComboBox<?> views=findViewSelector(panel);
+			assertNotNull(lifetime);assertNotNull(session);assertTrue(lifetime.isSelected());assertFalse(session.isSelected());assertFalse(panel.session());assertEquals(lifetime.getWidth(),session.getWidth());assertEquals(lifetime.getY(),session.getY());
+			assertTrue(SwingUtilities.convertPoint(lifetime,0,lifetime.getHeight(),panel).y<=SwingUtilities.convertPoint(views,0,0,panel).y);
+			session.doClick();assertTrue(panel.session());assertTrue(session.isSelected());assertFalse(lifetime.isSelected());assertEquals(java.util.List.of(true),changes);session.doClick();assertEquals(java.util.List.of(true),changes);
+			for(String view:java.util.List.of("Recent collections","All items","By source")) { views.setSelectedItem(view);layout(panel,230);assertTrue(panel.session());assertTrue(session.isSelected());assertTrue(SwingUtilities.convertPoint(session,0,session.getHeight(),panel).y<=SwingUtilities.convertPoint(views,0,0,panel).y); }
+			assertEquals(java.util.List.of(true),changes);lifetime.doClick();assertFalse(panel.session());assertTrue(lifetime.isSelected());assertFalse(session.isSelected());assertEquals(java.util.List.of(true,false),changes);
+		});
+	}
+	private static javax.swing.JToggleButton findScopeButton(Container container,String text)
+	{
+		for(Component child:container.getComponents()) { if(child instanceof javax.swing.JToggleButton&&text.equals(((javax.swing.JToggleButton)child).getText())) { return (javax.swing.JToggleButton)child; }if(child instanceof Container) { javax.swing.JToggleButton found=findScopeButton((Container)child,text);if(found!=null) { return found; } } }return null;
+	}
 	@Test public void sourceHeaderTextForwardsHoverAndLeftClicksButNotRightClicks() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
