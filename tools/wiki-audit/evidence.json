@@ -2,7 +2,7 @@
   "Giant rat": {
     "owner": "Giant rat",
     "revision": 15260179,
-    "fetchedAt": "2026-10-06T05:51:48.369340+00:00",
+    "fetchedAt": "2026-10-06T06:16:38.881571+00:00",
     "url": "https://oldschool.runescape.wiki/w/Giant_rat",
     "sha256": "c793c28135dd3c1e40a636917c32093e5aad0a33785332c0f3496a762fc167d1",
     "rows": [
@@ -36,7 +36,8 @@
         "rate": "1/15",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 370
+        "line": 370,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Giant rat#Low level",
@@ -218,7 +219,7 @@
   "Goblin": {
     "owner": "Goblin",
     "revision": 15351455,
-    "fetchedAt": "2026-10-06T05:51:47.440189+00:00",
+    "fetchedAt": "2026-10-06T06:16:38.056922+00:00",
     "url": "https://oldschool.runescape.wiki/w/Goblin",
     "sha256": "7bd2e966797a0768da9afbaad76a7de514cb226984714862b4c5d045455498ea",
     "rows": [
@@ -922,7 +923,11 @@
         "rate": "Common",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Goblin#Drop table 1",
+          "Goblin#Drop table 2"
+        ]
       },
       {
         "table": "Goblin",
@@ -930,10 +935,14 @@
         "rate": "Common",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Goblin#Drop table 1",
+          "Goblin#Drop table 2"
+        ]
       },
       {
-        "table": "Goblin",
+        "table": "Goblin#Drop table 1",
         "item": "Energy potion(3)",
         "rate": "Unknown",
         "quantity": "1",
@@ -941,7 +950,7 @@
         "line": 0
       },
       {
-        "table": "Goblin",
+        "table": "Goblin#Drop table 1",
         "item": "Energy potion(4)",
         "rate": "Common",
         "quantity": "1",
@@ -1298,7 +1307,11 @@
         "rate": "Common",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Goblin#Drop table 1",
+          "Goblin#Drop table 2"
+        ]
       },
       {
         "table": "Goblin",
@@ -1306,7 +1319,11 @@
         "rate": "Common",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Goblin#Drop table 1",
+          "Goblin#Drop table 2"
+        ]
       },
       {
         "table": "Goblin#Drop table 2",
@@ -1419,7 +1436,7 @@
   "Cow": {
     "owner": "Cow",
     "revision": 15364588,
-    "fetchedAt": "2026-10-06T04:20:45.096902+00:00",
+    "fetchedAt": "2026-10-06T06:16:57.371219+00:00",
     "url": "https://oldschool.runescape.wiki/w/Cow",
     "sha256": "f013842a1e915546168bc49eea30cc42e906aae4be1f5d3d9cf8523b9f2e856d",
     "rows": [
@@ -1501,13 +1518,13 @@
         "line": 0
       }
     ],
-    "renderSha256": "7bbd2afbf2ea8fe7dc7561446b8063ff03c46753d4adabef3e470524a724a737",
+    "renderSha256": "e8aa1e1cdea990ea80249b80870166d1879ecbaf455e26a230ad6c631aee4a3a",
     "corrections": []
   },
   "Chicken": {
     "owner": "Chicken",
     "revision": 15283952,
-    "fetchedAt": "2026-10-06T04:20:45.974679+00:00",
+    "fetchedAt": "2026-10-06T06:16:58.951220+00:00",
     "url": "https://oldschool.runescape.wiki/w/Chicken",
     "sha256": "85a657f406c135b6ba0cc1a19dc157c0075b596712d5b6a4fbc03e03b308efbd",
     "rows": [
@@ -1636,7 +1653,7 @@
         "line": 0
       }
     ],
-    "renderSha256": "63d08d3159a683d5e71ac0ff600dba98cd8eb56985b29c66889dc58382e47068",
+    "renderSha256": "c229cfca69b5ca0efe16058c90268039329b3cd5e6a5280308241b4e3e1f525a",
     "corrections": []
   },
   "Man": {
@@ -1820,7 +1837,8 @@
         "rate": "1/15",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 626
+        "line": 626,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Man",
@@ -4815,7 +4833,7 @@
   "Reward casket (beginner)": {
     "owner": "Reward casket (beginner)",
     "revision": 15366183,
-    "fetchedAt": "2026-10-06T05:52:00.403869+00:00",
+    "fetchedAt": "2026-10-06T06:16:51.152093+00:00",
     "url": "https://oldschool.runescape.wiki/w/Reward_casket_%28beginner%29",
     "sha256": "f2f3ea37a5bc896f694fbe2b02fd0d882d8a3b5aa5733f7349c75930b129ff60",
     "rows": [
@@ -6067,7 +6085,7 @@
   "Reward casket (easy)": {
     "owner": "Reward casket (easy)",
     "revision": 15358923,
-    "fetchedAt": "2026-10-06T05:52:01.490273+00:00",
+    "fetchedAt": "2026-10-06T06:16:52.063864+00:00",
     "url": "https://oldschool.runescape.wiki/w/Reward_casket_%28easy%29",
     "sha256": "b551c3d56d309c1d47bc9851d7929b1c9362e6ac74db7ef3e062c34c5c27f964",
     "rows": [
@@ -24743,14 +24761,478 @@
   "Reward pool": {
     "owner": "Reward pool",
     "revision": 15208420,
-    "fetchedAt": "2026-10-06T05:52:04.529324+00:00",
+    "fetchedAt": "2026-10-06T06:29:43.597537+00:00",
     "url": "https://oldschool.runescape.wiki/w/Reward_pool",
-    "sha256": "9cf59c720b0c0ea7aa67e8c3d3cc6c13744758641abf8da5814d9ed57d1a2e30",
-    "rows": [],
+    "sha256": "c6e7e071fd94aee7168ba071cf0906f8887f87dd9dd8ce471aa06e261fa0b7b5",
+    "rows": [
+      {
+        "table": "Reward pool#Levels 35–39",
+        "item": "Raw herring",
+        "rate": "900/6400",
+        "quantity": "30-40 (noted)",
+        "notes": " ",
+        "line": 2
+      },
+      {
+        "table": "Reward pool#Levels 35–39",
+        "item": "Raw mackerel",
+        "rate": "810/6400",
+        "quantity": "20-30 (noted)",
+        "notes": " ",
+        "line": 3
+      },
+      {
+        "table": "Reward pool#Levels 35–39",
+        "item": "Raw pike",
+        "rate": "720/6400",
+        "quantity": "10-20 (noted)",
+        "notes": " ",
+        "line": 4
+      },
+      {
+        "table": "Reward pool#Levels 35–39",
+        "item": "Raw salmon",
+        "rate": "630/6400",
+        "quantity": "7-12 (noted)",
+        "notes": " ",
+        "line": 5
+      },
+      {
+        "table": "Reward pool#Levels 35–39",
+        "item": "Raw tuna",
+        "rate": "540/6400",
+        "quantity": "5-10 (noted)",
+        "notes": " ",
+        "line": 6
+      },
+      {
+        "table": "Reward pool#Levels 40–45",
+        "item": "Raw mackerel",
+        "rate": "900/6400",
+        "quantity": "30-40 (noted)",
+        "notes": " ",
+        "line": 2
+      },
+      {
+        "table": "Reward pool#Levels 40–45",
+        "item": "Raw pike",
+        "rate": "810/6400",
+        "quantity": "20-30 (noted)",
+        "notes": " ",
+        "line": 3
+      },
+      {
+        "table": "Reward pool#Levels 40–45",
+        "item": "Raw salmon",
+        "rate": "720/6400",
+        "quantity": "10-20 (noted)",
+        "notes": " ",
+        "line": 4
+      },
+      {
+        "table": "Reward pool#Levels 40–45",
+        "item": "Raw tuna",
+        "rate": "630/6400",
+        "quantity": "7-12 (noted)",
+        "notes": " ",
+        "line": 5
+      },
+      {
+        "table": "Reward pool#Levels 40–45",
+        "item": "Raw lobster",
+        "rate": "540/6400",
+        "quantity": "5-10 (noted)",
+        "notes": " ",
+        "line": 6
+      },
+      {
+        "table": "Reward pool#Levels 46–49",
+        "item": "Raw pike",
+        "rate": "900/6400",
+        "quantity": "30-40 (noted)",
+        "notes": " ",
+        "line": 2
+      },
+      {
+        "table": "Reward pool#Levels 46–49",
+        "item": "Raw salmon",
+        "rate": "810/6400",
+        "quantity": "20-30 (noted)",
+        "notes": " ",
+        "line": 3
+      },
+      {
+        "table": "Reward pool#Levels 46–49",
+        "item": "Raw tuna",
+        "rate": "720/6400",
+        "quantity": "10-20 (noted)",
+        "notes": " ",
+        "line": 4
+      },
+      {
+        "table": "Reward pool#Levels 46–49",
+        "item": "Raw lobster",
+        "rate": "630/6400",
+        "quantity": "7-12 (noted)",
+        "notes": " ",
+        "line": 5
+      },
+      {
+        "table": "Reward pool#Levels 46–49",
+        "item": "Raw bass",
+        "rate": "540/6400",
+        "quantity": "5-10 (noted)",
+        "notes": " ",
+        "line": 6
+      },
+      {
+        "table": "Reward pool#Levels 50–75",
+        "item": "Raw salmon",
+        "rate": "900/6400",
+        "quantity": "30-40 (noted)",
+        "notes": " ",
+        "line": 2
+      },
+      {
+        "table": "Reward pool#Levels 50–75",
+        "item": "Raw tuna",
+        "rate": "810/6400",
+        "quantity": "20-30 (noted)",
+        "notes": " ",
+        "line": 3
+      },
+      {
+        "table": "Reward pool#Levels 50–75",
+        "item": "Raw lobster",
+        "rate": "720/6400",
+        "quantity": "10-20 (noted)",
+        "notes": " ",
+        "line": 4
+      },
+      {
+        "table": "Reward pool#Levels 50–75",
+        "item": "Raw bass",
+        "rate": "630/6400",
+        "quantity": "7-12 (noted)",
+        "notes": " ",
+        "line": 5
+      },
+      {
+        "table": "Reward pool#Levels 50–75",
+        "item": "Raw swordfish",
+        "rate": "540/6400",
+        "quantity": "5-10 (noted)",
+        "notes": " ",
+        "line": 6
+      },
+      {
+        "table": "Reward pool#Levels 76–78",
+        "item": "Raw tuna",
+        "rate": "900/6400",
+        "quantity": "30-40 (noted)",
+        "notes": " ",
+        "line": 2
+      },
+      {
+        "table": "Reward pool#Levels 76–78",
+        "item": "Raw lobster",
+        "rate": "810/6400",
+        "quantity": "20-30 (noted)",
+        "notes": " ",
+        "line": 3
+      },
+      {
+        "table": "Reward pool#Levels 76–78",
+        "item": "Raw bass",
+        "rate": "720/6400",
+        "quantity": "10-20 (noted)",
+        "notes": " ",
+        "line": 4
+      },
+      {
+        "table": "Reward pool#Levels 76–78",
+        "item": "Raw swordfish",
+        "rate": "630/6400",
+        "quantity": "7-12 (noted)",
+        "notes": " ",
+        "line": 5
+      },
+      {
+        "table": "Reward pool#Levels 76–78",
+        "item": "Raw shark",
+        "rate": "540/6400",
+        "quantity": "5-10 (noted)",
+        "notes": " ",
+        "line": 6
+      },
+      {
+        "table": "Reward pool#Levels 79–80",
+        "item": "Raw lobster",
+        "rate": "900/6400",
+        "quantity": "30-40 (noted)",
+        "notes": " ",
+        "line": 2
+      },
+      {
+        "table": "Reward pool#Levels 79–80",
+        "item": "Raw bass",
+        "rate": "810/6400",
+        "quantity": "20-30 (noted)",
+        "notes": " ",
+        "line": 3
+      },
+      {
+        "table": "Reward pool#Levels 79–80",
+        "item": "Raw swordfish",
+        "rate": "720/6400",
+        "quantity": "10-20 (noted)",
+        "notes": " ",
+        "line": 4
+      },
+      {
+        "table": "Reward pool#Levels 79–80",
+        "item": "Raw shark",
+        "rate": "630/6400",
+        "quantity": "7-12 (noted)",
+        "notes": " ",
+        "line": 5
+      },
+      {
+        "table": "Reward pool#Levels 79–80",
+        "item": "Raw sea turtle",
+        "rate": "540/6400",
+        "quantity": "5-10 (noted)",
+        "notes": " ",
+        "line": 6
+      },
+      {
+        "table": "Reward pool#Levels 81+",
+        "item": "Raw bass",
+        "rate": "900/6400",
+        "quantity": "30-40 (noted)",
+        "notes": " ",
+        "line": 2
+      },
+      {
+        "table": "Reward pool#Levels 81+",
+        "item": "Raw swordfish",
+        "rate": "810/6400",
+        "quantity": "20-30 (noted)",
+        "notes": " ",
+        "line": 3
+      },
+      {
+        "table": "Reward pool#Levels 81+",
+        "item": "Raw shark",
+        "rate": "720/6400",
+        "quantity": "10-20 (noted)",
+        "notes": " ",
+        "line": 4
+      },
+      {
+        "table": "Reward pool#Levels 81+",
+        "item": "Raw sea turtle",
+        "rate": "630/6400",
+        "quantity": "7-12 (noted)",
+        "notes": " ",
+        "line": 5
+      },
+      {
+        "table": "Reward pool#Levels 81+",
+        "item": "Raw manta ray",
+        "rate": "540/6400",
+        "quantity": "5-10 (noted)",
+        "notes": " ",
+        "line": 6
+      },
+      {
+        "table": "Reward pool",
+        "item": "Plank",
+        "rate": "7/160",
+        "quantity": "20-30 (noted)",
+        "notes": " ",
+        "line": 2
+      },
+      {
+        "table": "Reward pool",
+        "item": "Oak plank",
+        "rate": "1/32",
+        "quantity": "15-25 (noted)",
+        "notes": " ",
+        "line": 3
+      },
+      {
+        "table": "Reward pool",
+        "item": "Seaweed",
+        "rate": "1/40",
+        "quantity": "20-60 (noted)",
+        "notes": " ",
+        "line": 4
+      },
+      {
+        "table": "Reward pool",
+        "item": "Steel nails",
+        "rate": "1/80",
+        "quantity": "300-500",
+        "notes": " ",
+        "line": 5
+      },
+      {
+        "table": "Reward pool",
+        "item": "Feather",
+        "rate": "1/80",
+        "quantity": "800-1600",
+        "notes": " ",
+        "line": 6
+      },
+      {
+        "table": "Reward pool",
+        "item": "Fishing bait",
+        "rate": "1/80",
+        "quantity": "800-1600",
+        "notes": " ",
+        "line": 7
+      },
+      {
+        "table": "Reward pool",
+        "item": "Spirit flakes",
+        "rate": "1/4",
+        "quantity": "32-64",
+        "notes": " ",
+        "line": 2
+      },
+      {
+        "table": "Reward pool",
+        "item": "Casket (Reward pool)",
+        "rate": "1/20",
+        "quantity": "1",
+        "notes": " ",
+        "line": 3
+      },
+      {
+        "table": "Reward pool",
+        "item": "Soaked page",
+        "rate": "149/8000",
+        "quantity": "5-9",
+        "notes": " ",
+        "line": 4
+      },
+      {
+        "table": "Reward pool",
+        "item": "Fish barrel",
+        "rate": "1/400",
+        "quantity": "1",
+        "notes": " ",
+        "line": 5
+      },
+      {
+        "table": "Reward pool",
+        "item": "Soaked page",
+        "rate": "1/400",
+        "quantity": "25",
+        "notes": " <ref group=\"d\">These are dropped in place of duplicate fish barrels.</ref>",
+        "line": 6
+      },
+      {
+        "table": "Reward pool",
+        "item": "Tackle box",
+        "rate": "1/400",
+        "quantity": "1",
+        "notes": " ",
+        "line": 7
+      },
+      {
+        "table": "Reward pool",
+        "item": "Soaked page",
+        "rate": "1/400",
+        "quantity": "25",
+        "notes": " <ref group=\"d\">These are dropped in place of duplicate tackle boxes.</ref>",
+        "line": 8
+      },
+      {
+        "table": "Reward pool",
+        "item": "Big harpoonfish",
+        "rate": "1/1600",
+        "quantity": "1",
+        "notes": " ",
+        "line": 9
+      },
+      {
+        "table": "Reward pool",
+        "item": "Tome of Water (empty)",
+        "rate": "1/1600",
+        "quantity": "1",
+        "notes": " ",
+        "line": 10
+      },
+      {
+        "table": "Reward pool",
+        "item": "Tiny tempor",
+        "rate": "1/8000",
+        "quantity": "1",
+        "notes": " {{CiteTwitter|author=Mod Zuko|url=https://twitter.com/JagexZuko/status/1392118795834122241|date=11 May 2021|archiveurl=https://reldo.runescape.wiki/i/102979|archivedate=11 May 2021|quote=[https://archive.ph/TNts8/683705a1c6a7da99c0e828759e85f49506275b32.jpg Attached image]|name=rewardPool}}",
+        "line": 11
+      },
+      {
+        "table": "Reward pool",
+        "item": "Dragon harpoon",
+        "rate": "1/8000",
+        "quantity": "1",
+        "notes": " ",
+        "line": 12
+      }
+    ],
     "tableLevels": {},
     "tableNpcIds": {},
     "npcLevels": {},
     "itemNames": {},
+    "transclusions": [
+      {
+        "title": "Template:Reward pool/Rewards levels 35–39",
+        "revision": 15141560,
+        "sha256": "c879e2e40bd055431129b9f463ee4c9d080002ca07a239e915397d48dcfdc9c3"
+      },
+      {
+        "title": "Template:Reward pool/Rewards levels 40–45",
+        "revision": 15141562,
+        "sha256": "313ec5d03a82782b894b07474b152b7279b9875e9ec67d5d98bf4ffd4498339c"
+      },
+      {
+        "title": "Template:Reward pool/Rewards levels 46–49",
+        "revision": 15141574,
+        "sha256": "bd5152d29a6e87b2f888e7ae99fa684696c7ae9eaa3427fa49b0c0f44162fafa"
+      },
+      {
+        "title": "Template:Reward pool/Rewards levels 50–75",
+        "revision": 15141564,
+        "sha256": "a2f9b2002df707c64d357f63693d1f5994f122d0bee9e6486aeaa61cc999d6db"
+      },
+      {
+        "title": "Template:Reward pool/Rewards levels 76–78",
+        "revision": 15141567,
+        "sha256": "8e2bc065b21864e4ecb7225b0411c76b29a9e28fbbca4f34925270b07e9f05c7"
+      },
+      {
+        "title": "Template:Reward pool/Rewards levels 79–80",
+        "revision": 15141569,
+        "sha256": "e0d0798e18cc27c9cf7ecce9abba563835801141266e0dcef47ba42c8ca059a9"
+      },
+      {
+        "title": "Template:Reward pool/Rewards levels 81+",
+        "revision": 15141557,
+        "sha256": "21d84701c91055ab9864648eb3230fd1a730104df790a54227511462bcc2bbde"
+      },
+      {
+        "title": "Template:Reward pool/Rewards other",
+        "revision": 15173597,
+        "sha256": "3e7b44bfe10a3407015c9ad48b0c0d7ee7df45177d85221274c4b6ae49adb77d"
+      },
+      {
+        "title": "Template:Reward pool/Rewards unique",
+        "revision": 15310837,
+        "sha256": "1752f6ed1c2965c231bb9b4e5bbfa58078a8d1c28bbf34ace60bcaf1defb31fd"
+      }
+    ],
     "exportHash": "f160c981bbefa8a493758d5080807e5c58ef6590bfa8489a324ac50d122f1004",
     "renderedRows": [
       {
@@ -24842,7 +25324,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 35–39",
         "item": "Raw herring",
         "rate": "900/6,400",
         "quantity": "30–40 (noted)",
@@ -24850,7 +25332,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 35–39",
         "item": "Raw mackerel",
         "rate": "810/6,400",
         "quantity": "20–30 (noted)",
@@ -24858,7 +25340,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 35–39",
         "item": "Raw pike",
         "rate": "720/6,400",
         "quantity": "10–20 (noted)",
@@ -24866,7 +25348,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 35–39",
         "item": "Raw salmon",
         "rate": "630/6,400",
         "quantity": "7–12 (noted)",
@@ -24874,7 +25356,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 35–39",
         "item": "Raw tuna",
         "rate": "540/6,400",
         "quantity": "5–10 (noted)",
@@ -24882,7 +25364,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 40–45",
         "item": "Raw mackerel",
         "rate": "900/6,400",
         "quantity": "30–40 (noted)",
@@ -24890,7 +25372,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 40–45",
         "item": "Raw pike",
         "rate": "810/6,400",
         "quantity": "20–30 (noted)",
@@ -24898,7 +25380,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 40–45",
         "item": "Raw salmon",
         "rate": "720/6,400",
         "quantity": "10–20 (noted)",
@@ -24906,7 +25388,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 40–45",
         "item": "Raw tuna",
         "rate": "630/6,400",
         "quantity": "7–12 (noted)",
@@ -24914,7 +25396,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 40–45",
         "item": "Raw lobster",
         "rate": "540/6,400",
         "quantity": "5–10 (noted)",
@@ -24922,7 +25404,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 46–49",
         "item": "Raw pike",
         "rate": "900/6,400",
         "quantity": "30–40 (noted)",
@@ -24930,7 +25412,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 46–49",
         "item": "Raw salmon",
         "rate": "810/6,400",
         "quantity": "20–30 (noted)",
@@ -24938,7 +25420,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 46–49",
         "item": "Raw tuna",
         "rate": "720/6,400",
         "quantity": "10–20 (noted)",
@@ -24946,7 +25428,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 46–49",
         "item": "Raw lobster",
         "rate": "630/6,400",
         "quantity": "7–12 (noted)",
@@ -24954,7 +25436,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 46–49",
         "item": "Raw bass",
         "rate": "540/6,400",
         "quantity": "5–10 (noted)",
@@ -24962,7 +25444,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 50–75",
         "item": "Raw salmon",
         "rate": "900/6,400",
         "quantity": "30–40 (noted)",
@@ -24970,7 +25452,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 50–75",
         "item": "Raw tuna",
         "rate": "810/6,400",
         "quantity": "20–30 (noted)",
@@ -24978,7 +25460,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 50–75",
         "item": "Raw lobster",
         "rate": "720/6,400",
         "quantity": "10–20 (noted)",
@@ -24986,7 +25468,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 50–75",
         "item": "Raw bass",
         "rate": "630/6,400",
         "quantity": "7–12 (noted)",
@@ -24994,7 +25476,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 50–75",
         "item": "Raw swordfish",
         "rate": "540/6,400",
         "quantity": "5–10 (noted)",
@@ -25002,7 +25484,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 76–78",
         "item": "Raw tuna",
         "rate": "900/6,400",
         "quantity": "30–40 (noted)",
@@ -25010,7 +25492,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 76–78",
         "item": "Raw lobster",
         "rate": "810/6,400",
         "quantity": "20–30 (noted)",
@@ -25018,7 +25500,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 76–78",
         "item": "Raw bass",
         "rate": "720/6,400",
         "quantity": "10–20 (noted)",
@@ -25026,7 +25508,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 76–78",
         "item": "Raw swordfish",
         "rate": "630/6,400",
         "quantity": "7–12 (noted)",
@@ -25034,7 +25516,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 76–78",
         "item": "Raw shark",
         "rate": "540/6,400",
         "quantity": "5–10 (noted)",
@@ -25042,7 +25524,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 79–80",
         "item": "Raw lobster",
         "rate": "900/6,400",
         "quantity": "30–40 (noted)",
@@ -25050,7 +25532,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 79–80",
         "item": "Raw bass",
         "rate": "810/6,400",
         "quantity": "20–30 (noted)",
@@ -25058,7 +25540,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 79–80",
         "item": "Raw swordfish",
         "rate": "720/6,400",
         "quantity": "10–20 (noted)",
@@ -25066,7 +25548,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 79–80",
         "item": "Raw shark",
         "rate": "630/6,400",
         "quantity": "7–12 (noted)",
@@ -25074,7 +25556,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 79–80",
         "item": "Raw sea turtle",
         "rate": "540/6,400",
         "quantity": "5–10 (noted)",
@@ -25082,7 +25564,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 81+",
         "item": "Raw bass",
         "rate": "900/6,400",
         "quantity": "30–40 (noted)",
@@ -25090,7 +25572,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 81+",
         "item": "Raw swordfish",
         "rate": "810/6,400",
         "quantity": "20–30 (noted)",
@@ -25098,7 +25580,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 81+",
         "item": "Raw shark",
         "rate": "720/6,400",
         "quantity": "10–20 (noted)",
@@ -25106,7 +25588,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 81+",
         "item": "Raw sea turtle",
         "rate": "630/6,400",
         "quantity": "7–12 (noted)",
@@ -25114,7 +25596,7 @@
         "line": 0
       },
       {
-        "table": "Reward pool",
+        "table": "Reward pool#Levels 81+",
         "item": "Raw manta ray",
         "rate": "540/6,400",
         "quantity": "5–10 (noted)",
@@ -25176,7 +25658,7 @@
   "Reward Cart": {
     "owner": "Reward Cart",
     "revision": 15310821,
-    "fetchedAt": "2026-10-06T05:52:03.672018+00:00",
+    "fetchedAt": "2026-10-06T06:16:54.076507+00:00",
     "url": "https://oldschool.runescape.wiki/w/Reward_Cart",
     "sha256": "42395497a49e2e5b8a20542d66b3bf995e68190d1227b7ae95f5e948ccf71ae8",
     "rows": [
@@ -27969,7 +28451,7 @@
   "Small salvage": {
     "owner": "Small salvage",
     "revision": 15357642,
-    "fetchedAt": "2026-10-06T05:51:59.502850+00:00",
+    "fetchedAt": "2026-10-06T06:16:50.216885+00:00",
     "url": "https://oldschool.runescape.wiki/w/Small_salvage",
     "sha256": "144ca8c2bb6641544c59ff305a14df341a1772d958d44f7809f2eb8a0220f298",
     "rows": [
@@ -28357,7 +28839,7 @@
   "Casket (Reward pool)": {
     "owner": "Casket (Reward pool)",
     "revision": 15190143,
-    "fetchedAt": "2026-10-06T05:52:05.335852+00:00",
+    "fetchedAt": "2026-10-06T06:16:55.745164+00:00",
     "url": "https://oldschool.runescape.wiki/w/Casket_%28Reward_pool%29",
     "sha256": "9c8569700fc4dbdc3c6074cf2ad3927e8c963e6de1bdf867bebe138707fcb456",
     "rows": [
@@ -36021,7 +36503,7 @@
         "line": 679
       },
       {
-        "table": "Iron rocks",
+        "table": "Iron rocks#Prifddinas",
         "item": "Crystal shard",
         "rate": "1/65",
         "quantity": "1",
@@ -36029,7 +36511,7 @@
         "line": 695
       },
       {
-        "table": "Iron rocks",
+        "table": "Iron rocks#Mining Guild",
         "item": "Unidentified minerals",
         "rate": "1/100",
         "quantity": "1",
@@ -36084,7 +36566,7 @@
         "line": 0
       },
       {
-        "table": "Iron rocks",
+        "table": "Iron rocks#Prifddinas",
         "item": "Crystal shard",
         "rate": "1/65",
         "quantity": "1",
@@ -36092,7 +36574,7 @@
         "line": 0
       },
       {
-        "table": "Iron rocks",
+        "table": "Iron rocks#Mining Guild",
         "item": "Unidentified minerals",
         "rate": "1/100",
         "quantity": "1",
@@ -36530,7 +37012,7 @@
     "exportHash": "c9d8c40e6e8f4094cffd533ce0cd8064589c5d036616f7f7a42496d05c6c2264",
     "renderedRows": [
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Free-to-play",
         "item": "Lamp",
         "rate": "~306/754",
         "quantity": "1",
@@ -36538,7 +37020,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Free-to-play",
         "item": "Uncut ruby",
         "rate": "~108/754",
         "quantity": "4 (noted)",
@@ -36546,7 +37028,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Free-to-play",
         "item": "Uncut diamond",
         "rate": "~100/754",
         "quantity": "3 (noted)",
@@ -36554,7 +37036,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Free-to-play",
         "item": "Chaos rune",
         "rate": "~110/754",
         "quantity": "19–25",
@@ -36562,7 +37044,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Free-to-play",
         "item": "Law rune",
         "rate": "~134/754",
         "quantity": "7–10",
@@ -36570,7 +37052,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Members",
         "item": "Lamp",
         "rate": "~1,194/5,656",
         "quantity": "1",
@@ -36578,7 +37060,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Members",
         "item": "Uncut ruby",
         "rate": "~580/5,656",
         "quantity": "4 (noted)",
@@ -36586,7 +37068,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Members",
         "item": "Uncut diamond",
         "rate": "~631/5,656",
         "quantity": "3 (noted)",
@@ -36594,7 +37076,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Members",
         "item": "Mithril arrowtips",
         "rate": "~49/5,656",
         "quantity": "45–50",
@@ -36602,7 +37084,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Members",
         "item": "Ugthanki kebab",
         "rate": "~65/5,656",
         "quantity": "2",
@@ -36610,7 +37092,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Members",
         "item": "Chaos rune",
         "rate": "~569/5,656",
         "quantity": "19–25",
@@ -36618,7 +37100,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Members",
         "item": "Law rune",
         "rate": "~555/5,656",
         "quantity": "7–10",
@@ -36626,7 +37108,7 @@
         "line": 0
       },
       {
-        "table": "Prison Pete",
+        "table": "Prison Pete#Members",
         "item": "Grimy toadflax",
         "rate": "~1,225/5,656",
         "quantity": "6 (noted)",
@@ -42888,7 +43370,7 @@
         "line": 200
       },
       {
-        "table": "Maple tree (Farming)",
+        "table": "Maple tree (Farming)#Diseased",
         "item": "Maple leaves",
         "rate": "Always",
         "quantity": "1",
@@ -42896,7 +43378,7 @@
         "line": 201
       },
       {
-        "table": "Maple tree (Farming)",
+        "table": "Maple tree (Farming)#Stump",
         "item": "Maple roots",
         "rate": "Always",
         "quantity": "1-4",
@@ -42919,7 +43401,7 @@
         "line": 0
       },
       {
-        "table": "Maple tree (Farming)",
+        "table": "Maple tree (Farming)#Diseased",
         "item": "Maple leaves",
         "rate": "Always[d 1]",
         "quantity": "1",
@@ -42927,7 +43409,7 @@
         "line": 0
       },
       {
-        "table": "Maple tree (Farming)",
+        "table": "Maple tree (Farming)#Stump",
         "item": "Maple roots",
         "rate": "Always[d 2]",
         "quantity": "1–4",
@@ -42991,7 +43473,8 @@
         "rate": "1/8",
         "quantity": "1",
         "notes": " <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 165
+        "line": 165,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Icefiend",
@@ -43002,7 +43485,7 @@
         "line": 167
       },
       {
-        "table": "Icefiend",
+        "table": "Icefiend#Level 13",
         "item": "Tooth half of key (moon key)",
         "rate": "1/1373",
         "quantity": "1",
@@ -43010,7 +43493,7 @@
         "line": 168
       },
       {
-        "table": "Icefiend",
+        "table": "Icefiend#Level 13",
         "item": "Frozen tear",
         "rate": "1/150",
         "quantity": "5",
@@ -43194,7 +43677,7 @@
         "line": 0
       },
       {
-        "table": "Icefiend",
+        "table": "Icefiend#Level 13",
         "item": "Tooth half of key (moon key)",
         "rate": "1/1,373",
         "quantity": "1",
@@ -43202,7 +43685,7 @@
         "line": 0
       },
       {
-        "table": "Icefiend",
+        "table": "Icefiend#Level 13",
         "item": "Frozen tear",
         "rate": "1/150",
         "quantity": "5",
@@ -43790,7 +44273,8 @@
         "rate": "1/5",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 460
+        "line": 460,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Hobgoblin#Unarmed",
@@ -47713,7 +48197,7 @@
         "line": 110
       },
       {
-        "table": "Experiment",
+        "table": "Experiment#Level 51",
         "item": "Cavern key",
         "rate": "Always",
         "quantity": "1",
@@ -47765,7 +48249,7 @@
         "line": 0
       },
       {
-        "table": "Experiment",
+        "table": "Experiment#Level 51",
         "item": "Cavern key",
         "rate": "Always[d 1]",
         "quantity": "1",
@@ -49357,7 +49841,8 @@
         "rate": "1/3",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 219
+        "line": 219,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Ice warrior",
@@ -49938,7 +50423,7 @@
   "Ram": {
     "owner": "Ram",
     "revision": 15291732,
-    "fetchedAt": "2026-10-06T04:21:42.383911+00:00",
+    "fetchedAt": "2026-10-06T06:16:58.151922+00:00",
     "url": "https://oldschool.runescape.wiki/w/Ram",
     "sha256": "ca4c0e4270934ee2f8edd8b1b2204e528bbb2b73910a85707ff0629a58914f42",
     "rows": [
@@ -49988,7 +50473,7 @@
         "line": 0
       }
     ],
-    "renderSha256": "9a155bc95abbc35c2713d508111c024af3fa4f341d558a6e545c59ec8fc25a58",
+    "renderSha256": "fe6bbb0437d569af97b6acd7523e1f2403cb95fbce06e928311d043cb9c83699",
     "corrections": []
   },
   "Bloodwood tree": {
@@ -50178,7 +50663,7 @@
     "exportHash": "de5d349a9ca7e83330d3e90be5ea5e5f1b8a79c0d4c9511d13f51c67620c9fcd",
     "renderedRows": [
       {
-        "table": "Boat fishing spot (big net, harpoon)",
+        "table": "Boat fishing spot (big net, harpoon)#Big net",
         "item": "Raw mackerel",
         "rate": "Common",
         "quantity": "1",
@@ -50186,7 +50671,7 @@
         "line": 0
       },
       {
-        "table": "Boat fishing spot (big net, harpoon)",
+        "table": "Boat fishing spot (big net, harpoon)#Big net",
         "item": "Raw cod",
         "rate": "Common",
         "quantity": "1",
@@ -50194,7 +50679,7 @@
         "line": 0
       },
       {
-        "table": "Boat fishing spot (big net, harpoon)",
+        "table": "Boat fishing spot (big net, harpoon)#Big net",
         "item": "Raw bass",
         "rate": "Common",
         "quantity": "1",
@@ -50202,7 +50687,7 @@
         "line": 0
       },
       {
-        "table": "Boat fishing spot (big net, harpoon)",
+        "table": "Boat fishing spot (big net, harpoon)#Big net",
         "item": "Leather boots",
         "rate": "Uncommon",
         "quantity": "1",
@@ -50210,7 +50695,7 @@
         "line": 0
       },
       {
-        "table": "Boat fishing spot (big net, harpoon)",
+        "table": "Boat fishing spot (big net, harpoon)#Big net",
         "item": "Leather gloves",
         "rate": "Uncommon",
         "quantity": "1",
@@ -50218,7 +50703,7 @@
         "line": 0
       },
       {
-        "table": "Boat fishing spot (big net, harpoon)",
+        "table": "Boat fishing spot (big net, harpoon)#Big net",
         "item": "Seaweed",
         "rate": "Uncommon",
         "quantity": "1",
@@ -50226,7 +50711,7 @@
         "line": 0
       },
       {
-        "table": "Boat fishing spot (big net, harpoon)",
+        "table": "Boat fishing spot (big net, harpoon)#Big net",
         "item": "Oyster",
         "rate": "Uncommon",
         "quantity": "1",
@@ -50234,7 +50719,7 @@
         "line": 0
       },
       {
-        "table": "Boat fishing spot (big net, harpoon)",
+        "table": "Boat fishing spot (big net, harpoon)#Big net",
         "item": "Casket",
         "rate": "Rare",
         "quantity": "1",
@@ -50242,7 +50727,7 @@
         "line": 0
       },
       {
-        "table": "Boat fishing spot (big net, harpoon)",
+        "table": "Boat fishing spot (big net, harpoon)#Big net",
         "item": "Big bass",
         "rate": "Very rare[d 1]",
         "quantity": "1",
@@ -51650,7 +52135,7 @@
   "Brutus": {
     "owner": "Brutus",
     "revision": 15364604,
-    "fetchedAt": "2026-10-06T05:52:02.848821+00:00",
+    "fetchedAt": "2026-10-06T06:16:53.251385+00:00",
     "url": "https://oldschool.runescape.wiki/w/Brutus",
     "sha256": "699fea9ffdf19b5511eec024ce485343fef27db00e053edea5def8818ce50916",
     "rows": [
@@ -57119,7 +57604,7 @@
         "line": 0
       },
       {
-        "table": "Clue turtle",
+        "table": "Clue turtle#Levels 30-49",
         "item": "Clue scroll (easy)",
         "rate": "~8/20",
         "quantity": "1",
@@ -57127,7 +57612,7 @@
         "line": 0
       },
       {
-        "table": "Clue turtle",
+        "table": "Clue turtle#Levels 30-49",
         "item": "Clue scroll (medium)",
         "rate": "~12/20",
         "quantity": "1",
@@ -57140,7 +57625,11 @@
         "rate": "~9/20",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Clue turtle#Levels 50-69",
+          "Clue turtle#Levels 70+"
+        ]
       },
       {
         "table": "Clue turtle",
@@ -57148,10 +57637,14 @@
         "rate": "~6/20",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Clue turtle#Levels 50-69",
+          "Clue turtle#Levels 70+"
+        ]
       },
       {
-        "table": "Clue turtle",
+        "table": "Clue turtle#Levels 50-69",
         "item": "Clue scroll (hard)",
         "rate": "~5/20",
         "quantity": "1",
@@ -57164,7 +57657,11 @@
         "rate": "~9/20",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Clue turtle#Levels 50-69",
+          "Clue turtle#Levels 70+"
+        ]
       },
       {
         "table": "Clue turtle",
@@ -57172,10 +57669,14 @@
         "rate": "~6/20",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Clue turtle#Levels 50-69",
+          "Clue turtle#Levels 70+"
+        ]
       },
       {
-        "table": "Clue turtle",
+        "table": "Clue turtle#Levels 70+",
         "item": "Clue scroll (hard)",
         "rate": "~3/20",
         "quantity": "1",
@@ -57183,7 +57684,7 @@
         "line": 0
       },
       {
-        "table": "Clue turtle",
+        "table": "Clue turtle#Levels 70+",
         "item": "Clue scroll (elite)",
         "rate": "~2/20",
         "quantity": "1",
@@ -57202,7 +57703,7 @@
     "sha256": "c920a841026e5dac2c63cabefa259a2c5a5db9e72daed67743f4def9e9789766",
     "rows": [
       {
-        "table": "Sq'irk tree",
+        "table": "Sq'irk tree#Winter",
         "item": "Winter sq'irk",
         "rate": "Always",
         "quantity": "1",
@@ -57210,7 +57711,7 @@
         "line": 68
       },
       {
-        "table": "Sq'irk tree",
+        "table": "Sq'irk tree#Spring",
         "item": "Spring sq'irk",
         "rate": "Always",
         "quantity": "1",
@@ -57218,7 +57719,7 @@
         "line": 69
       },
       {
-        "table": "Sq'irk tree",
+        "table": "Sq'irk tree#Autumn",
         "item": "Autumn sq'irk",
         "rate": "Always",
         "quantity": "1",
@@ -57226,7 +57727,7 @@
         "line": 70
       },
       {
-        "table": "Sq'irk tree",
+        "table": "Sq'irk tree#Summer",
         "item": "Summer sq'irk",
         "rate": "Always",
         "quantity": "1",
@@ -57249,7 +57750,7 @@
     "exportHash": "92c935a2f7524caedfe7ca821682084b6312689f0fd112acf5d8bd7c09e11c0d",
     "renderedRows": [
       {
-        "table": "Sq'irk tree",
+        "table": "Sq'irk tree#Winter",
         "item": "Winter sq'irk",
         "rate": "Always[d 1]",
         "quantity": "1",
@@ -57257,7 +57758,7 @@
         "line": 0
       },
       {
-        "table": "Sq'irk tree",
+        "table": "Sq'irk tree#Spring",
         "item": "Spring sq'irk",
         "rate": "Always[d 2]",
         "quantity": "1",
@@ -57265,7 +57766,7 @@
         "line": 0
       },
       {
-        "table": "Sq'irk tree",
+        "table": "Sq'irk tree#Autumn",
         "item": "Autumn sq'irk",
         "rate": "Always[d 3]",
         "quantity": "1",
@@ -57273,7 +57774,7 @@
         "line": 0
       },
       {
-        "table": "Sq'irk tree",
+        "table": "Sq'irk tree#Summer",
         "item": "Summer sq'irk",
         "rate": "Always[d 4]",
         "quantity": "1",
@@ -57739,7 +58240,7 @@
         "line": 0
       },
       {
-        "table": "Mort'ton local",
+        "table": "Mort'ton local#Serum 208",
         "item": "Thin snail",
         "rate": "Uncommon",
         "quantity": "1–3",
@@ -60715,7 +61216,7 @@
         "line": 0
       },
       {
-        "table": "Rogue",
+        "table": "Rogue#Level 15",
         "item": "Energy potion(3)",
         "rate": "Common",
         "quantity": "1",
@@ -61097,7 +61598,7 @@
     "exportHash": "e781bafd4d817387459b675d4b2b039448c67c17ac5d7ca8fc6ad5d878e4f73e",
     "renderedRows": [
       {
-        "table": "Fishing spot (big net, harpoon)",
+        "table": "Fishing spot (big net, harpoon)#Big net",
         "item": "Raw mackerel",
         "rate": "Common",
         "quantity": "1",
@@ -61105,7 +61606,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (big net, harpoon)",
+        "table": "Fishing spot (big net, harpoon)#Big net",
         "item": "Raw cod",
         "rate": "Common",
         "quantity": "1",
@@ -61113,7 +61614,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (big net, harpoon)",
+        "table": "Fishing spot (big net, harpoon)#Big net",
         "item": "Raw bass",
         "rate": "Common",
         "quantity": "1",
@@ -61121,7 +61622,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (big net, harpoon)",
+        "table": "Fishing spot (big net, harpoon)#Big net",
         "item": "Leather boots",
         "rate": "Uncommon",
         "quantity": "1",
@@ -61129,7 +61630,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (big net, harpoon)",
+        "table": "Fishing spot (big net, harpoon)#Big net",
         "item": "Leather gloves",
         "rate": "Uncommon",
         "quantity": "1",
@@ -61137,7 +61638,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (big net, harpoon)",
+        "table": "Fishing spot (big net, harpoon)#Big net",
         "item": "Seaweed",
         "rate": "Uncommon",
         "quantity": "1",
@@ -61145,7 +61646,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (big net, harpoon)",
+        "table": "Fishing spot (big net, harpoon)#Big net",
         "item": "Oyster",
         "rate": "Uncommon",
         "quantity": "1",
@@ -61153,7 +61654,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (big net, harpoon)",
+        "table": "Fishing spot (big net, harpoon)#Big net",
         "item": "Casket",
         "rate": "Rare",
         "quantity": "1",
@@ -61161,7 +61662,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (big net, harpoon)",
+        "table": "Fishing spot (big net, harpoon)#Big net",
         "item": "Big bass",
         "rate": "Very rare[d 1]",
         "quantity": "1",
@@ -61174,7 +61675,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)",
@@ -61182,7 +61687,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)",
@@ -61190,7 +61699,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)",
@@ -61198,7 +61711,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)",
@@ -61206,7 +61723,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)#Big net",
@@ -61238,7 +61759,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)",
@@ -61246,7 +61771,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)",
@@ -61254,7 +61783,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)",
@@ -61262,7 +61795,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)",
@@ -61270,7 +61807,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (big net, harpoon)#Big net",
+          "Fishing spot (big net, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (big net, harpoon)#Harpoon",
@@ -61732,7 +62273,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)",
@@ -61740,7 +62285,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)",
@@ -61748,7 +62297,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)",
@@ -61756,7 +62309,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)",
@@ -61764,7 +62321,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)#Cage",
@@ -61780,10 +62341,14 @@
         "rate": "Very rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
-        "table": "Fishing spot (cage, harpoon)",
+        "table": "Fishing spot (cage, harpoon)#Harpoon",
         "item": "Raw tuna",
         "rate": "Common",
         "quantity": "1",
@@ -61791,7 +62356,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (cage, harpoon)",
+        "table": "Fishing spot (cage, harpoon)#Harpoon",
         "item": "Raw swordfish",
         "rate": "Common",
         "quantity": "1",
@@ -61799,7 +62364,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (cage, harpoon)",
+        "table": "Fishing spot (cage, harpoon)#Harpoon",
         "item": "Big swordfish",
         "rate": "Very rare[d 1]",
         "quantity": "1",
@@ -61812,7 +62377,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)",
@@ -61820,7 +62389,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)",
@@ -61828,7 +62401,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)",
@@ -61836,7 +62413,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)",
@@ -61844,7 +62425,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       },
       {
         "table": "Fishing spot (cage, harpoon)#Harpoon",
@@ -61860,7 +62445,11 @@
         "rate": "Very rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (cage, harpoon)#Cage",
+          "Fishing spot (cage, harpoon)#Harpoon"
+        ]
       }
     ],
     "renderSha256": "6dcb2d04530085a1de3988d45a2bb4394480d8609c38d81a5c13aea3748a703d",
@@ -62107,7 +62696,7 @@
     "exportHash": "7f12fd679e98d44850e8bd6cefe8067494e06c688ebfcab6385917aa8708a1f7",
     "renderedRows": [
       {
-        "table": "Fishing spot (small net, bait)",
+        "table": "Fishing spot (small net, bait)#Small net",
         "item": "Raw anchovies",
         "rate": "Common",
         "quantity": "1",
@@ -62115,7 +62704,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (small net, bait)",
+        "table": "Fishing spot (small net, bait)#Small net",
         "item": "Raw shrimps",
         "rate": "Common",
         "quantity": "1",
@@ -62128,7 +62717,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)",
@@ -62136,7 +62729,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)",
@@ -62144,7 +62741,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)",
@@ -62152,7 +62753,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)",
@@ -62160,7 +62765,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)#Small net",
@@ -62176,10 +62785,14 @@
         "rate": "Very rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
-        "table": "Fishing spot (small net, bait)",
+        "table": "Fishing spot (small net, bait)#Bait",
         "item": "Raw herring",
         "rate": "Common",
         "quantity": "1",
@@ -62187,7 +62800,7 @@
         "line": 0
       },
       {
-        "table": "Fishing spot (small net, bait)",
+        "table": "Fishing spot (small net, bait)#Bait",
         "item": "Raw sardine",
         "rate": "Common",
         "quantity": "1",
@@ -62200,7 +62813,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)",
@@ -62208,7 +62825,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)",
@@ -62216,7 +62837,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)",
@@ -62224,7 +62849,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)",
@@ -62232,7 +62861,11 @@
         "rate": "Rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       },
       {
         "table": "Fishing spot (small net, bait)#Bait",
@@ -62248,7 +62881,11 @@
         "rate": "Very rare",
         "quantity": "1",
         "notes": "",
-        "line": 0
+        "line": 0,
+        "tables": [
+          "Fishing spot (small net, bait)#Bait",
+          "Fishing spot (small net, bait)#Small net"
+        ]
       }
     ],
     "renderSha256": "a7802214f8f91b60a9c5b8e5132c73c5e8303c1d3ebf2696e8f7760a8522d72d",
@@ -63411,7 +64048,7 @@
   "Imp": {
     "owner": "Imp",
     "revision": 15359433,
-    "fetchedAt": "2026-10-06T05:51:55.944307+00:00",
+    "fetchedAt": "2026-10-06T06:16:46.407968+00:00",
     "url": "https://oldschool.runescape.wiki/w/Imp",
     "sha256": "bfb9044380bd01dee2c22a0e68149ced234d39859dbe6c33be76a7af35b33cfd",
     "rows": [
@@ -65259,7 +65896,8 @@
         "rate": "1/3",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 308
+        "line": 308,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Ice giant#Regular",
@@ -65467,7 +66105,8 @@
         "rate": "1/3",
         "quantity": "1",
         "notes": " <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 374
+        "line": 374,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Ice giant#Wilderness Slayer Cave",
@@ -69059,7 +69698,7 @@
         "line": 212
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Aldarin",
         "item": "Grapes",
         "rate": "",
         "quantity": "40 (noted)",
@@ -69067,7 +69706,7 @@
         "line": 217
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Ardougne",
         "item": "Cake",
         "rate": "",
         "quantity": "2 (noted)",
@@ -69075,7 +69714,7 @@
         "line": 218
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Brimhaven",
         "item": "Pineapple",
         "rate": "",
         "quantity": "25 (noted)",
@@ -69083,7 +69722,7 @@
         "line": 219
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Catherby",
         "item": "Raw lobster",
         "rate": "",
         "quantity": "15 (noted)",
@@ -69091,7 +69730,7 @@
         "line": 220
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Civitas illa Fortis",
         "item": "Varlamorian kebab",
         "rate": "",
         "quantity": "2 (noted)",
@@ -69099,7 +69738,7 @@
         "line": 221
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Corsair Cove",
         "item": "Steel scimitar",
         "rate": "",
         "quantity": "1 (noted)",
@@ -69107,7 +69746,7 @@
         "line": 222
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Deepfin Point",
         "item": "Lead ore",
         "rate": "",
         "quantity": "10 (noted)",
@@ -69115,7 +69754,7 @@
         "line": 223
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Etceteria",
         "item": "Teak logs",
         "rate": "",
         "quantity": "5 (noted)",
@@ -69123,7 +69762,7 @@
         "line": 224
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Jatizo",
         "item": "Mithril ore",
         "rate": "",
         "quantity": "10 (noted)",
@@ -69131,7 +69770,7 @@
         "line": 225
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Land's End",
         "item": "Bird nest (empty)",
         "rate": "",
         "quantity": "5 (noted)",
@@ -69139,7 +69778,7 @@
         "line": 226
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Lunar Isle",
         "item": "Astral rune",
         "rate": "",
         "quantity": "25",
@@ -69147,7 +69786,7 @@
         "line": 227
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Neitiznot",
         "item": "Yak-hide",
         "rate": "",
         "quantity": "15 (noted)",
@@ -69155,7 +69794,7 @@
         "line": 228
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#The Pandemonium",
         "item": "Grog",
         "rate": "",
         "quantity": "1 (noted)",
@@ -69163,7 +69802,7 @@
         "line": 229
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#The Pandemonium",
         "item": "Barnacle blaster",
         "rate": "",
         "quantity": "1 (noted)",
@@ -69171,7 +69810,7 @@
         "line": 230
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#The Pandemonium",
         "item": "Sailor's mirage",
         "rate": "",
         "quantity": "1 (noted)",
@@ -69179,7 +69818,7 @@
         "line": 231
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#The Pandemonium",
         "item": "Vodka",
         "rate": "",
         "quantity": "1 (noted)",
@@ -69187,7 +69826,7 @@
         "line": 232
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Piscatoris",
         "item": "Raw monkfish",
         "rate": "",
         "quantity": "10 (noted)",
@@ -69195,7 +69834,7 @@
         "line": 233
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Port Khazard",
         "item": "Raw manta ray",
         "rate": "",
         "quantity": "10 (noted)",
@@ -69203,7 +69842,7 @@
         "line": 234
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Port Piscarilius",
         "item": "Raw anglerfish",
         "rate": "",
         "quantity": "5 (noted)",
@@ -69211,7 +69850,7 @@
         "line": 235
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Port Roberts",
         "item": "Steel cannonball",
         "rate": "",
         "quantity": "25",
@@ -69219,7 +69858,7 @@
         "line": 236
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Port Sarim",
         "item": "Casket",
         "rate": "",
         "quantity": "1 (noted)",
@@ -69227,7 +69866,7 @@
         "line": 237
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Port Tyras",
         "item": "Zulrah's scales",
         "rate": "",
         "quantity": "25",
@@ -69235,7 +69874,7 @@
         "line": 238
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Priffddinas",
         "item": "Crystal shard",
         "rate": "",
         "quantity": "10",
@@ -69243,7 +69882,7 @@
         "line": 239
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Red Rock",
         "item": "Pillar coral",
         "rate": "",
         "quantity": "5",
@@ -69251,7 +69890,7 @@
         "line": 240
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Rellekka",
         "item": "Fremennik helm",
         "rate": "",
         "quantity": "1",
@@ -69259,7 +69898,7 @@
         "line": 241
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Ruins of Unkah",
         "item": "Spirit flakes",
         "rate": "",
         "quantity": "10",
@@ -69267,7 +69906,7 @@
         "line": 242
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#The Summer Shore",
         "item": "Pillar frag",
         "rate": "",
         "quantity": "2",
@@ -69275,7 +69914,7 @@
         "line": 243
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Sunset Coast",
         "item": "Bucket of sand",
         "rate": "",
         "quantity": "40 (noted)",
@@ -69283,7 +69922,7 @@
         "line": 244
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Void Knights' Outpost",
         "item": "Steel platebody",
         "rate": "",
         "quantity": "1 (noted)",
@@ -69291,7 +69930,7 @@
         "line": 245
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Cairn Isle",
         "item": "Uncut sapphire",
         "rate": "",
         "quantity": "10 (noted)",
@@ -69299,7 +69938,7 @@
         "line": 252
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Entrana",
         "item": "Wyrm bones",
         "rate": "",
         "quantity": "15 (noted)",
@@ -69307,7 +69946,7 @@
         "line": 253
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Hosidius",
         "item": "Supercompost",
         "rate": "",
         "quantity": "25 (noted)",
@@ -69315,7 +69954,7 @@
         "line": 254
       },
       {
-        "table": "Medium port reward bag",
+        "table": "Medium port reward bag#Musa Point",
         "item": "Banana",
         "rate": "",
         "quantity": "25 (noted)",
@@ -72080,7 +72719,7 @@
         "line": 242
       },
       {
-        "table": "Teak tree",
+        "table": "Teak tree#Prifddinas",
         "item": "Crystal shard",
         "rate": "1/40",
         "quantity": "1",
@@ -72167,7 +72806,7 @@
         "line": 0
       },
       {
-        "table": "Teak tree",
+        "table": "Teak tree#Prifddinas",
         "item": "Crystal shard",
         "rate": "1/40",
         "quantity": "1",
@@ -72247,7 +72886,7 @@
   "Master Farmer": {
     "owner": "Master Farmer",
     "revision": 15267392,
-    "fetchedAt": "2026-10-06T05:51:51.886741+00:00",
+    "fetchedAt": "2026-10-06T06:16:42.419260+00:00",
     "url": "https://oldschool.runescape.wiki/w/Master_Farmer",
     "sha256": "22efa26de640e3858ae181ecaac289930821c2218dd4a680dff5bad318855ceb",
     "rows": [
@@ -75674,7 +76313,7 @@
     "sha256": "3885becabde4080db070246766cc6311bcb5afe8adffd9182ab7923cfacc04d5",
     "rows": [
       {
-        "table": "Termites (NPC)",
+        "table": "Termites (NPC)#Basic",
         "item": "Termites",
         "rate": "Always",
         "quantity": "11-14",
@@ -75682,7 +76321,7 @@
         "line": 51
       },
       {
-        "table": "Termites (NPC)",
+        "table": "Termites (NPC)#Advanced",
         "item": "Termites",
         "rate": "Always",
         "quantity": "11-21",
@@ -75705,7 +76344,7 @@
     "exportHash": "6e08b1b21f1c2ed7f8eee0713397d5e176bd0ff0a9a35acfdf2df386c30a5eac",
     "renderedRows": [
       {
-        "table": "Termites (NPC)",
+        "table": "Termites (NPC)#Basic",
         "item": "Termites",
         "rate": "Always[d 1]",
         "quantity": "11–14",
@@ -75713,7 +76352,7 @@
         "line": 0
       },
       {
-        "table": "Termites (NPC)",
+        "table": "Termites (NPC)#Advanced",
         "item": "Termites",
         "rate": "Always[d 2]",
         "quantity": "11–21",
@@ -77861,7 +78500,7 @@
   "Unicorn": {
     "owner": "Unicorn",
     "revision": 15285003,
-    "fetchedAt": "2026-10-06T05:51:49.121019+00:00",
+    "fetchedAt": "2026-10-06T06:16:39.767820+00:00",
     "url": "https://oldschool.runescape.wiki/w/Unicorn",
     "sha256": "90c023546d33b5dd6108d58a72a33534b8b24a7c14d44f57ea91e2c6b7b0f0a4",
     "rows": [
@@ -77946,7 +78585,7 @@
   "Jail guard": {
     "owner": "Jail guard",
     "revision": 15199200,
-    "fetchedAt": "2026-10-06T05:51:49.877742+00:00",
+    "fetchedAt": "2026-10-06T06:16:40.534904+00:00",
     "url": "https://oldschool.runescape.wiki/w/Jail_guard",
     "sha256": "74fc4dbfa4641c1021aeb90bb526314bdbb29ddee9633b0663b82eee6ec73f38",
     "rows": [
@@ -77985,7 +78624,7 @@
   "Black Knight": {
     "owner": "Black Knight",
     "revision": 15332965,
-    "fetchedAt": "2026-10-06T05:51:50.883328+00:00",
+    "fetchedAt": "2026-10-06T06:16:41.524304+00:00",
     "url": "https://oldschool.runescape.wiki/w/Black_Knight",
     "sha256": "aa90e2927353ce1b89db6d868b246fd00483de006a9621e49193c387a3eb2fc3",
     "rows": [
@@ -78195,7 +78834,8 @@
         "rate": "1/9",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 294
+        "line": 294,
+        "requiredArea": "Wilderness"
       }
     ],
     "tableLevels": {},
@@ -78681,7 +79321,7 @@
   "Zombie": {
     "owner": "Zombie",
     "revision": 15339798,
-    "fetchedAt": "2026-10-06T05:51:52.899922+00:00",
+    "fetchedAt": "2026-10-06T06:16:43.361303+00:00",
     "url": "https://oldschool.runescape.wiki/w/Zombie",
     "sha256": "a887f6f9611dfedcbaaecb0c3417a9e654a22b19975dd8db6568e0528879a5fc",
     "rows": [
@@ -79806,7 +80446,7 @@
   "Skeleton": {
     "owner": "Skeleton",
     "revision": 15323222,
-    "fetchedAt": "2026-10-06T05:51:53.994657+00:00",
+    "fetchedAt": "2026-10-06T06:16:44.561551+00:00",
     "url": "https://oldschool.runescape.wiki/w/Skeleton",
     "sha256": "e8aeab0ba48257a6ee3d802a68c6a12363682013b038463adcf1cc92f1600c28",
     "rows": [
@@ -79824,7 +80464,8 @@
         "rate": "1/6",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 767
+        "line": 767,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Skeleton#Plain",
@@ -80024,7 +80665,8 @@
         "rate": "1/14",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 831
+        "line": 831,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Skeleton#Unarmed",
@@ -80200,7 +80842,8 @@
         "rate": "1/14",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 896
+        "line": 896,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Skeleton#Armed",
@@ -80801,7 +81444,7 @@
         "line": 0
       },
       {
-        "table": "Skeleton",
+        "table": "Skeleton#Armed",
         "item": "Air rune",
         "rate": "3/128",
         "quantity": "12; 15",
@@ -81148,7 +81791,7 @@
   "Rat": {
     "owner": "Rat",
     "revision": 15353339,
-    "fetchedAt": "2026-10-06T05:51:54.943052+00:00",
+    "fetchedAt": "2026-10-06T06:16:45.507975+00:00",
     "url": "https://oldschool.runescape.wiki/w/Rat",
     "sha256": "973598645177f999b69ab7e98e8d754d5bc5996cebe4488f8164fc177da1ee24",
     "rows": [
@@ -81174,7 +81817,8 @@
         "rate": "1/15",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=\"d\">Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 1298
+        "line": 1298,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Rat#Stronghold of Security",
@@ -81299,7 +81943,7 @@
   "Giant bat": {
     "owner": "Giant bat",
     "revision": 15258141,
-    "fetchedAt": "2026-10-06T05:51:56.898501+00:00",
+    "fetchedAt": "2026-10-06T06:16:47.255658+00:00",
     "url": "https://oldschool.runescape.wiki/w/Giant_bat",
     "sha256": "72fd86a8731465398b37f000ad87e9137f6c2f763d27655fc5125e9b8e5c600f",
     "rows": [
@@ -81325,7 +81969,8 @@
         "rate": "1/5",
         "quantity": "1",
         "notes": " <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 405
+        "line": 405,
+        "requiredArea": "Wilderness"
       }
     ],
     "tableLevels": {},
@@ -81368,7 +82013,7 @@
   "Chaos druid": {
     "owner": "Chaos druid",
     "revision": 15259337,
-    "fetchedAt": "2026-10-06T05:51:57.802746+00:00",
+    "fetchedAt": "2026-10-06T06:16:48.050213+00:00",
     "url": "https://oldschool.runescape.wiki/w/Chaos_druid",
     "sha256": "07709859a2fcb6996b8077099792f8d78bf538b1a9c9bc75dba8399eddf61dd8",
     "rows": [
@@ -81514,7 +82159,8 @@
         "rate": "1/11",
         "quantity": "1",
         "notes": " <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 168
+        "line": 168,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Chaos druid",
@@ -81884,7 +82530,7 @@
   "Magic axe": {
     "owner": "Magic axe",
     "revision": 15242120,
-    "fetchedAt": "2026-10-06T05:51:58.593386+00:00",
+    "fetchedAt": "2026-10-06T06:16:49.430648+00:00",
     "url": "https://oldschool.runescape.wiki/w/Magic_axe",
     "sha256": "cc45f2fd00c6681ecab0c2795cfe277a1e657aebd8e558982358b921dbe2cb8e",
     "rows": [
@@ -81902,7 +82548,8 @@
         "rate": "1/3",
         "quantity": "1",
         "notes": " <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 101
+        "line": 101,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Magic axe",
@@ -82081,17 +82728,18 @@
   "Ghost": {
     "owner": "Ghost",
     "revision": 15212981,
-    "fetchedAt": "2026-10-06T05:52:06.285283+00:00",
+    "fetchedAt": "2026-10-06T06:16:56.588979+00:00",
     "url": "https://oldschool.runescape.wiki/w/Ghost",
     "sha256": "95bbd0585d6a005f44690ba96e1c0dc825f6d8f9ef5d9c63404422d92074f1b6",
     "rows": [
       {
-        "table": "Ghost",
+        "table": "Ghost#Level 19",
         "item": "Looting bag",
         "rate": "1/7",
         "quantity": "1",
         "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
-        "line": 294
+        "line": 294,
+        "requiredArea": "Wilderness"
       },
       {
         "table": "Ghost",
@@ -82185,7 +82833,7 @@
     "exportHash": "60d9fc84d9c5891993bade32d3904d23b3e2c7f1dfe14116c5254d133aca01a1",
     "renderedRows": [
       {
-        "table": "Ghost",
+        "table": "Ghost#Level 19",
         "item": "Looting bag",
         "rate": "1/7",
         "quantity": "1",
@@ -82202,6 +82850,3336 @@
       }
     ],
     "renderSha256": "ef36cf34e7d24814a928347eb79dda80280d913faedd7c178b7fa9c19f704aea",
+    "corrections": []
+  },
+  "Dark wizard": {
+    "owner": "Dark wizard",
+    "revision": 15314900,
+    "fetchedAt": "2026-10-06T06:17:02.186214+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Dark_wizard",
+    "sha256": "18fad444ab0d321f1fdb5cc43314c8ab6c004e12eb2e288ae4e20ba8797f9eaf",
+    "rows": [
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 217
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Staff",
+        "rate": "8/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 222
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Wizard hat",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": " <ref group=d>Drop rate is decreased to 4/128 in [[members]] worlds.</ref>",
+        "line": 223
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Black robe",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 224
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Earth rune",
+        "rate": "4/128",
+        "quantity": "36",
+        "notes": " ",
+        "line": 230
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 231
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Water rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 232
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Earth rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 233
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Fire rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 234
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Air rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 235
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Water rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 236
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 237
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 238
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Nature rune",
+        "rate": "7/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 243
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Chaos rune",
+        "rate": "6/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 244
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Mind rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 245
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Body rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 246
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 247
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Body rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 248
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Blood rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": "{{(m)}} ",
+        "line": 249
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 250
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Law rune",
+        "rate": "1/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 251
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Coins",
+        "rate": "17/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 256
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Coins",
+        "rate": "16/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 257
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Coins",
+        "rate": "7/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 258
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "29",
+        "notes": " ",
+        "line": 259
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "30",
+        "notes": " ",
+        "line": 260
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Nothing",
+        "rate": "16/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 265
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Water talisman",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 266
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Fire talisman",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 267
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Energy potion(2)",
+        "rate": "",
+        "quantity": "1",
+        "notes": " ",
+        "line": 268
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Energy potion(3)",
+        "rate": "",
+        "quantity": "1",
+        "notes": " ",
+        "line": 269
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Energy potion(4)",
+        "rate": "",
+        "quantity": "1",
+        "notes": " ",
+        "line": 270
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Looting bag",
+        "rate": "1/15",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 275,
+        "requiredArea": "Wilderness"
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/50",
+        "quantity": "1",
+        "notes": " ",
+        "line": 276
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 286
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Staff",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 291
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Wizard hat",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": " <ref group=d>Drop rate is decreased to 4/128 in [[members]] worlds.</ref>",
+        "line": 292
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Black robe",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 293
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Earth rune",
+        "rate": "4/128",
+        "quantity": "36",
+        "notes": " ",
+        "line": 299
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 300
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Water rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 301
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Earth rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 302
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Fire rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 303
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Air rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 304
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Water rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 305
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 306
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 307
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Nature rune",
+        "rate": "7/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 312
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Chaos rune",
+        "rate": "6/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 313
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Mind rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 314
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Body rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 315
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 316
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Body rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 317
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Blood rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": "{{(m)}} ",
+        "line": 318
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 319
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Law rune",
+        "rate": "1/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 320
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Coins",
+        "rate": "17/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 325
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Coins",
+        "rate": "16/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 326
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Coins",
+        "rate": "9/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 327
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "29",
+        "notes": " ",
+        "line": 328
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "30",
+        "notes": " ",
+        "line": 329
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Nothing",
+        "rate": "16/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 334
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Water talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 335
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Fire talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 336
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Energy potion(3)",
+        "rate": "",
+        "quantity": "1",
+        "notes": " ",
+        "line": 337
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Energy potion(4)",
+        "rate": "",
+        "quantity": "1",
+        "notes": " ",
+        "line": 338
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Looting bag",
+        "rate": "1/7",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 343,
+        "requiredArea": "Wilderness"
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/35",
+        "quantity": "1",
+        "notes": " ",
+        "line": 344
+      }
+    ],
+    "tableLevels": {
+      "Dark wizard#Low level": [
+        7,
+        11,
+        20,
+        22,
+        23
+      ],
+      "Dark wizard#High level": [
+        7,
+        11,
+        20,
+        22,
+        23
+      ]
+    },
+    "tableNpcIds": {
+      "Dark wizard#Low level": [
+        512,
+        2058,
+        2059,
+        5086,
+        5087
+      ],
+      "Dark wizard#High level": [
+        510,
+        2056,
+        2057,
+        5088,
+        5089
+      ]
+    },
+    "npcLevels": {
+      "512": 7,
+      "5086": 7,
+      "5087": 7,
+      "2058": 11,
+      "2059": 11,
+      "510": 20,
+      "5088": 20,
+      "5089": 20,
+      "2057": 22,
+      "2056": 23
+    },
+    "itemNames": {},
+    "exportHash": "7b046b8c569ced0f18d80e4ef2377ab53175a64bebd3c013c8a147ab3f54454a",
+    "renderedRows": [
+      {
+        "table": "Dark wizard",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Staff",
+        "rate": "8/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Wizard hat",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Black robe",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Earth rune",
+        "rate": "4/128",
+        "quantity": "36",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Water rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Earth rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Fire rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Air rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Water rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Nature rune",
+        "rate": "7/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Chaos rune",
+        "rate": "6/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Mind rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Body rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Body rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Blood rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Law rune",
+        "rate": "1/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Coins",
+        "rate": "17/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Coins",
+        "rate": "16/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Coins",
+        "rate": "7/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "29",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "30",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Water talisman",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Fire talisman",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Energy potion(2)",
+        "rate": "Unknown",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Energy potion(3)",
+        "rate": "Unknown",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Energy potion(4)",
+        "rate": "Unknown",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Looting bag",
+        "rate": "1/15",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard#Low level",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/50",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Staff",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Wizard hat",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Black robe",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Earth rune",
+        "rate": "4/128",
+        "quantity": "36",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Water rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Earth rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Fire rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Air rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Water rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Nature rune",
+        "rate": "7/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Chaos rune",
+        "rate": "6/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Mind rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Body rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Body rune",
+        "rate": "2/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Blood rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Law rune",
+        "rate": "1/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Coins",
+        "rate": "17/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Coins",
+        "rate": "16/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Coins",
+        "rate": "9/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "29",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "30",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Dark wizard#High level",
+          "Dark wizard#Low level"
+        ]
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Water talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Fire talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Energy potion(3)",
+        "rate": "Unknown",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard",
+        "item": "Energy potion(4)",
+        "rate": "Unknown",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Looting bag",
+        "rate": "1/7",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Dark wizard#High level",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/35",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "c308324681f72403442b47086b951639b18121895a0a1f5da46b980be9dcf350",
+    "corrections": []
+  },
+  "Farmer": {
+    "owner": "Farmer",
+    "revision": 15321505,
+    "fetchedAt": "2026-10-06T06:16:59.793465+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Farmer",
+    "sha256": "a659a98c3930acf4c684b0e4e9a3819154cbb46b19c5db20f7f7d20700b9727d",
+    "rows": [
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 173
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Bronze med helm",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 178
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Iron dagger",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 179
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Bronze arrow",
+        "rate": "3/128",
+        "quantity": "7",
+        "notes": " ",
+        "line": 184
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 185
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "6",
+        "notes": " ",
+        "line": 186
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "9",
+        "notes": " ",
+        "line": 187
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Chaos rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 188
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Coins",
+        "rate": "38/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 193
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Coins",
+        "rate": "23/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 194
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Coins",
+        "rate": "9/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 195
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "15",
+        "notes": " ",
+        "line": 196
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "25",
+        "notes": " ",
+        "line": 197
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Nothing",
+        "rate": "30/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 202
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Fishing bait",
+        "rate": "5/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 203
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Copper ore",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 204
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Earth talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 205
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Cabbage",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 206
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Energy potion(3)",
+        "rate": "Unknown",
+        "quantity": "1",
+        "notes": " ",
+        "line": 207
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/90",
+        "quantity": "1",
+        "notes": " ",
+        "line": 212
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 221
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 226
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "6",
+        "notes": " ",
+        "line": 227
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "9",
+        "notes": " ",
+        "line": 228
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Chaos rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 229
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Coins",
+        "rate": "38/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 246
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "25",
+        "notes": " ",
+        "line": 247
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Nothing",
+        "rate": "28/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 252
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Fishing bait",
+        "rate": "5/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 253
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Rake",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 254
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Earth talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 255
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Gardening boots",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 256
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Seed dibber",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 257
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Secateurs",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 258
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Watering can(8)",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 259
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Energy potion(3)",
+        "rate": "Unknown",
+        "quantity": "1",
+        "notes": " ",
+        "line": 260
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/90",
+        "quantity": "1",
+        "notes": " ",
+        "line": 265
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Clue scroll (easy)",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 266
+      },
+      {
+        "table": "Farmer",
+        "item": "Coins",
+        "rate": "123/128",
+        "quantity": "9",
+        "notes": " ",
+        "line": 293
+      },
+      {
+        "table": "Farmer",
+        "item": "Potato seed",
+        "rate": "5/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 294
+      },
+      {
+        "table": "Farmer",
+        "item": "Rocky",
+        "rate": "1/256961",
+        "quantity": "1",
+        "notes": " {{CiteTwitter\n|author=Mod Kieren\n|url=https://twitter.com/JagexKieren/status/780410304731709440\n|date=26 September 2016\n|archiveurl=https://reldo.runescape.wiki/i/104505\n|archivedate=26 May 2020\n|quote=Okay... first one! Thieving pet rates! Others soon :). Retweet! [https://pbs.twimg.com/media/CtSTBe9XEAABH3h.jpg]\n}}{{Refn|group=d| The drop rate increases with Thieving level; see [[Rocky#Drop_rates|Rocky]] page for more details.}}",
+        "line": 298
+      }
+    ],
+    "tableLevels": {
+      "Farmer#Members-only": [
+        7
+      ],
+      "Farmer#Free-to-play": [
+        7
+      ]
+    },
+    "tableNpcIds": {},
+    "npcLevels": {
+      "3114": 7,
+      "3243": 7,
+      "3244": 7,
+      "11918": 7,
+      "11919": 7,
+      "11920": 7,
+      "11921": 7
+    },
+    "itemNames": {},
+    "exportHash": "4a5310238fd52d78d4661a1c02fb6143540653bc2765135c30a44a7f473dc4c9",
+    "renderedRows": [
+      {
+        "table": "Farmer",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Bronze med helm",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Iron dagger",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Bronze arrow",
+        "rate": "3/128",
+        "quantity": "7",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "6",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "9",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Chaos rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Coins",
+        "rate": "38/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Coins",
+        "rate": "23/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Coins",
+        "rate": "9/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "15",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "25",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Fishing bait",
+        "rate": "5/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Copper ore",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Earth talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer#Free-to-play",
+        "item": "Cabbage",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Energy potion(3)",
+        "rate": "Unknown",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/90",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "6",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "9",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Chaos rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy guam leaf",
+        "rate": "1/46.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy marrentill",
+        "rate": "1/62.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy tarromin",
+        "rate": "1/82.7",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy harralander",
+        "rate": "1/106.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy ranarr weed",
+        "rate": "1/135.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy irit leaf",
+        "rate": "1/186.2",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy avantoe",
+        "rate": "1/248.2",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy kwuarm",
+        "rate": "1/297.9",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy cadantine",
+        "rate": "1/372.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy lantadyme",
+        "rate": "1/496.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Grimy dwarf weed",
+        "rate": "1/496.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Potato seed",
+        "rate": "1/9.5",
+        "quantity": "1–4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Onion seed",
+        "rate": "1/19",
+        "quantity": "1–3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Cabbage seed",
+        "rate": "1/37.9",
+        "quantity": "1–3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Tomato seed",
+        "rate": "1/75.9",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Sweetcorn seed",
+        "rate": "1/151.7",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Strawberry seed",
+        "rate": "1/303.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Watermelon seed",
+        "rate": "1/606.8",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Snape grass seed",
+        "rate": "1/606.8",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Coins",
+        "rate": "38/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "25",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Fishing bait",
+        "rate": "5/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Rake",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Earth talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Gardening boots",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Seed dibber",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Secateurs",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Watering can(8)",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Energy potion(3)",
+        "rate": "Unknown",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/90",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Farmer#Free-to-play",
+          "Farmer#Members"
+        ]
+      },
+      {
+        "table": "Farmer#Members",
+        "item": "Clue scroll (easy)",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Coins",
+        "rate": "123/128",
+        "quantity": "9",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Potato seed",
+        "rate": "5/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Farmer",
+        "item": "Rocky",
+        "rate": "1/256,961",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "f5922226674e24028acb835a27c03e75ae81a56a3e4cae605645c57b8f27b285",
+    "corrections": []
+  },
+  "Highwayman": {
+    "owner": "Highwayman",
+    "revision": 15350645,
+    "fetchedAt": "2026-10-06T06:17:00.560483+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Highwayman",
+    "sha256": "8756c425fbf6f58413d47a41d8a828fca798f0c9c3d257bd0e7bfecf3647df7f",
+    "rows": [
+      {
+        "table": "Highwayman#No hood",
+        "item": "Black cape",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 118
+      },
+      {
+        "table": "Highwayman#No hood",
+        "item": "Iron bolts",
+        "rate": "5/100",
+        "quantity": "2-12",
+        "notes": "{{(m)}} ",
+        "line": 119
+      },
+      {
+        "table": "Highwayman#No hood",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 120
+      },
+      {
+        "table": "Highwayman#Hood",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 128
+      }
+    ],
+    "tableLevels": {
+      "Highwayman#No hood": [
+        5
+      ],
+      "Highwayman#Hood": [
+        5
+      ]
+    },
+    "tableNpcIds": {
+      "Highwayman#No hood": [
+        518
+      ],
+      "Highwayman#Hood": [
+        519
+      ]
+    },
+    "npcLevels": {
+      "518": 5,
+      "519": 5
+    },
+    "itemNames": {},
+    "exportHash": "9d4f50d27fb897fe09f913acbefaf9385c2bedfebaa10709d0850e88c875d7bd",
+    "renderedRows": [
+      {
+        "table": "Highwayman#No hood",
+        "item": "Black cape",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Highwayman#No hood",
+        "item": "Iron bolts",
+        "rate": "5/100",
+        "quantity": "2–12",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Highwayman",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Highwayman#Hood",
+          "Highwayman#No hood"
+        ]
+      },
+      {
+        "table": "Highwayman",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Highwayman#Hood",
+          "Highwayman#No hood"
+        ]
+      }
+    ],
+    "renderSha256": "0a8ef9754ecb2985dff866a09029c8d7be47c9e66f629722c7da84caf7eff7ee",
+    "corrections": []
+  },
+  "Mugger": {
+    "owner": "Mugger",
+    "revision": 15350646,
+    "fetchedAt": "2026-10-06T06:17:01.348288+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Mugger",
+    "sha256": "b344b9845ea2cf08fffaa7992beb369aa52de132d41c3c1817feb98754b9f749",
+    "rows": [
+      {
+        "table": "Mugger",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 154
+      },
+      {
+        "table": "Mugger",
+        "item": "Bronze bolts",
+        "rate": "27/128",
+        "quantity": "2-12",
+        "notes": "{{(m)}} ",
+        "line": 159
+      },
+      {
+        "table": "Mugger",
+        "item": "Mind rune",
+        "rate": "3/128",
+        "quantity": "9",
+        "notes": " ",
+        "line": 160
+      },
+      {
+        "table": "Mugger",
+        "item": "Water rune",
+        "rate": "2/128",
+        "quantity": "6",
+        "notes": " ",
+        "line": 161
+      },
+      {
+        "table": "Mugger",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 162
+      },
+      {
+        "table": "Mugger",
+        "item": "Coins",
+        "rate": "13/128",
+        "quantity": "10",
+        "notes": "{{(f)}} <ref group=d>Only dropped in [[free-to-play]]</ref>",
+        "line": 174
+      },
+      {
+        "table": "Mugger",
+        "item": "Coins",
+        "rate": "12/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 175
+      },
+      {
+        "table": "Mugger",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "15",
+        "notes": " ",
+        "line": 176
+      },
+      {
+        "table": "Mugger",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "25",
+        "notes": " ",
+        "line": 177
+      },
+      {
+        "table": "Mugger",
+        "item": "Rope",
+        "rate": "40/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 183
+      },
+      {
+        "table": "Mugger",
+        "item": "Nothing",
+        "rate": "13/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 184
+      },
+      {
+        "table": "Mugger",
+        "item": "Knife",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 185
+      },
+      {
+        "table": "Mugger",
+        "item": "Fishing bait",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 186
+      },
+      {
+        "table": "Mugger",
+        "item": "Copper ore",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 187
+      },
+      {
+        "table": "Mugger",
+        "item": "Bronze med helm",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 188
+      },
+      {
+        "table": "Mugger",
+        "item": "Cabbage",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 189
+      },
+      {
+        "table": "Mugger",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/80",
+        "quantity": "1",
+        "notes": " ",
+        "line": 194
+      },
+      {
+        "table": "Mugger",
+        "item": "Clue scroll (easy)",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 195
+      },
+      {
+        "table": "Mugger",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 203
+      }
+    ],
+    "tableLevels": {},
+    "tableNpcIds": {},
+    "npcLevels": {
+      "513": 6,
+      "1461": 6,
+      "6996": 6,
+      "13282": 6
+    },
+    "itemNames": {},
+    "exportHash": "be67c43217ffd2512f362eaf4cfe3c448fd6cbb5c2e0d36730fddcda48f00252",
+    "renderedRows": [
+      {
+        "table": "Mugger",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Bronze bolts",
+        "rate": "27/128",
+        "quantity": "2–12",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Mind rune",
+        "rate": "3/128",
+        "quantity": "9",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Water rune",
+        "rate": "2/128",
+        "quantity": "6",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy guam leaf",
+        "rate": "1/39.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy marrentill",
+        "rate": "1/52.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy tarromin",
+        "rate": "1/70",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy harralander",
+        "rate": "1/90",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy ranarr weed",
+        "rate": "1/114.6",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy irit leaf",
+        "rate": "1/157.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy avantoe",
+        "rate": "1/210.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy kwuarm",
+        "rate": "1/252.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy cadantine",
+        "rate": "1/315.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy lantadyme",
+        "rate": "1/420.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Grimy dwarf weed",
+        "rate": "1/420.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Coins",
+        "rate": "13/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Coins",
+        "rate": "12/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "15",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "25",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Rope",
+        "rate": "40/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Knife",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Fishing bait",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Copper ore",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Bronze med helm",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Cabbage",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/80",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Clue scroll (easy)",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Mugger",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "db27b073b3842f05436ba28fa111b319802fe5c7b1ef30af94c2f253067d6989",
+    "corrections": []
+  },
+  "Guard": {
+    "owner": "Guard",
+    "revision": 15321511,
+    "fetchedAt": "2026-10-06T06:17:03.124824+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Guard",
+    "sha256": "300cbff723e54ae600f43928975a0d4db48dae32408f84c6c7005e7615223e2d",
+    "rows": [
+      {
+        "table": "Guard",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 604
+      },
+      {
+        "table": "Guard",
+        "item": "Iron bolts",
+        "rate": "10/128",
+        "quantity": "2-12",
+        "notes": "{{(m)}} ",
+        "line": 609
+      },
+      {
+        "table": "Guard",
+        "item": "Steel arrow",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 610
+      },
+      {
+        "table": "Guard",
+        "item": "Bronze arrow",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 611
+      },
+      {
+        "table": "Guard",
+        "item": "Air rune",
+        "rate": "2/128",
+        "quantity": "6",
+        "notes": " ",
+        "line": 612
+      },
+      {
+        "table": "Guard",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 613
+      },
+      {
+        "table": "Guard",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 614
+      },
+      {
+        "table": "Guard",
+        "item": "Blood rune",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "{{(m)}} ",
+        "line": 615
+      },
+      {
+        "table": "Guard",
+        "item": "Chaos rune",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 616
+      },
+      {
+        "table": "Guard",
+        "item": "Nature rune",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 617
+      },
+      {
+        "table": "Guard",
+        "item": "Steel arrow",
+        "rate": "1/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 618
+      },
+      {
+        "table": "Guard",
+        "item": "Bronze arrow",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 619
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "19/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 630
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "16/128",
+        "quantity": "7",
+        "notes": " ",
+        "line": 631
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "18/128",
+        "quantity": "5",
+        "notes": "{{(f)}} <ref group=d>Only drops in [[free-to-play]].</ref>",
+        "line": 632
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "9/128",
+        "quantity": "12",
+        "notes": " ",
+        "line": 633
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "8/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 634
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "25",
+        "notes": " ",
+        "line": 635
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "17",
+        "notes": " ",
+        "line": 636
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "30",
+        "notes": " ",
+        "line": 637
+      },
+      {
+        "table": "Guard",
+        "item": "Nothing",
+        "rate": "8/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 643
+      },
+      {
+        "table": "Guard",
+        "item": "Iron dagger",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 644
+      },
+      {
+        "table": "Guard",
+        "item": "Body talisman",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": " <ref group=d>The body talisman's drop rate increases to 4/128 while in a [[free-to-play]] world.</ref>",
+        "line": 645
+      },
+      {
+        "table": "Guard",
+        "item": "Grain",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 646
+      },
+      {
+        "table": "Guard",
+        "item": "Iron ore",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 647
+      },
+      {
+        "table": "Guard",
+        "item": "Key (medium)",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>The key is only dropped when completing a medium clue scroll asking the player to kill an Ardougne knight.</ref>",
+        "line": 653
+      },
+      {
+        "table": "Guard",
+        "item": "Clue scroll (medium)",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " <ref group=d>The medium clue scroll drop rate increases to 1/106 if the medium [[Falador Diary]] has been completed. This only applies to guards in [[Falador]].</ref>",
+        "line": 654
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "Always",
+        "quantity": "30",
+        "notes": " ",
+        "line": 672
+      },
+      {
+        "table": "Guard",
+        "item": "Rocky",
+        "rate": "1/256,211",
+        "quantity": "1",
+        "notes": " {{CiteTwitter\n|author=Mod Kieren\n|url=https://twitter.com/JagexKieren/status/780410304731709440\n|date=26 September 2016\n|archiveurl=https://reldo.runescape.wiki/i/104505\n|archivedate=26 May 2020\n|quote=Okay... first one! Thieving pet rates! Others soon :). Retweet! [https://pbs.twimg.com/media/CtSTBe9XEAABH3h.jpg]\n}}{{Refn|group=d| The drop rate increases with Thieving level; see [[Rocky#Drop_rates|Rocky]] page for more details.}}",
+        "line": 677
+      }
+    ],
+    "tableLevels": {},
+    "tableNpcIds": {},
+    "npcLevels": {
+      "3254": 21,
+      "11922": 21,
+      "11923": 21,
+      "11924": 21,
+      "3269": 21,
+      "11942": 21,
+      "11943": 21,
+      "11944": 21,
+      "3270": 22,
+      "11945": 22,
+      "3271": 19,
+      "11946": 19,
+      "3273": 22,
+      "3274": 22,
+      "11912": 21,
+      "11913": 21,
+      "11914": 21,
+      "11915": 21,
+      "11916": 21,
+      "5418": 20,
+      "11937": 20,
+      "11938": 20,
+      "11939": 20
+    },
+    "itemNames": {},
+    "exportHash": "6d3d75651e537ae5eaf8b1f6a3ad590729a5ef0236a2cf881f0eb2ed8f2fae90",
+    "renderedRows": [
+      {
+        "table": "Guard",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Iron bolts",
+        "rate": "10/128",
+        "quantity": "2–12",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Steel arrow",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Bronze arrow",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Air rune",
+        "rate": "2/128",
+        "quantity": "6",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Blood rune",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Chaos rune",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Nature rune",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Steel arrow",
+        "rate": "1/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Bronze arrow",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Potato seed",
+        "rate": "1/19",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Onion seed",
+        "rate": "1/25",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Cabbage seed",
+        "rate": "1/38",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Tomato seed",
+        "rate": "1/77",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Sweetcorn seed",
+        "rate": "1/155",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Strawberry seed",
+        "rate": "1/311",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Watermelon seed",
+        "rate": "1/651",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Snape grass seed",
+        "rate": "1/896",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "19/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "16/128",
+        "quantity": "7",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "18/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "9/128",
+        "quantity": "12",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "8/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "25",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "17",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "30",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Iron dagger",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Body talisman",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Grain",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Iron ore",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Key (medium)",
+        "rate": "Always[d 1]",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Clue scroll (medium)",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Coins",
+        "rate": "Always",
+        "quantity": "30",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Guard",
+        "item": "Rocky",
+        "rate": "1/256,211",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "b0bce33e27fadf8868ae996a3703ad74a3e5722eeeb1f8eb2b5d821108c68ae2",
     "corrections": []
   }
 }

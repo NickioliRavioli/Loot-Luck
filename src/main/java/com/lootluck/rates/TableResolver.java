@@ -33,6 +33,13 @@ public final class TableResolver
 			rows = rows.stream().filter(row -> "thieving".equals(row.mechanics.get("Drop type"))).collect(java.util.stream.Collectors.toList());
 		}
 		if (rows.isEmpty()) { return new Resolution(rows, false, "No table matches this source event type"); }
+		List<RateRow> common=new ArrayList<>();
+		if("NPC".equals(source.type)&&context.combatLevel!=null&&rows.stream().anyMatch(row->!row.owner.equals(row.variant)))
+		{
+			for(RateRow row:rows) { if(row.owner.equals(row.variant)&&contains(row.mechanics.getOrDefault("Drop level",""),context.combatLevel)) { common.add(row); } }
+			rows=new ArrayList<>(rows);rows.removeAll(common);
+			if(rows.isEmpty()) { return new Resolution(common,true,"Shared table applies to the recorded combat level"); }
+		}
 		Map<String, List<RateRow>> tables = new LinkedHashMap<>();
 		for (RateRow row : rows) { tables.computeIfAbsent(row.variant == null ? "" : row.variant, k -> new ArrayList<>()).add(row); }
 		List<RateRow> selected = new ArrayList<>();
@@ -45,7 +52,8 @@ public final class TableResolver
 				if (contains(ids, context.npcId)) { selected.addAll(table.getValue()); }
 				continue;
 			}
-			String levels = table.getValue().get(0).mechanics.getOrDefault("Table combat levels", "");
+			String levels = publishedLevels(table.getValue());
+			if(levels.isBlank()) { levels=table.getValue().get(0).mechanics.getOrDefault("Table combat levels", ""); }
 			if (levels.isBlank())
 			{
 				int anchor = table.getKey().indexOf('#');
@@ -55,9 +63,11 @@ public final class TableResolver
 			if (tables.size() > 1 && (levels.isBlank() || context.combatLevel == null)) { missing = true; }
 			if (levels.isBlank() || context.combatLevel == null || contains(levels, context.combatLevel)) { selected.addAll(table.getValue()); }
 		}
-		if (missing || selected.isEmpty()) { return new Resolution(rows, false, "Applicable table unresolved: missing combat level or source-specific condition"); }
+		if(!missing&&selected.isEmpty()&&!common.isEmpty()) { return new Resolution(common,true,"Shared table applies; no variant table matches this NPC"); }
+		if (missing || selected.isEmpty()) { List<RateRow> candidates=new ArrayList<>(rows);candidates.addAll(common);return new Resolution(candidates, false, "Applicable table unresolved: missing combat level or source-specific condition"); }
 		long candidates = selected.stream().map(row -> row.variant).distinct().count();
-		if (candidates != 1) { return new Resolution(selected, false, "More than one table matches the recorded context"); }
+		if (candidates != 1) { selected.addAll(common);return new Resolution(selected, false, "More than one table matches the recorded context"); }
+		selected.addAll(common);
 		if (context.members != null)
 		{
 			selected.removeIf(row -> context.members ? "(f)".equals(row.worldMarker()) : "(m)".equals(row.worldMarker()));
@@ -68,5 +78,17 @@ public final class TableResolver
 	{
 		for (String part : list.split("[, ]+")) { if (part.equals(Integer.toString(number))) { return true; } }
 		return false;
+	}
+	private static String publishedLevels(List<RateRow> rows)
+	{
+		java.util.Set<Integer> common=null;
+		for(RateRow row:rows)
+		{
+			String value=row.mechanics.getOrDefault("Drop level","");if(!value.matches("\\d+(?:[, ]+\\d+)*")) { return ""; }
+			java.util.Set<Integer> levels=new java.util.TreeSet<>();
+			try { for(String part:value.split("[, ]+")) { levels.add(Integer.parseInt(part)); } }catch(NumberFormatException ex) { return ""; }
+			if(common==null) { common=levels; }else if(!common.equals(levels)) { return ""; }
+		}
+		return common==null?"":common.stream().map(String::valueOf).collect(java.util.stream.Collectors.joining(","));
 	}
 }

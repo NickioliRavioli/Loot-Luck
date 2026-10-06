@@ -23,10 +23,15 @@ public final class PanelState
 	public List<Item> allItems=new ArrayList<>();
 	public static final class Source
 	{
-		public String key,name,countTooltip,value,wikiUrl;
+		public String key,name,countTooltip,value,wikiUrl,familyKey;
 		public long count,lastReceived;
 		public boolean validationAvailable,validationApproved;
 		public List<Item> items=new ArrayList<>();
+		public List<Source> children=new ArrayList<>();
+	}
+	public List<Source> sourceRows()
+	{
+		List<Source> result=new ArrayList<>();for(Source source:sources) { result.add(source);result.addAll(source.children); }return result;
 	}
 	public static final class Item
 	{

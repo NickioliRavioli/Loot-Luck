@@ -11,6 +11,29 @@ import java.util.Map;
 final class SourceGroups
 {
 	private SourceGroups() { }
+	static Map<String,Ledger.Source> conditions(Ledger ledger,String familyKey,com.lootluck.rates.RateProvider rates)
+	{
+		Map<String,List<Ledger.Source>> groups=new LinkedHashMap<>();
+		for(Ledger.Source source:ledger.sourceVariants())
+		{
+			if(!source.identity.family().key().equals(familyKey)) { continue; }
+			String label=com.lootluck.rates.SourceConditions.label(source.identity,rates.rows(source.identity));
+			groups.computeIfAbsent(label+"\u001f"+source.identity.context,k->new ArrayList<>()).add(source);
+		}
+		Map<String,Ledger.Source> result=new LinkedHashMap<>();
+		groups.forEach((key,members)->{
+			Ledger.Source combined=members.size()==1?members.get(0):combine(members);
+			// Every member resolved to the same conditions and world; keep a representative lookup identity.
+			if(members.size()>1)
+			{
+				SourceIdentity first=members.get(0).identity;
+				Boolean wilderness=com.lootluck.model.ObservationContext.from(first).wilderness;
+				combined.identity=key.startsWith("Unknown conditions")?new SourceIdentity(first.type,first.name,"conditions=unresolved"+(wilderness==null?"":";wilderness="+wilderness),first.context,first.wikiOwner==null?"":first.wikiOwner):first;
+			}
+			result.put(familyKey+":conditions:"+com.lootluck.rates.WikiParser.hash(key),combined);
+		});
+		return result;
+	}
 	static Map<String,Ledger.Source> build(Ledger ledger)
 	{
 		Map<String,List<Ledger.Source>> groups=new LinkedHashMap<>();

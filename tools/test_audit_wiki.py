@@ -1,7 +1,7 @@
 """Offline regressions for the independent Wiki-page audit reader."""
 from fractions import Fraction
 import unittest
-from audit_wiki import DropHTML, arithmetic, fields, probability, quantity, templates, page_evidence
+from audit_wiki import DropHTML, arithmetic, fields, probability, quantity, templates, page_evidence, same_rate
 
 
 class WikiAuditReaderTest(unittest.TestCase):
@@ -18,9 +18,22 @@ class WikiAuditReaderTest(unittest.TestCase):
         self.assertEqual(Fraction(1, 4), probability("25%"))
         self.assertIsNone(probability("Rare"))
         self.assertIsNone(probability("1/0"))
+        self.assertTrue(same_rate("Common[1]", "Common"))
+        self.assertFalse(same_rate("Rare", "Unknown"))
+        self.assertTrue(same_rate("2 × 1/128", "1/128"))
+        self.assertTrue(same_rate("3 × ~1/64", "1/64"))
+        self.assertTrue(same_rate("11 × Varies", "Varies"))
 
     def test_quantities_compare_without_visual_footnotes(self):
         self.assertEqual(quantity("1,000-2,000[2]"), quantity("1000–2000"))
+        self.assertEqual(quantity("12, 15"), quantity("12; 15"))
+        self.assertEqual(quantity("5\u00e2\u20ac\u201c10\u00c2\u00a0(noted)"), quantity("5–10 (noted)"))
+
+    def test_explicit_row_variant_and_wilderness_condition(self):
+        text = '{{DropsTableHead}}{{DropsLine|name=Looting bag|dropversion=Level 19|quantity=1|rarity=1/7|raritynotes=Looting bags are only dropped by those found in the [[Wilderness]].}}'
+        row = page_evidence("Ghost", {"parse": {"wikitext": {"*": text}, "revid": 1}, "fetchedAt": "2026-10-06"})["rows"][0]
+        self.assertEqual("Ghost#Level 19", row["table"])
+        self.assertEqual("Wilderness", row["requiredArea"])
 
     def test_nested_templates_and_link_pipes_remain_intact(self):
         text = "{{DropsLine|name=[[Coins|coins]]|rarity={{#expr:1 / 128}}|quantity=2}}"

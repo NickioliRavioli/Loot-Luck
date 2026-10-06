@@ -53,9 +53,14 @@ public final class ItemRateMatcher
 		if(amount!=1||quantity<=0||candidates.stream().anyMatch(row->!"1".equals(row.mechanics.get("Rolls")))) { return List.of(); }
 		return candidates.stream().filter(row->{
 			try {
+				String text=row.quantity==null?"":row.quantity.replace(" (noted)","").trim();
+				text=text.replaceAll("(?<=\\d),(?=\\d{3}(?:\\D|$))", "");
+				if(text.matches("\\d+(?:\\s*[,;]\\s*\\d+)+")) {
+					for(String option:text.split("[,;]")) { if(quantity==Long.parseLong(option.trim())) { return true; } }
+					return false;
+				}
 				String low=row.mechanics.get("Quantity Low"),high=row.mechanics.get("Quantity High");
 				if(low!=null&&high!=null) { return quantity>=Long.parseLong(low)&&quantity<=Long.parseLong(high); }
-				String text=row.quantity==null?"":row.quantity.replace(" (noted)","").trim();
 				String[] bounds=text.split("[-–—]");
 				return bounds.length==1?quantity==Long.parseLong(bounds[0].trim()):bounds.length==2&&quantity>=Long.parseLong(bounds[0].trim())&&quantity<=Long.parseLong(bounds[1].trim());
 			} catch(NumberFormatException ex) { return false; }

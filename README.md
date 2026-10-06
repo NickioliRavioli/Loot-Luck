@@ -73,6 +73,8 @@ Optional runtime refresh updates the full catalogue with throttled, paginated Wi
 
 ### Historical published rates
 
+Sources with multiple published tables or area restrictions use one combined header with expandable condition groups by default. **Show variants separately** in settings gives each group its own header. Labels use Wiki table evidence and captured context, including Dark wizard combat levels. Cosmetic NPC IDs sharing verified conditions combine; unknown conditions stay visible. Totals do not change when switching views. New death-location evidence is conservative, and older unknown locations are never inferred from later loot.
+
 New observations retain immutable rate versions per item, with quantities, item-present notification counts and first/last timestamps. The expanded item's **i** button shows current published data and recorded history. Snapshots preserve fractions, conditions, variants, rolls, provenance and fetch time: the rate known at collection, not proof of the game's effective probability on that date. Unknown-at-collection observations stay unknown after later refreshes.
 
 This private test build starts a fresh ledger in `profiles-wiki-v1`; no previous ledger is migrated. Older files are left in place. Published-rate history remains aggregated by version, while collection history preserves raw notifications under the configured limit.

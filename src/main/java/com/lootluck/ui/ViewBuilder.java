@@ -29,10 +29,44 @@ public final class ViewBuilder
 	}
 	public static PanelState build(Ledger ledger,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld)
 	{
+		return build(ledger,rates,unobtained,identities,hideOtherWorld,membersWorld,false);
+	}
+	public static PanelState build(Ledger ledger,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld,boolean separateVariants)
+	{
 		PanelState state=new PanelState();state.notice="";
 		for(Map.Entry<String,Ledger.Source> entry:SourceGroups.build(ledger).entrySet())
 		{
-			Ledger.Source s=entry.getValue();PanelState.Source source=new PanelState.Source();source.key=entry.getKey();source.name=com.lootluck.rates.RewardSources.displayName(s.identity);
+			Ledger.Source s=entry.getValue();PanelState.Source family=sourceView(entry.getKey(),s,rates,unobtained,identities,hideOtherWorld,membersWorld);
+			if(com.lootluck.rates.SourceConditions.hasVariants(rates.rows(s.identity)))
+			{
+				Map<String,Ledger.Source> groups=SourceGroups.conditions(ledger,entry.getKey(),rates);
+				boolean multipleWorlds=groups.values().stream().map(value->value.identity.context).distinct().count()>1;
+				for(Map.Entry<String,Ledger.Source> group:groups.entrySet())
+				{
+					Ledger.Source member=group.getValue();PanelState.Source child=sourceView(group.getKey(),member,rates,unobtained,identities,hideOtherWorld,membersWorld);
+					String label=com.lootluck.rates.SourceConditions.label(member.identity,rates.rows(member.identity));
+					if(multipleWorlds) { label+=" / "+("[MEMBERS]".equals(member.identity.context)?"Members":"[]".equals(member.identity.context)?"Free-to-play":"Special/unknown world"); }
+					child.name=separateVariants?family.name+" ("+label+")":label;family.children.add(child);
+				}
+				family.children.sort(Comparator.comparingLong((PanelState.Source value)->value.lastReceived).reversed());
+			}
+			if(separateVariants&&!family.children.isEmpty()) { state.sources.addAll(family.children); }else { state.sources.add(family); }
+		}
+		state.sources.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());
+		Map<Integer,PanelState.Item> totals=new LinkedHashMap<>();
+		for(Ledger.Source source:ledger.sourceVariants()) { for(Ledger.Item item:source.items.values()) { PanelState.Item total=totals.computeIfAbsent(item.id,id->{PanelState.Item i=new PanelState.Item();i.id=id;i.key="all:"+id;i.name=item.name;return i;});total.quantity=Math.addExact(total.quantity,item.quantity);total.occurrences=Math.addExact(total.occurrences,item.occurrences);total.lastReceived=Math.max(total.lastReceived,item.lastReceived); } }
+		state.allItems.addAll(totals.values());state.allItems.sort(Comparator.comparingLong((PanelState.Item i)->i.lastReceived).reversed());
+		for(int index=ledger.history.size()-1;index>=0;index--)
+		{
+			Ledger.CollectionRecord record=ledger.history.get(index);PanelState.Source collection=new PanelState.Source();collection.key="collection:"+index;collection.name=com.lootluck.rates.RewardSources.displayName(record.source);collection.count=record.reportedAmount;collection.lastReceived=record.timestamp;collection.countTooltip="One recorded notification; reported amount "+record.reportedAmount+". Not automatically individual attempts.";
+			for(Map.Entry<Integer,Long> item:record.quantities.entrySet()) { PanelState.Item row=new PanelState.Item();row.id=item.getKey();row.key=collection.key+":"+row.id;row.name=record.names.getOrDefault(row.id,"Item "+row.id);row.quantity=item.getValue();row.occurrences=1;row.lastReceived=record.timestamp;collection.items.add(row); }
+			state.collections.add(collection);
+		}
+		state.collections.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());return state;
+	}
+	private static PanelState.Source sourceView(String sourceKey,Ledger.Source s,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld)
+	{
+			PanelState.Source source=new PanelState.Source();source.key=sourceKey;source.familyKey=s.identity.family().key();source.name=com.lootluck.rates.RewardSources.displayName(s.identity);
 			com.lootluck.rates.TableResolver.Resolution resolution=com.lootluck.rates.TableResolver.resolve(s.identity,rates.rows(s.identity));
 			List<RateRow> sourceRates=resolution.rows;
 			String wikiOwner=sourceRates.isEmpty()?com.lootluck.rates.RewardSources.wikiOwner(s.identity):sourceRates.get(0).owner;
@@ -63,13 +97,14 @@ public final class ViewBuilder
 				for(Map.Entry<String,List<RateRow>> group:byName.entrySet())
 				{
 					RateRow identityRow=group.getValue().get(0);
+					if(Boolean.FALSE.equals(com.lootluck.rates.ItemEligibility.eligible(identityRow,s.identity))) { continue; }
 					String gameKey=normalize((identityRow.gameName==null?identityRow.itemName:identityRow.gameName)+(com.lootluck.rates.ItemRateMatcher.notedRow(identityRow)?" (noted)":""));
 					Integer id=identities.getOrDefault(gameKey,identities.get(group.getKey()));
 					if(id==null&&!com.lootluck.rates.ItemRateMatcher.notedRow(identityRow)&&!identityRow.itemIds.isEmpty()) { id=identityRow.itemIds.get(0); }
 					final Integer resolvedId=id;
 					boolean obtained=display.values().stream().anyMatch(i->(resolvedId!=null&&i.id==resolvedId)||!com.lootluck.rates.ItemRateMatcher.item(i.id,i.id,i.name,s.identity,group.getValue()).isEmpty());
 					if(obtained) { continue; }
-					PanelState.Item row=new PanelState.Item();row.id=id==null?0:id;RateRow first=group.getValue().get(0);row.name=first.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(first)?" (noted)":"");row.key=source.key+":rate:"+group.getKey();
+					PanelState.Item row=new PanelState.Item();row.id=id==null?0:id;RateRow first=group.getValue().get(0);row.name=(first.gameName==null?first.itemName:first.gameName)+(com.lootluck.rates.ItemRateMatcher.notedRow(first)?" (noted)":"");row.key=source.key+":rate:"+group.getKey();
 					applyRate(row,group.getValue());
 					if(hideOtherWorld&&membersWorld!=null&&(membersWorld?"(f)":"(m)").equals(row.worldMarker)) { continue; }
 					applySegment(row,s);display.put("rate:"+group.getKey(),row);
@@ -78,19 +113,7 @@ public final class ViewBuilder
 			Map<String,Integer> tables=new LinkedHashMap<>(),positions=new LinkedHashMap<>();
 			for(int index=0;index<sourceRates.size();index++) { RateRow rate=sourceRates.get(index);tables.computeIfAbsent(com.lootluck.rates.DropTableGroups.table(rate),key->tables.size());positions.putIfAbsent(com.lootluck.rates.ItemRateMatcher.lookupName(rate.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(rate)?" (noted)":"")),index); }
 			for(PanelState.Item item:display.values()) { item.tableOrder=tables.getOrDefault(item.dropTable,Integer.MAX_VALUE);item.wikiOrder=positions.getOrDefault(com.lootluck.rates.ItemRateMatcher.lookupName(item.name,s.identity),Integer.MAX_VALUE); }
-			source.items.addAll(display.values());state.sources.add(source);
-		}
-		state.sources.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());
-		Map<Integer,PanelState.Item> totals=new LinkedHashMap<>();
-		for(Ledger.Source source:ledger.sourceVariants()) { for(Ledger.Item item:source.items.values()) { PanelState.Item total=totals.computeIfAbsent(item.id,id->{PanelState.Item i=new PanelState.Item();i.id=id;i.key="all:"+id;i.name=item.name;return i;});total.quantity=Math.addExact(total.quantity,item.quantity);total.occurrences=Math.addExact(total.occurrences,item.occurrences);total.lastReceived=Math.max(total.lastReceived,item.lastReceived); } }
-		state.allItems.addAll(totals.values());state.allItems.sort(Comparator.comparingLong((PanelState.Item i)->i.lastReceived).reversed());
-		for(int index=ledger.history.size()-1;index>=0;index--)
-		{
-			Ledger.CollectionRecord record=ledger.history.get(index);PanelState.Source collection=new PanelState.Source();collection.key="collection:"+index;collection.name=com.lootluck.rates.RewardSources.displayName(record.source);collection.count=record.reportedAmount;collection.lastReceived=record.timestamp;collection.countTooltip="One recorded notification; reported amount "+record.reportedAmount+". Not automatically individual attempts.";
-			for(Map.Entry<Integer,Long> item:record.quantities.entrySet()) { PanelState.Item row=new PanelState.Item();row.id=item.getKey();row.key=collection.key+":"+row.id;row.name=record.names.getOrDefault(row.id,"Item "+row.id);row.quantity=item.getValue();row.occurrences=1;row.lastReceived=record.timestamp;collection.items.add(row); }
-			state.collections.add(collection);
-		}
-		state.collections.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());return state;
+			source.items.addAll(display.values());return source;
 	}
 	public static String normalize(String name) { return com.lootluck.rates.ItemRateMatcher.normalize(name); }
 	private static String historyDate(long time) { return java.time.format.DateTimeFormatter.ofPattern("d MMM yyyy HH:mm").withZone(java.time.ZoneId.systemDefault()).format(java.time.Instant.ofEpochMilli(time)); }

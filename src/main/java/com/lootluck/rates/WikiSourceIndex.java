@@ -24,6 +24,6 @@ public final class WikiSourceIndex
 		Integer id=ObservationContext.from(source).npcId;
 		if(id==null||!owners.has(id.toString())) { return source; }
 		String owner=owners.get(id.toString()).getAsString();
-		return new SourceIdentity(source.type,source.name,source.variant,source.context,owner.equals(source.name)?"":owner);
+		return new SourceIdentity(source.type,source.name,source.variant,source.context,owner.equals(source.name)?"":owner,source.deathLocation==null?"":source.deathLocation);
 	}
 }

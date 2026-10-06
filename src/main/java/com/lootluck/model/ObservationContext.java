@@ -7,17 +7,18 @@ import java.util.regex.Pattern;
 public final class ObservationContext
 {
 	public final Integer combatLevel, npcId;
-	public final Boolean members;
+	public final Boolean members, wilderness;
 	public final boolean standardWorld;
-	private ObservationContext(Integer level, Integer id, Boolean members, boolean standard)
-	{ combatLevel = level; npcId = id; this.members = members; standardWorld = standard; }
+	private ObservationContext(Integer level, Integer id, Boolean members, Boolean wilderness, boolean standard)
+	{ combatLevel = level; npcId = id; this.members = members; this.wilderness=wilderness;standardWorld = standard; }
 	public static ObservationContext from(SourceIdentity source)
 	{
 		Integer level = number(source.variant, "combat"), id = number(source.variant, "metadata");
 		String world = source.context;
 		Boolean members = world.startsWith("[") ? world.contains("MEMBERS") : null;
 		boolean standard = world.matches("\\[(?:MEMBERS)?\\]");
-		return new ObservationContext(level, "NPC".equals(source.type) ? id : null, members, standard);
+		Matcher area=Pattern.compile("(?:^|;)wilderness=(true|false)(?:;|$)").matcher(source.variant);
+		return new ObservationContext(level, "NPC".equals(source.type) ? id : null, members,area.find()?Boolean.valueOf(area.group(1)):null, standard);
 	}
 	private static Integer number(String text, String key)
 	{

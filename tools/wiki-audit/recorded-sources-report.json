@@ -23,12 +23,20 @@
     "Reward Cart",
     "Reward pool",
     "Casket (Reward pool)",
-    "Ghost"
+    "Ghost",
+    "Cow",
+    "Ram",
+    "Chicken",
+    "Farmer",
+    "Highwayman",
+    "Mugger",
+    "Dark wizard",
+    "Guard"
   ],
-  "evidencePages": 160,
+  "evidencePages": 165,
   "coverage": {
-    "rowsWithoutDirectPageTemplate": 152,
-    "directRowsCompared": 899
+    "rowsWithoutDirectPageTemplate": 133,
+    "directRowsCompared": 1124
   },
   "pageChanges": [],
   "unresolved": [],

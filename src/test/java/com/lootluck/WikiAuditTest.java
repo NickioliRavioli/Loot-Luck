@@ -27,6 +27,70 @@ public class WikiAuditTest
 	private SourceIdentity npc(String name,int combat,int id) { return new SourceIdentity("NPC",name,"combat="+combat+";metadata="+id,"[MEMBERS]"); }
 	private Observation observation(SourceIdentity source,Map<Integer,Long> items)
 	{ return new Observation(source,1,1,items,Map.of(),Map.of()); }
+	@Test public void discreteQuantitiesNeverBecomeAnInclusiveRange()
+	{
+		RateRow row=new RateRow();row.quantity="12, 15";row.mechanics.put("Rolls","1");row.mechanics.put("Quantity Low","12");row.mechanics.put("Quantity High","15");
+		assertEquals(1,ItemRateMatcher.matchCollection("Air rune",List.of(row),15,1).size());
+		assertTrue(ItemRateMatcher.matchCollection("Air rune",List.of(row),14,1).isEmpty());
+		row.quantity="1,000";row.mechanics.remove("Quantity Low");row.mechanics.remove("Quantity High");
+		assertEquals(1,ItemRateMatcher.matchCollection("Coins",List.of(row),1000,1).size());
+	}
+	@Test public void darkWizardTablesResolveFromPublishedCombatLevelsWithoutCustomRules()
+	{
+		List<RateRow> rows=new ArrayList<>();
+		for(RateRow original:catalogue.get("Dark wizard")) { RateRow row=original.snapshot();row.mechanics.remove("Table combat levels");row.mechanics.remove("Table NPC IDs");rows.add(row); }
+		for(int level:new int[]{7,11,20,22,23})
+		{
+			TableResolver.Resolution result=TableResolver.resolve(npc("Dark wizard",level,0),rows);
+			assertTrue(result.reason,result.resolved);String table=level<20?"#Low level":"#High level";
+			assertTrue(result.rows.stream().filter(row->row.itemName.equals("Earth rune")).allMatch(row->row.variant.endsWith(table)));
+			List<RateRow> earth=ItemRateMatcher.item(557,557,"Earth rune",npc("Dark wizard",level,0),result.rows);
+			assertEquals(3,earth.size());assertEquals("1/32",earth.stream().filter(row->row.quantity.equals("36")).findFirst().orElseThrow().display());
+		}
+		assertFalse(TableResolver.resolve(npc("Dark wizard",99,0),rows).resolved);
+	}
+	@Test public void ghostCommonTableAndWildernessEligibilityStayDistinct()
+	{
+		SourceIdentity unknown=npc("Ghost",19,85);
+		SourceIdentity outside=new SourceIdentity("NPC","Ghost",unknown.variant+";wilderness=false","[MEMBERS]");
+		SourceIdentity wilderness=new SourceIdentity("NPC","Ghost",unknown.variant+";wilderness=true","[MEMBERS]");
+		List<RateRow> rows=TableResolver.resolve(unknown,catalogue.get("Ghost")).rows;
+		assertEquals(2,rows.size());RateRow bag=rows.stream().filter(row->row.itemName.equals("Looting bag")).findFirst().orElseThrow();
+		assertEquals("Wilderness",bag.mechanics.get("Required area"));assertNull(ItemEligibility.eligible(bag,unknown));
+		assertEquals(Boolean.FALSE,ItemEligibility.eligible(bag,outside));assertEquals(Boolean.TRUE,ItemEligibility.eligible(bag,wilderness));
+		assertEquals(1,TableResolver.resolve(npc("Ghost",76,2531),catalogue.get("Ghost")).rows.size());
+		assertFalse(new ValidationRegistry(new Gson()).candidate("Ghost"));
+	}
+	@Test public void conditionHeadersToggleWithoutChangingEligibleAttemptsOrTotals()
+	{
+		LedgerEngine engine=new LedgerEngine(new Ledger());
+		RateRow bag=catalogue.get("Ghost").stream().filter(row->row.itemName.equals("Looting bag")).findFirst().orElseThrow();int id=bag.itemIds.get(0);
+		SourceIdentity outside=new SourceIdentity("NPC","Ghost","combat=19;metadata=85;wilderness=false","[MEMBERS]");
+		SourceIdentity wild=new SourceIdentity("NPC","Ghost","combat=19;metadata=85;wilderness=true","[MEMBERS]");
+		for(int n=0;n<70;n++) { engine.observe(observation(outside,Map.of()),AttemptAdapter.Assessment.unsupported("Outside Wilderness")); }
+		for(int n=0;n<10;n++) { engine.observe(observation(wild,n==9?Map.of(id,1L):Map.of()),AttemptAdapter.Assessment.certified("test-only","test-bag",Map.of(id,1.0/7))); }
+		for(int n=0;n<5;n++) { engine.observe(observation(npc("Ghost",19,85),Map.of()),AttemptAdapter.Assessment.unsupported("Unknown old location")); }
+		RateProvider rates=new RateProvider() { public List<RateRow> rows(SourceIdentity source) { return catalogue.get("Ghost"); }public void refresh(SourceIdentity source,boolean force) {} };
+		com.lootluck.ui.PanelState combined=com.lootluck.ui.ViewBuilder.build(engine.lifetime(),rates,true,Map.of());
+		assertEquals(1,combined.sources.size());assertEquals(85,combined.sources.get(0).count);assertEquals(3,combined.sources.get(0).children.size());
+		assertEquals(10,combined.sources.get(0).items.stream().filter(item->item.id==id).findFirst().orElseThrow().attempts.longValue());
+		com.lootluck.ui.PanelState.Source outsideView=combined.sources.get(0).children.stream().filter(source->source.name.contains("Outside Wilderness")).findFirst().orElseThrow();
+		assertTrue(outsideView.items.stream().noneMatch(item->item.id==id));
+		com.lootluck.ui.PanelState separate=com.lootluck.ui.ViewBuilder.build(engine.lifetime(),rates,true,Map.of(),false,null,true);
+		assertEquals(3,separate.sources.size());assertEquals(85,separate.sources.stream().mapToLong(source->source.count).sum());
+		assertEquals(combined.allItems.get(0).quantity,separate.allItems.get(0).quantity);assertEquals(85,engine.lifetime().history.size());
+		assertTrue(separate.sources.stream().anyMatch(source->source.name.startsWith("Ghost (")&&source.name.contains("Unknown location")));
+	}
+	@Test public void cosmeticGoblinIdsShareConditionChildrenButDifferentTablesDoNot()
+	{
+		LedgerEngine engine=new LedgerEngine(new Ledger());
+		for(int id:new int[]{3032,3033,3045}) { engine.observe(observation(npc("Goblin",id==3045?5:2,id),Map.of(526,1L)),AttemptAdapter.Assessment.unsupported("unapproved")); }
+		RateProvider rates=new RateProvider() { public List<RateRow> rows(SourceIdentity source) { return catalogue.get("Goblin"); }public void refresh(SourceIdentity source,boolean force) {} };
+		com.lootluck.ui.PanelState view=com.lootluck.ui.ViewBuilder.build(engine.lifetime(),rates,false,Map.of());
+		assertEquals(2,view.sources.get(0).children.size());assertEquals(3,view.sources.get(0).children.stream().mapToLong(source->source.count).sum());
+		assertTrue(view.sources.get(0).children.stream().anyMatch(source->source.name.equals("Drop table 1")&&source.count==2));
+		assertEquals(3,engine.lifetime().sourceVariants().size());
+	}
 	@Test public void anchoredQuestBoneUsesExactVariantId()
 	{
 		SourceIdentity zombie=npc("Zombie",24,56);

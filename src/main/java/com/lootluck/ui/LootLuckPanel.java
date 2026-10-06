@@ -49,6 +49,7 @@ public final class LootLuckPanel extends PluginPanel
 	private final Consumer<Boolean> scopeChanged;
 	private final Consumer<String> openWiki;
 	private final Set<String> collapsed=new HashSet<>();
+	private final Set<String> knownConditionKeys=new HashSet<>();
 	private final JButton toggleSources=new JButton();
 	private final JButton toggleGrid=new JButton();
 	private final JButton toggleUnobtained=new JButton();
@@ -82,7 +83,7 @@ public final class LootLuckPanel extends PluginPanel
 		JPanel headerActions=new JPanel(new GridLayout(1,4,2,0));headerActions.setOpaque(false);headerActions.add(toggleUnobtained);headerActions.add(toggleGrid);headerActions.add(toggleSources);headerActions.add(settingsButton);heading.add(headerActions,BorderLayout.EAST);
 		toggleGrid.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,16));toggleGrid.setMargin(new java.awt.Insets(2,4,2,4));
 		toggleGrid.addActionListener(e->{state.gridView=!state.gridView;gridChanged.accept(state.gridView);render();});
-		toggleSources.addActionListener(e->{boolean collapse=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));for(PanelState.Source source:state.sources) { if(collapse) { collapsed.add(source.key); }else { collapsed.remove(source.key); } }render();});
+		toggleSources.addActionListener(e->{boolean collapse=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));for(PanelState.Source source:state.sourceRows()) { if(collapse) { collapsed.add(source.key); }else { collapsed.remove(source.key); } }render();});
 		settings.setOpaque(false);JButton back=new JButton("← Back to loot");settings.add(back);settings.add(label("Settings",GOLD));
 		settingsButton.addActionListener(e->showSettings(true));back.addActionListener(e->showSettings(false));
 		top.add(view);
@@ -136,7 +137,7 @@ public final class LootLuckPanel extends PluginPanel
 	public void setDataAction(Consumer<String> action) { dataAction=action; }
 	public void setValidationAction(Consumer<String> action) { validationAction=action; }
 	public boolean driest() { return sort.getSelectedIndex()==2; }
-	public void update(PanelState state) { if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); } this.state=state;render(); }
+	public void update(PanelState state) { if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); } this.state=state;for(PanelState.Source source:state.sources) { for(PanelState.Source child:source.children) { if(knownConditionKeys.add(child.key)) { collapsed.add(child.key); } } }render(); }
 	private void render()
 	{
 		content.removeAll();itemButtons.clear();
@@ -147,8 +148,12 @@ public final class LootLuckPanel extends PluginPanel
 		if(configSettings!=null) { configSettings.sync(); }
 		if(!state.notice.isEmpty()) { JLabel notice=label(state.notice,MUTED);content.add(notice); }
 		if(view.getSelectedIndex()!=0) { renderObservations();content.revalidate();content.repaint();return; }
-		for(PanelState.Source source:state.sources)
-		{
+		for(PanelState.Source source:state.sources) { content.add(sourceCard(source));content.add(javax.swing.Box.createVerticalStrut(5)); }
+		if(state.sources.isEmpty()) { JLabel empty=label("No loot recorded in this view.",MUTED);empty.setBorder(BorderFactory.createEmptyBorder(12,0,12,0));content.add(empty); }
+		JLabel status=label(state.dataStatus,MUTED);content.add(status);content.revalidate();content.repaint();
+	}
+	private JPanel sourceCard(PanelState.Source source)
+	{
 			JPanel group=new JPanel(new BorderLayout()) { @Override public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE,getPreferredSize().height); } };group.setOpaque(false);group.setAlignmentX(LEFT_ALIGNMENT);
 			JButton header=new JButton();header.setLayout(new BorderLayout(4,0));header.setBackground(new Color(16,16,16));header.setBorder(BorderFactory.createEmptyBorder(8,4,8,4));
 			header.add(label((collapsed.contains(source.key)?"▸ ":"▾ ")+source.name,GOLD),BorderLayout.WEST);
@@ -166,21 +171,19 @@ public final class LootLuckPanel extends PluginPanel
 			{
 				JButton validation=new JButton(source.validationApproved?"Luck tracking validated":"Validate luck tracking");
 				validation.setEnabled(!source.validationApproved);validation.setToolTipText("Confirm the source-specific gameplay checks before enabling exact luck statistics.");
-				validation.addActionListener(e->validationAction.accept(source.key));group.add(validation,BorderLayout.SOUTH);
+				validation.addActionListener(e->validationAction.accept(source.familyKey==null?source.key:source.familyKey));group.add(validation,BorderLayout.SOUTH);
 			}
 			if(!collapsed.contains(source.key))
 			{
 				JPanel rows=new JPanel();rows.setOpaque(false);rows.setLayout(new javax.swing.BoxLayout(rows,javax.swing.BoxLayout.Y_AXIS));
 				ArrayList<PanelState.Item> ordered=new ArrayList<>(source.items);
 				ordered.sort(ItemOrdering.comparator(sort.getSelectedIndex(),state.groupByDropTable));
-				if(state.gridView) { group.add(sourceGrid(ordered),BorderLayout.CENTER); }
+				if(!source.children.isEmpty()) { rows.setBorder(BorderFactory.createEmptyBorder(0,8,0,0));for(PanelState.Source child:source.children) { rows.add(sourceCard(child)); }group.add(rows,BorderLayout.CENTER); }
+				else if(state.gridView) { group.add(sourceGrid(ordered),BorderLayout.CENTER); }
 				else if(ordered.size()>100) { group.add(virtualSourceItems(ordered),BorderLayout.CENTER); }
 				else { for(PanelState.Item item:ordered) { rows.add(itemRow(item));if(item.key.equals(expanded)) { rows.add(details(item)); } }group.add(rows,BorderLayout.CENTER); }
 			}
-			content.add(group);content.add(javax.swing.Box.createVerticalStrut(5));
-		}
-		if(state.sources.isEmpty()) { JLabel empty=label("No loot recorded in this view.",MUTED);empty.setBorder(BorderFactory.createEmptyBorder(12,0,12,0));content.add(empty); }
-		JLabel status=label(state.dataStatus,MUTED);content.add(status);content.revalidate();content.repaint();
+			return group;
 	}
 	private JPanel virtualSourceItems(java.util.List<PanelState.Item> items)
 	{

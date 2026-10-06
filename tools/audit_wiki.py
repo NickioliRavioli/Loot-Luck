@@ -77,7 +77,21 @@ def normalize(value):
 
 
 def quantity(value):
-    return re.sub(r"\[[^]]*\]", "", normalize(value)).replace(",", "").replace("-", "–").strip()
+    # A few transcluded Wiki tables contain UTF-8 text decoded as Windows-1252.
+    value = value.replace("\u00e2\u20ac\u201c", "\u2013").replace("\u00e2\u20ac\u201d", "\u2014").replace("\u00c2\u00a0", "\u00a0")
+    value = re.sub(r"\[[^]]*\]", "", normalize(value))
+    value = re.sub(r"(?<=\d),(?=\d{3}(?:\D|$))", "", value)
+    return re.sub(r"\s*[;,]\s*", ";", value).replace("-", "–").replace("—", "–").strip()
+
+
+def same_rate(left, right):
+    # Roll count and approximation are separate structured export fields.
+    left = re.sub(r"^\d+\s*[×x]\s*", "", left).lstrip("~ ")
+    right = re.sub(r"^\d+\s*[×x]\s*", "", right).lstrip("~ ")
+    a, b = probability(left), probability(right)
+    if a is not None or b is not None:
+        return a == b
+    return normalize(re.sub(r"\[[^]]*\]", "", left)) == normalize(re.sub(r"\[[^]]*\]", "", right))
 
 
 def probability(value):
@@ -195,10 +209,14 @@ def page_evidence(owner, data):
             if name == "dropslineclue":
                 item = "Clue scroll (" + params.get("type", "") + ")"
             if item:
-                rows.append({"table": table, "item": item, "rate": params.get("rarity", ""),
+                row_table = owner + "#" + params["dropversion"] if params.get("dropversion") else table
+                rows.append({"table": row_table, "item": item, "rate": params.get("rarity", ""),
                              "quantity": params.get("quantity", "1"),
                              "notes": " ".join(params.get(k, "") for k in ("namenotes", "raritynotes")),
                              "line": text.count("\n", 0, start) + 1})
+    for row in rows:
+        if re.search(r"only dropped by those found in the \[\[Wilderness\]\]", row["notes"], re.I):
+            row["requiredArea"] = "Wilderness"
     return {"owner": owner, "revision": data["parse"]["revid"], "fetchedAt": data["fetchedAt"],
             "url": "https://oldschool.runescape.wiki/w/" + urllib.parse.quote(owner.replace(" ", "_")),
             "sha256": hashlib.sha256(text.encode()).hexdigest(), "rows": rows,
@@ -266,6 +284,7 @@ def main():
     parser.add_argument("--sample", type=int, default=150)
     parser.add_argument("--all-pages", action="store_true")
     parser.add_argument("--render", action="store_true", help="Also audit rendered tables, including transcluded rates")
+    parser.add_argument("--transclusions", action="store_true", help="Fetch source-owned subpages referenced by the selected pages")
     parser.add_argument("--owners", nargs="*", default=[])
     args = parser.parse_args()
     full = json.loads((ROOT / "tools/wiki-inputs/full-catalogue.json").read_text(encoding="utf-8"))
@@ -332,6 +351,19 @@ def main():
                 conflicts.append({"owner": owner, "kind": "page-not-fetched"})
                 continue
             page = page_evidence(owner, data)
+            owned = sorted({"Template:" + body.split("|", 1)[0].strip() for _, body in templates(data["parse"]["wikitext"]["*"])
+                            if body.split("|", 1)[0].strip().casefold().startswith(owner.casefold() + "/")})
+            transclusions = []
+            for title in owned:
+                child = fetch(title, args.refresh and args.transclusions, args.render) if args.transclusions or (PAGES / (hashlib.sha256(title.encode()).hexdigest() + ".json")).exists() else None
+                if child is None:
+                    continue
+                witness = page_evidence(owner, child)
+                page["rows"].extend(witness["rows"])
+                transclusions.append({"title": title, "revision": witness["revision"], "sha256": witness["sha256"]})
+            if transclusions:
+                page["transclusions"] = transclusions
+                page["sha256"] = hashlib.sha256((page["sha256"] + "\n" + "\n".join(t["title"] + ":" + t["sha256"] for t in transclusions)).encode()).hexdigest()
             signatures = []
             for row in groups.get(owner, []):
                 d = json.loads(row["drop_json"])
@@ -345,7 +377,7 @@ def main():
                     anchored = {direct["item"] for direct in page["rows"]
                                 if "#" in direct["item"] and normalize(direct["item"].split("#")[0]) == normalize(row["item"]) and
                                 quantity(direct["quantity"]) == quantity(row["quantity"]) and
-                                probability(direct["rate"]) is not None and probability(direct["rate"]) == probability(row["rate"])}
+                                same_rate(direct["rate"], row["rate"])}
                     if len(anchored) == 1:
                         row["item"] = anchored.pop()
                     if row["table"] != owner:
@@ -355,7 +387,7 @@ def main():
                     tables = {direct["table"] for direct in page["rows"]
                               if normalize(direct["item"]) == normalize(row["item"]) and
                               quantity(direct["quantity"]) == quantity(row["quantity"]) and
-                              probability(direct["rate"]) is not None and probability(direct["rate"]) == probability(row["rate"])}
+                              same_rate(direct["rate"], row["rate"])}
                     if len(tables) == 1:
                         row["table"] = tables.pop()
                     elif tables:
@@ -381,16 +413,14 @@ def main():
                                          "quantity": drop.get("Drop Quantity", ""), "rate": drop["Rarity"],
                                          "reason": "No independently resolved rendered table/item/quantity match; rate not certified"})
                     continue
-                actual = probability(str(drop["Rarity"]))
-                numeric = [r for r in candidates if probability(r["rate"]) is not None]
-                if numeric and not any(probability(r["rate"]) == actual for r in numeric):
-                    unique = {str(probability(r["rate"])) for r in numeric}
+                if not any(same_rate(r["rate"], str(drop["Rarity"])) for r in candidates):
+                    unique = {str(probability(r["rate"])) if probability(r["rate"]) is not None else normalize(re.sub(r"\[[^]]*\]", "", r["rate"])) for r in candidates}
                     correction = {"item": row["item_name"], "table": row["page_name_sub"],
-                                  "quantity": drop["Drop Quantity"], "before": drop["Rarity"], "after": re.sub(r"^\d+\s*[×x]\s*", "", numeric[0]["rate"])}
+                                  "quantity": drop["Drop Quantity"], "before": drop["Rarity"], "after": re.sub(r"\[[^]]*\]", "", re.sub(r"^\d+\s*[×x]\s*", "", candidates[0]["rate"])).strip()}
                     if len(unique) == 1:
                         page["corrections"].append(correction)
                     conflicts.append({"owner": owner, "kind": "rate-conflict", "item": row["item_name"],
-                                      "table": row["page_name_sub"], "export": drop["Rarity"], "page": numeric,
+                                      "table": row["page_name_sub"], "export": drop["Rarity"], "page": candidates,
                                       "resolution": "page-backed-correction" if len(unique) == 1 else "ambiguous"})
                 else:
                     matched += 1

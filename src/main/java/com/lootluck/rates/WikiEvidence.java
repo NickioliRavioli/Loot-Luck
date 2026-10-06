@@ -29,7 +29,7 @@ public final class WikiEvidence
 			for(RateRow row:rows)
 			{
 				String original=row.mechanics.remove("Structured export rate");if(original!=null) { row.rawRate=original; }
-				for(String key:List.of("Table combat levels","Table NPC IDs","Wiki page revision","Wiki page evidence hash","Source page conditions")) { row.mechanics.remove(key); }
+				for(String key:List.of("Table combat levels","Table NPC IDs","Wiki page revision","Wiki page evidence hash","Source page conditions","Required area")) { row.mechanics.remove(key); }
 			}
 			return;
 		}
@@ -72,6 +72,7 @@ public final class WikiEvidence
 					!row.rawRate.equals(expected.get("rate").getAsString()) || !row.quantity.equals(expected.get("quantity").getAsString())) { continue; }
 				String notes = expected.get("notes").getAsString().trim();
 				if (!notes.isEmpty()) { row.mechanics.put("Source page conditions", notes); }
+				if(expected.has("requiredArea")) { row.mechanics.put("Required area",expected.get("requiredArea").getAsString()); }
 			}
 		}
 	}

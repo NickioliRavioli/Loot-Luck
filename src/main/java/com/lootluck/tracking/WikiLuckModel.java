@@ -38,6 +38,7 @@ public final class WikiLuckModel
 			boolean exclusive=rows.size()>1&&exclusiveItems.contains(ItemRateMatcher.normalize(rows.get(0).itemName));
 			if (rows.size() != 1 && !exclusive) { continue; }
 			RateRow row = rows.get(0);
+			if(!Boolean.TRUE.equals(com.lootluck.rates.ItemEligibility.eligible(row,observation.source))) { continue; }
 			Double q = row.publishedProbability();
 			if(exclusive)
 			{

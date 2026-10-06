@@ -79,6 +79,9 @@ public class LootLuckPlugin extends Plugin
 	private int scanCursor;
 	private boolean scanning;
 	private final com.lootluck.tracking.MysteryBoxTracker mysteryBoxes=new com.lootluck.tracking.MysteryBoxTracker();
+	private final com.lootluck.tracking.NpcDeathContexts npcDeaths=new com.lootluck.tracking.NpcDeathContexts();
+	private java.util.Collection<ItemStack> pendingNpcItems;
+	private String pendingNpcContext="";
 
 	@Override protected void startUp()
 	{
@@ -109,6 +112,7 @@ public class LootLuckPlugin extends Plugin
 	private void activate(String key)
 	{
 		mysteryBoxes.clear();
+		npcDeaths.clear();pendingNpcItems=null;pendingNpcContext="";
 		activeProfile=key;long token=generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.cancelRequests(); }
 		submit(r->{
 			r.profile=key;r.engine=null;
@@ -121,7 +125,7 @@ public class LootLuckPlugin extends Plugin
 	@Subscribe public void onGameStateChanged(GameStateChanged event)
 	{
 		updateWorldType();
-		if(event.getGameState()!=GameState.LOGGED_IN) { mysteryBoxes.clear(); }
+		if(event.getGameState()!=GameState.LOGGED_IN) { mysteryBoxes.clear();npcDeaths.clear();pendingNpcItems=null;pendingNpcContext=""; }
 		if(event.getGameState()==GameState.LOGIN_SCREEN||event.getGameState()==GameState.HOPPING||event.getGameState()==GameState.CONNECTION_LOST)
 		{ submit(r->{if(r.engine!=null) { r.engine.interruptCoverage(); }}); }
 		if(event.getGameState()==GameState.LOGGED_IN||event.getGameState()==GameState.LOGIN_SCREEN) { checkPrerequisite();startIdentityScan();publish(); }
@@ -142,10 +146,31 @@ public class LootLuckPlugin extends Plugin
 	{
 		if(!running||activeProfile==null||event.getType()==null||"PLAYER".equals(event.getType().name())||event.getName()==null||event.getName().isBlank()) { return; }
 		String metadata=event.getMetadata() instanceof Number?String.valueOf(event.getMetadata()):"unresolved";
-		SourceIdentity source=new SourceIdentity(event.getType().name(),event.getName(),"combat="+event.getCombatLevel()+";metadata="+metadata,client.getWorldType().toString());
+		String deathContext="NPC".equals(event.getType().name())&&event.getItems()==pendingNpcItems?pendingNpcContext:"";
+		pendingNpcItems=null;pendingNpcContext="";
+		java.util.regex.Matcher location=java.util.regex.Pattern.compile(";deathLocation=([^;]+)").matcher(deathContext);
+		String deathLocation=location.find()?location.group(1):"";
+		SourceIdentity source=new SourceIdentity(event.getType().name(),event.getName(),"combat="+event.getCombatLevel()+";metadata="+metadata+deathContext.replaceAll(";deathLocation=[^;]+",""),client.getWorldType().toString(),"",deathLocation);
 		RuntimeData current=runtime;if(current!=null&&current.rates!=null) { source=current.rates.resolveSource(source); }
 		if("Mystery box".equals(event.getName())) { mysteryBoxes.clear(); }
 		recordLoot(source,event.getItems(),Math.max(0,event.getAmount()));
+	}
+	@Subscribe public void onActorDeath(net.runelite.api.events.ActorDeath event)
+	{
+		if(!running||activeProfile==null||!(event.getActor() instanceof net.runelite.api.NPC)) { return; }
+		net.runelite.api.NPC npc=(net.runelite.api.NPC)event.getActor();net.runelite.api.NPCComposition composition=npc.getTransformedComposition();
+		if(composition==null) { return; }
+		net.runelite.api.Player local=client.getLocalPlayer();net.runelite.api.coords.WorldPoint point=npc.getWorldLocation(),player=local==null?null:local.getWorldLocation();
+		boolean unknownView=local==null||npc.getWorldView()==null||npc.getWorldView()!=local.getWorldView()||npc.getWorldView().isInstance();
+		Boolean wild=com.lootluck.tracking.NpcDeathContexts.wilderness(point,player,client.getVarbitValue(net.runelite.api.gameval.VarbitID.INSIDE_WILDERNESS)==1,unknownView);
+		npcDeaths.record(npc.getIndex(),composition.getId(),client.getTickCount(),point,wild);
+	}
+	@Subscribe(priority=1) public void onServerNpcLoot(net.runelite.client.events.ServerNpcLoot event)
+	{
+		if(!running||activeProfile==null) { return; }
+		// Runs before core Loot Tracker emits its nested processed event. Identity is the event's
+		// collection object, never its contents, so repeated genuine rewards remain distinct.
+		pendingNpcItems=event.getItems();pendingNpcContext=npcDeaths.consume(event.getComposition().getId(),client.getTickCount());
 	}
 	private void recordLoot(SourceIdentity source,java.util.Collection<ItemStack> items,long amount)
 	{
@@ -325,7 +350,7 @@ public class LootLuckPlugin extends Plugin
 	private void publishOnWorker(RuntimeData r,long token)
 	{
 		if(r!=runtime || token!=generation.get()) { return; }
-		PanelState view=r.engine==null||r.rates==null?new PanelState():ViewBuilder.build(session?r.engine.session():r.engine.lifetime(),r.rates,all||config.includeUnobtained(),new LinkedHashMap<>(identities),config.hideUnobtainedOtherWorld(),membersWorld);
+		PanelState view=r.engine==null||r.rates==null?new PanelState():ViewBuilder.build(session?r.engine.session():r.engine.lifetime(),r.rates,all||config.includeUnobtained(),new LinkedHashMap<>(identities),config.hideUnobtainedOtherWorld(),membersWorld,config.separateConditionVariants());
 		view.showGe=config.showGe();view.showHa=config.showHa();view.luckColors=config.luckColors();view.showAllRates=config.showAllRates();
 		view.showWikiLinks=config.showWikiLinks();
 		view.includeUnobtained=config.includeUnobtained();
@@ -337,16 +362,17 @@ public class LootLuckPlugin extends Plugin
 		view.stackCounts=config.stackCounts();view.iconQuantities=config.iconQuantities()&&!config.stackCounts()&&!view.stackCounts;
 		view.notice=!r.error.isEmpty()?r.error:!lootTrackerEnabled?"Enable RuneLite Loot Tracker to receive loot.":activeProfile==null?"Log in to select an account profile.":view.sources.isEmpty()?"No loot recorded yet.":"";
 		view.dataStatus=r.rates==null?"Rate catalogue loading":r.rates.status+(config.wikiRefresh()?" · refresh enabled":" · offline mode");
-		if(r.rates!=null&&r.validation!=null) { for(PanelState.Source source:view.sources)
+		if(r.rates!=null&&r.validation!=null) { for(PanelState.Source source:view.sourceRows())
 		{
-			Ledger.Source family=r.engine==null?null:r.engine.lifetime().sources.get(source.key);
+			Ledger.Source family=r.engine==null?null:r.engine.lifetime().sources.get(source.familyKey);
 			if(family==null) { continue; }
 			String contract=r.validation.contract(family.identity,r.rates.rows(family.identity));
 			source.validationAvailable=!contract.isEmpty();source.validationApproved=source.validationAvailable&&contract.equals(approval(r.profile,family.identity));
+			if(!view.sources.contains(source)) { source.validationAvailable=false; }
 		} }
 		clientThread.invoke(()->{
 			if(!running||token!=generation.get()) { return; }
-			for(PanelState.Source source:view.sources)
+			for(PanelState.Source source:view.sourceRows())
 			{
 				long total=0;
 				for(PanelState.Item item:source.items)
@@ -369,6 +395,7 @@ public class LootLuckPlugin extends Plugin
 	@Override protected void shutDown()
 	{
 		mysteryBoxes.clear();
+		npcDeaths.clear();pendingNpcItems=null;pendingNpcContext="";
 		running=false;generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.close(); }
 		// Already captured immutable observations finish on the storage worker; never block the client thread.
 		// Shared executor is not shut down; only previously accepted immutable observations drain.
