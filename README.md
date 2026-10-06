@@ -34,6 +34,17 @@ For Jagex accounts, follow RuneLite's development-client login instructions: htt
 
 ## Development fixture client
 
+For large-number examples in an existing development profile, close RuneLite and
+run `python tools/large_value_examples.py "PATH_TO_PROFILE_SNAPSHOT.json" --client-closed`.
+The offline helper adds three labelled `Example:` source families with five item
+rows, uses bundled Wiki identities, and retains a timestamped backup. Real
+sources and collection history stay unchanged; All items totals include the
+examples. They use normal RuneLite prices and intentionally have no certified
+rates or attempt statistics. Repeating the command replaces the same examples
+instead of accumulating them. Add `--remove` to remove only those example
+families while keeping subsequent real loot. Keep RuneLite closed during removal
+too; the helper refuses replacement if the snapshot changes during preparation.
+
 ```powershell
 .\gradlew.bat fixture --args="--developer-mode --debug"
 ```

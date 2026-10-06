@@ -24,6 +24,7 @@ public final class AuditRecordedLoot
 		for(String input:args)
 		{
 			Ledger ledger=gson.fromJson(Files.readString(Path.of(input)),Ledger.class);
+			com.lootluck.storage.LedgerStore.validate(ledger);
 			for(Ledger.Source source:ledger.sourceVariants())
 			{
 				SourceIdentity id=sources.resolve(source.identity);String owner=RewardSources.wikiOwner(id);
