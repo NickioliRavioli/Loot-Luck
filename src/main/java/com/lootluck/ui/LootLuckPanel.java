@@ -238,7 +238,7 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private JButton gridItem(PanelState.Item item)
 	{
-		JButton button=new EffectButton(state.itemEffect,effectColor(item)) {
+		JButton button=new EffectButton(item.quantity>0?state.itemEffect:ItemEffect.NONE,effectColor(item)) {
 			@Override public void doLayout() { for(java.awt.Component child:getComponents()) { if("count".equals(child.getName())) { child.setBounds(2,getHeight()-14,getWidth()-4,12); }else { child.setBounds(2,2,getWidth()-4,getHeight()-4); } } }
 		};button.setLayout(null);button.setBackground(ROW);button.setMargin(new java.awt.Insets(0,0,0,0));
 		button.setBorder(BorderFactory.createLineBorder(item.key.equals(expanded)?GOLD:BG,2));
@@ -286,7 +286,7 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private JButton observationRow(PanelState.Item item,boolean combined)
 	{
-		JButton row=new EffectButton(state.itemEffect,effectColor(item));row.setLayout(new BorderLayout(5,0));row.setBackground(ROW);row.setBorder(BorderFactory.createEmptyBorder(4,2,4,4));row.setAlignmentX(LEFT_ALIGNMENT);
+		JButton row=new EffectButton(item.quantity>0?state.itemEffect:ItemEffect.NONE,effectColor(item));row.setLayout(new BorderLayout(5,0));row.setBackground(ROW);row.setBorder(BorderFactory.createEmptyBorder(4,2,4,4));row.setAlignmentX(LEFT_ALIGNMENT);
 		JLabel sprite=new JLabel(item.id>0?icons.apply(item.id,item.quantity):null);sprite.setPreferredSize(new Dimension(40,32));sprite.setHorizontalAlignment(JLabel.CENTER);row.add(sprite,BorderLayout.WEST);
 		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.add(label(item.name,Color.LIGHT_GRAY));if(combined&&!state.stackCounts) { text.add(label(NUMBER.format(item.occurrences)+" occurrences",MUTED)); }row.add(text,BorderLayout.CENTER);row.add(itemCounts(item),BorderLayout.EAST);row.setMaximumSize(new Dimension(Integer.MAX_VALUE,42));row.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);
 		if(combined) { itemButtons.put(item.key,row);row.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;render();JButton current=itemButtons.get(item.key);if(current!=null) { current.requestFocusInWindow(); }});makeRowClickable(row,row); }
@@ -295,7 +295,7 @@ public final class LootLuckPanel extends PluginPanel
 	private JPanel itemRow(PanelState.Item item)
 	{
 		JPanel holder=new JPanel(new BorderLayout());holder.setOpaque(false);holder.setAlignmentX(LEFT_ALIGNMENT);
-		JButton button=new EffectButton(state.itemEffect,effectColor(item));button.setLayout(new BorderLayout(5,0));button.setBackground(item.key.equals(expanded)?new Color(56,49,39):ROW);button.setBorder(BorderFactory.createMatteBorder(0,0,1,0,BG));
+		JButton button=new EffectButton(item.quantity>0?state.itemEffect:ItemEffect.NONE,effectColor(item));button.setLayout(new BorderLayout(5,0));button.setBackground(item.key.equals(expanded)?new Color(56,49,39):ROW);button.setBorder(BorderFactory.createMatteBorder(0,0,1,0,BG));
 		JLabel icon=new JLabel(itemIcon(item));icon.setHorizontalAlignment(JLabel.CENTER);icon.setBorder(BorderFactory.createEmptyBorder(0,2,0,2));icon.setPreferredSize(new Dimension(40,36));if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.WEST);
 		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.setBorder(BorderFactory.createEmptyBorder(4,0,4,0));
 		JLabel name=label(item.name+(!state.hideUnobtainedOtherWorld&&!item.worldMarker.isEmpty()?" "+item.worldMarker:""),item.quantity==0?MUTED:Color.LIGHT_GRAY);text.add(name);
