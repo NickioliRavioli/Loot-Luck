@@ -14,6 +14,41 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void expandedNumbersRemainExactAndFitAtSidebarWidth() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			for(boolean grid:new boolean[]{false,true})
+			{
+				PanelState state=new PanelState();state.notice="";state.gridView=grid;state.showGe=true;state.showHa=true;
+				PanelState.Source source=new PanelState.Source();source.key="large";source.name="Large totals";
+				PanelState.Item item=new PanelState.Item();item.key="coins";item.name="Coins";item.quantity=Long.MAX_VALUE;item.occurrences=Long.MAX_VALUE;item.unresolvedOccurrences=Long.MAX_VALUE;
+				item.rate="1/128";item.valueAvailable=true;item.ge=2_149_631_130_647L;item.ha=Long.MAX_VALUE;
+				PanelState.RateOption option=new PanelState.RateOption();option.table="Main";option.dropQuantity="1";option.rate="1/128";option.occurrences=Long.MAX_VALUE;item.rateOptions.add(option);
+				source.items.add(item);state.sources.add(source);
+				LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);
+				javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,700);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);
+				findButton(panel,"Coins").doClick();viewport.doLayout();layoutChildren(panel);
+				Container body=findLabel(panel,"Quantity").getParent().getParent().getParent();
+				for(String text:new String[]{"9,223,372,036,854,775,807","x9,223,372,036,854,775,807","2,149,631,130,647 gp","9,223,372,036,854,775,807 gp"})
+				{
+					assertNotNull(text,findLabel(body,text));assertNumericLabelFits(body,text);
+				}
+				if(!grid)
+				{
+					BufferedImage image=new BufferedImage(230,panel.getHeight(),BufferedImage.TYPE_INT_ARGB);panel.paint(image.getGraphics());
+					try { ImageIO.write(image,"png",new java.io.File("build/large-detail-values.png")); } catch(Exception e) { throw new IllegalStateException(e); }
+				}
+			}
+		});
+	}
+	private static void assertNumericLabelFits(Container container,String text)
+	{
+		for(Component child:container.getComponents())
+		{
+			if(child instanceof javax.swing.JLabel&&text.equals(((javax.swing.JLabel)child).getText())) { assertTrue(text+" clipped: "+child.getWidth()+" < "+child.getPreferredSize().width,child.getWidth()>=child.getPreferredSize().width);assertTrue(child.getHeight()>=child.getPreferredSize().height); }
+			if(child instanceof Container) { assertNumericLabelFits((Container)child,text); }
+		}
+	}
 	@Test public void settingsBackHeaderStaysOutsideTheScrollingContent() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{

@@ -373,7 +373,7 @@ public final class LootLuckPanel extends PluginPanel
 	{
 		JPanel wrap=new JPanel(new BorderLayout(0,4));wrap.setBackground(new Color(24,24,24));wrap.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,2,0,0,new Color(119,100,69)),BorderFactory.createEmptyBorder(7,8,8,8)));wrap.setAlignmentX(LEFT_ALIGNMENT);
 		if(!item.worldMarker.isEmpty()) { wrap.add(label("(m)".equals(item.worldMarker)?"Members worlds only":"Free-to-play worlds only",MUTED),BorderLayout.NORTH); }
-		JPanel grid=new JPanel(new GridLayout(0,2,8,4));grid.setOpaque(false);
+		JPanel grid=new JPanel(new GridLayout(0,1,0,6));grid.setOpaque(false);
 		stat(grid,"Quantity",NUMBER.format(item.quantity),"All recorded units; separate from occurrences.",Color.YELLOW);
 		stat(grid,"Occurrences","x"+NUMBER.format(item.occurrences),"Recorded notifications containing the item, including excluded/batched observations.",null);
 		if(PanelState.LUCK_STATISTICS_VISIBLE)
@@ -390,8 +390,8 @@ public final class LootLuckPanel extends PluginPanel
 		stat(grid,"P(X ≥ k)",percent(item.upper),"Chance of this many drops or more."+availability,null);
 		stat(grid,"P(X ≤ k)",percent(item.lower),"Chance of this many drops or fewer."+availability,null);
 		}
-		if(state.showGe) { stat(grid,"GE total",item.valueAvailable?money(item.ge):"—","Current RuneLite GE price × recorded quantity; not historical sale proceeds.",null); }
-		if(state.showHa) { stat(grid,"HA total",item.valueAvailable?money(item.ha):"—","High Alchemy total before rune costs.",null); }
+		if(state.showGe) { stat(grid,"GE total",item.valueAvailable?NUMBER.format(item.ge)+" gp":"—","Current RuneLite GE price × recorded quantity; not historical sale proceeds.",null); }
+		if(state.showHa) { stat(grid,"HA total",item.valueAvailable?NUMBER.format(item.ha)+" gp":"—","High Alchemy total before rune costs.",null); }
 		JPanel body=new JPanel();body.setLayout(new javax.swing.BoxLayout(body,javax.swing.BoxLayout.Y_AXIS));body.setOpaque(false);body.add(grid);
 		if(!item.rateOptions.isEmpty()||item.unresolvedOccurrences>0)
 		{
@@ -403,15 +403,15 @@ public final class LootLuckPanel extends PluginPanel
 				breakdown.add(label(table.getKey(),GOLD));
 				for(PanelState.RateOption option:table.getValue())
 				{
-					JPanel line=new JPanel(new GridLayout(1,4,2,0));line.setOpaque(false);line.add(label(option.dropQuantity==null?"—":option.dropQuantity,MUTED));
-					JLabel rate=rateLabel(option.rate,option.color);line.add(rate);
-					JLabel occurrences=label("x"+NUMBER.format(option.occurrences==null?0:option.occurrences),MUTED);occurrences.setHorizontalAlignment(JLabel.RIGHT);line.add(occurrences);breakdown.add(line);
+					JPanel published=new JPanel(new GridLayout(1,2,2,0));published.setOpaque(false);published.add(label(option.dropQuantity==null?"—":option.dropQuantity,MUTED));
+					JLabel rate=rateLabel(option.rate,option.color);published.add(rate);
+					JLabel occurrences=label("x"+NUMBER.format(option.occurrences==null?0:option.occurrences),MUTED);occurrences.setHorizontalAlignment(JLabel.RIGHT);
+					breakdown.add(detailCountRow(published,occurrences));
 				}
 			}
 			if(item.unresolvedOccurrences>0)
 			{
-				JPanel unknown=new JPanel(new BorderLayout(4,0));unknown.setOpaque(false);unknown.add(label("Unknown table",GOLD),BorderLayout.CENTER);
-				JLabel occurrences=label("x"+NUMBER.format(item.unresolvedOccurrences),MUTED);occurrences.setHorizontalAlignment(JLabel.RIGHT);unknown.add(occurrences,BorderLayout.EAST);breakdown.add(unknown);
+				JLabel occurrences=label("x"+NUMBER.format(item.unresolvedOccurrences),MUTED);occurrences.setHorizontalAlignment(JLabel.RIGHT);breakdown.add(detailCountRow(label("Unknown table",GOLD),occurrences));
 			}
 			body.add(breakdown);
 		}
@@ -441,7 +441,14 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private void stat(JPanel grid,String name,String value,String tip,Color color)
 	{
-		JPanel cell=new JPanel(new BorderLayout(3,0));cell.setOpaque(false);JLabel label=label(name,MUTED),number=label(value,color==null?Color.LIGHT_GRAY:color);cell.add(label,BorderLayout.CENTER);cell.add(number,BorderLayout.EAST);grid.add(cell);
+		JPanel cell=new JPanel(new BorderLayout(0,1));cell.setOpaque(false);JLabel label=label(name,MUTED),number=label(value,color==null?Color.LIGHT_GRAY:color);cell.add(label,BorderLayout.NORTH);cell.add(number,BorderLayout.CENTER);grid.add(cell);
+	}
+	private JPanel detailCountRow(javax.swing.JComponent description,JLabel count)
+	{
+		// Reserve a full-width line for counts that would crowd the published table fields.
+		JPanel row=new JPanel(new BorderLayout(4,1));row.setOpaque(false);
+		boolean large=count.getPreferredSize().width>70;
+		row.add(description,large?BorderLayout.NORTH:BorderLayout.CENTER);row.add(count,large?BorderLayout.SOUTH:BorderLayout.EAST);return row;
 	}
 	private static JLabel label(String text,Color color) { JLabel l=new JLabel(text);l.setAlignmentX(LEFT_ALIGNMENT);l.setFont(FontManager.getRunescapeSmallFont());l.setForeground(color);return l; }
 	private static JLabel rateLabel(String text,Color color)

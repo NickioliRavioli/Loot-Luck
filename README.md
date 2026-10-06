@@ -98,7 +98,10 @@ No historical core Loot Tracker import, hosted service, account uploads, reflect
 See [THIRD_PARTY.md](THIRD_PARTY.md) for licenses and network disclosures. This is a local development build, not a Plugin Hub submission or an assertion of Hub approval.
 
 Expanded rate breakdowns group rows by their published table name. Columns show
-published drop quantity/range, rarity, and collected units assigned to that row.
+published drop quantity/range, rarity, and recorded occurrences assigned to that row.
+Expanded quantities, occurrences and GE/HA totals use exact comma-separated
+numbers on full-width lines; large table occurrence counts move onto their own
+right-aligned line. Summary values remain compact.
 New notifications can be assigned by a unique quantity-range match when the
 reported amount and published roll count are both one. Overlapping matches,
 batches, missing roll/quantity metadata and multiple rolls remain under Unknown
