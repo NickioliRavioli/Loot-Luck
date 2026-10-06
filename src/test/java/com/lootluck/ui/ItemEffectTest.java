@@ -50,6 +50,12 @@ public class ItemEffectTest
 			for(int i=0;i<buttons.size();i++) { buttons.get(i).doClick();assertEquals(ItemEffect.values()[i],config.itemEffect());assertTrue(buttons.get(i).isSelected());assertEquals(1,buttons.stream().filter(javax.swing.JButton::isSelected).count()); }
 		});
 	}
+	@Test public void variesEffectsUseNeutralGreyWithoutChangingLabelColor()
+	{
+		PanelState.Item item=new PanelState.Item();item.rate="Varies";item.rarity=com.lootluck.rates.RateRow.VARIES_COLOR;
+		assertEquals(new Color(160,160,160),LootLuckPanel.effectColor(item));assertEquals(com.lootluck.rates.RateRow.VARIES_COLOR,item.rarity);
+		item.rate="1/10000";assertEquals(item.rarity,LootLuckPanel.effectColor(item));
+	}
 	@Test public void rarityAuraUsesTheItemColor()
 	{
 		for(ItemEffect effect:new ItemEffect[]{ItemEffect.RARITY,ItemEffect.RARITY_PRISM,ItemEffect.RARITY_AURORA,ItemEffect.RARITY_OPAL,ItemEffect.RARITY_FADE,ItemEffect.RARITY_PULSE,ItemEffect.RARITY_DUST,ItemEffect.RARITY_SHEEN})
