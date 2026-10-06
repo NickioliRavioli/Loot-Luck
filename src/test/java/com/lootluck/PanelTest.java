@@ -14,6 +14,14 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void singleDropTableAppearsInExpandedDetails() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			PanelState state=new PanelState();PanelState.Source source=new PanelState.Source();source.key="test";source.name="Test";PanelState.Item item=new PanelState.Item();item.key="single";item.name="Single table item";item.rate="1/20";source.items.add(item);state.sources.add(source);
+			PanelState.RateOption option=new PanelState.RateOption();option.table="Unique";option.rate="1/20";option.dropQuantity="1";option.color=java.awt.Color.GREEN;item.rateOptions.add(option);
+			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);findButton(panel,"Single table item").doClick();assertNotNull(findLabel(panel,"Unique"));item.rateOptions.clear();panel.update(state);assertNotNull(findLabel(panel,"Unknown table"));
+		});
+	}
 	@Test public void headerEyeToggleUpdatesPreferenceAndTracksState() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{

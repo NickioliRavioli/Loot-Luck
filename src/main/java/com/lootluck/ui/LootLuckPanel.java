@@ -353,7 +353,7 @@ public final class LootLuckPanel extends PluginPanel
 		if(state.showGe) { stat(grid,"GE total",item.valueAvailable?money(item.ge):"—","Current RuneLite GE price × recorded quantity; not historical sale proceeds.",null); }
 		if(state.showHa) { stat(grid,"HA total",item.valueAvailable?money(item.ha):"—","High Alchemy total before rune costs.",null); }
 		JPanel body=new JPanel();body.setLayout(new javax.swing.BoxLayout(body,javax.swing.BoxLayout.Y_AXIS));body.setOpaque(false);body.add(grid);
-		if(item.rateOptions.size()>1||item.unresolvedOccurrences>0)
+		if(!item.rateOptions.isEmpty()||item.unresolvedOccurrences>0)
 		{
 			JPanel breakdown=new JPanel(new GridLayout(0,1,0,3));breakdown.setOpaque(false);breakdown.setBorder(BorderFactory.createEmptyBorder(8,0,2,0));
 			java.util.Map<String,java.util.List<PanelState.RateOption>> tables=new java.util.LinkedHashMap<>();
@@ -371,6 +371,7 @@ public final class LootLuckPanel extends PluginPanel
 			if(item.unresolvedOccurrences>0) { JLabel unknown=label("Unknown table    x"+NUMBER.format(item.unresolvedQuantity),MUTED);breakdown.add(unknown); }
 			body.add(breakdown);
 		}
+		else { body.add(label("Unknown table",MUTED)); }
 		wrap.add(body);
 		JPanel footer=new JPanel(new BorderLayout(4,0));footer.setOpaque(false);
 		footer.add(label(item.attempts==null?"Model pending":"Validated segment",MUTED),BorderLayout.CENTER);
