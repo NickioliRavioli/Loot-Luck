@@ -63,6 +63,11 @@ tasks.register('generateRates', JavaExec) {
 	args 'tools/wiki-inputs', 'src/main/resources/rates/catalogue.json', '2026-10-02T00:00:00Z'
 }
 
+tasks.register('auditRecordedLoot', JavaExec) {
+	classpath = sourceSets.test.runtimeClasspath
+	mainClass = 'com.lootluck.AuditRecordedLoot'
+}
+
 tasks.register('copyMathNotices', Copy) {
 	def math = configurations.runtimeClasspath.filter { it.name == 'commons-math3-3.6.1.jar' }
 	from({ math.collect { zipTree(it) } }) {

@@ -27,6 +27,16 @@ public class WikiAuditTest
 	private SourceIdentity npc(String name,int combat,int id) { return new SourceIdentity("NPC",name,"combat="+combat+";metadata="+id,"[MEMBERS]"); }
 	private Observation observation(SourceIdentity source,Map<Integer,Long> items)
 	{ return new Observation(source,1,1,items,Map.of(),Map.of()); }
+	@Test public void anchoredQuestBoneUsesExactVariantId()
+	{
+		SourceIdentity zombie=npc("Zombie",24,56);
+		List<RateRow> rows=TableResolver.resolve(zombie,catalogue.get("Zombie")).rows;
+		List<RateRow> bone=ItemRateMatcher.item(7863,7863,"Zombie bone",zombie,rows);
+		assertEquals(1,bone.size());assertEquals("1/4",bone.get(0).display());assertEquals(List.of(7863),bone.get(0).itemIds);
+		assertTrue("Polished bone must not match unpolished drop",ItemRateMatcher.item(7865,7865,"Zombie bone",zombie,rows).isEmpty());
+		SourceIdentity rat=npc("Rat",1,2854);
+		assertEquals("1/4",ItemRateMatcher.item(7836,7836,"Rat bone",rat,TableResolver.resolve(rat,catalogue.get("Rat")).rows).get(0).display());
+	}
 	@Test public void sameNamedNpcSourcesUseWikiIdsAndPreserveRawIdentity() throws Exception
 	{
 		Gson gson=new Gson();WikiSourceIndex index=new WikiSourceIndex(gson);

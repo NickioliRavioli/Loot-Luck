@@ -8,7 +8,7 @@ from pathlib import Path
 
 rows = []
 for offset in range(0, 50000, 500):
-    query = "bucket('infobox_item').select('page_name','item_name','item_id').orderBy('page_name','asc').limit(500).offset(%d).run()" % offset
+    query = "bucket('infobox_item').select('page_name','version_anchor','item_name','item_id').orderBy('page_name','asc').limit(500).offset(%d).run()" % offset
     url = "https://oldschool.runescape.wiki/api.php?" + urllib.parse.urlencode({"action": "bucket", "format": "json", "query": query})
     for retry in range(3):
         try:

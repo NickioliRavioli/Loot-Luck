@@ -2,7 +2,7 @@
   "Giant rat": {
     "owner": "Giant rat",
     "revision": 15260179,
-    "fetchedAt": "2026-10-06T04:20:43.438453+00:00",
+    "fetchedAt": "2026-10-06T05:51:48.369340+00:00",
     "url": "https://oldschool.runescape.wiki/w/Giant_rat",
     "sha256": "c793c28135dd3c1e40a636917c32093e5aad0a33785332c0f3496a762fc167d1",
     "rows": [
@@ -212,13 +212,13 @@
         "line": 0
       }
     ],
-    "renderSha256": "6cdba789d570dbbd988299134a922782a85314c737998baa3e618beb1ae67ab1",
+    "renderSha256": "2cf53b9339c29b371d87c8234932df4388cda3b621e32fa16ea29704faf003d0",
     "corrections": []
   },
   "Goblin": {
     "owner": "Goblin",
     "revision": 15351455,
-    "fetchedAt": "2026-10-06T04:20:44.292598+00:00",
+    "fetchedAt": "2026-10-06T05:51:47.440189+00:00",
     "url": "https://oldschool.runescape.wiki/w/Goblin",
     "sha256": "7bd2e966797a0768da9afbaad76a7de514cb226984714862b4c5d045455498ea",
     "rows": [
@@ -1413,7 +1413,7 @@
         ]
       }
     ],
-    "renderSha256": "d27b2c7c68bcf27853fa44598e4a0a0f1d908476c5ba5303b2f32ce9bfa8e261",
+    "renderSha256": "828bccb5d32eb7b4b135d4cff53847db89b34e72ddedb4a0016040916cd3b6fb",
     "corrections": []
   },
   "Cow": {
@@ -4815,7 +4815,7 @@
   "Reward casket (beginner)": {
     "owner": "Reward casket (beginner)",
     "revision": 15366183,
-    "fetchedAt": "2026-10-06T04:20:50.243893+00:00",
+    "fetchedAt": "2026-10-06T05:52:00.403869+00:00",
     "url": "https://oldschool.runescape.wiki/w/Reward_casket_%28beginner%29",
     "sha256": "f2f3ea37a5bc896f694fbe2b02fd0d882d8a3b5aa5733f7349c75930b129ff60",
     "rows": [
@@ -6061,13 +6061,13 @@
         "line": 0
       }
     ],
-    "renderSha256": "a336a0da7844db74b0ce769d977b728f4918e38d918106d630bf25f10eb9b180",
+    "renderSha256": "4425746231c7ba895338fd177ec130f7508a89cda17995c9fae2c856493fd7b6",
     "corrections": []
   },
   "Reward casket (easy)": {
     "owner": "Reward casket (easy)",
     "revision": 15358923,
-    "fetchedAt": "2026-10-06T04:20:51.158459+00:00",
+    "fetchedAt": "2026-10-06T05:52:01.490273+00:00",
     "url": "https://oldschool.runescape.wiki/w/Reward_casket_%28easy%29",
     "sha256": "b551c3d56d309c1d47bc9851d7929b1c9362e6ac74db7ef3e062c34c5c27f964",
     "rows": [
@@ -10609,7 +10609,7 @@
         "line": 0
       }
     ],
-    "renderSha256": "ee01b98f67d742e3526c1f6d0105442bf7aa982642f5fd86488b6df16ff2ea57",
+    "renderSha256": "21bacafa584889dbbeda23deb760b75b8e499611925ee08cc78031eef8c12480",
     "corrections": []
   },
   "Reward casket (medium)": {
@@ -24743,7 +24743,7 @@
   "Reward pool": {
     "owner": "Reward pool",
     "revision": 15208420,
-    "fetchedAt": "2026-10-06T04:20:55.967437+00:00",
+    "fetchedAt": "2026-10-06T05:52:04.529324+00:00",
     "url": "https://oldschool.runescape.wiki/w/Reward_pool",
     "sha256": "9cf59c720b0c0ea7aa67e8c3d3cc6c13744758641abf8da5814d9ed57d1a2e30",
     "rows": [],
@@ -25170,13 +25170,13 @@
         "line": 0
       }
     ],
-    "renderSha256": "30031fffb7cc34fd289128e6ad3baf7e6a6712095d37027f6e370520ccce920e",
+    "renderSha256": "dcec1b95667db93d5f6666878ccf9e32687b515120126f64b9b5e9a020193b62",
     "corrections": []
   },
   "Reward Cart": {
     "owner": "Reward Cart",
     "revision": 15310821,
-    "fetchedAt": "2026-10-06T04:20:56.776534+00:00",
+    "fetchedAt": "2026-10-06T05:52:03.672018+00:00",
     "url": "https://oldschool.runescape.wiki/w/Reward_Cart",
     "sha256": "42395497a49e2e5b8a20542d66b3bf995e68190d1227b7ae95f5e948ccf71ae8",
     "rows": [
@@ -26388,7 +26388,7 @@
         "line": 0
       }
     ],
-    "renderSha256": "f86131a80213825dbe66b94c6fef3dc96108ffdfe88c8cd89b0af2b2cac14596",
+    "renderSha256": "0a4337e087c476da2796124606fd6e9ce73cf498f03cc8d03cf61f674fd5b1ac",
     "corrections": []
   },
   "Mystery box": {
@@ -27969,7 +27969,7 @@
   "Small salvage": {
     "owner": "Small salvage",
     "revision": 15357642,
-    "fetchedAt": "2026-10-06T04:20:59.193562+00:00",
+    "fetchedAt": "2026-10-06T05:51:59.502850+00:00",
     "url": "https://oldschool.runescape.wiki/w/Small_salvage",
     "sha256": "144ca8c2bb6641544c59ff305a14df341a1772d958d44f7809f2eb8a0220f298",
     "rows": [
@@ -28351,13 +28351,13 @@
         "line": 0
       }
     ],
-    "renderSha256": "3f54942f4ec46b91e9f680147199f94b1a717de5772391defec08a175b49e379",
+    "renderSha256": "335f3397d6a90a9195545224683ebf6e7909b7b2b5cfb4da4d37b03eb0172884",
     "corrections": []
   },
   "Casket (Reward pool)": {
     "owner": "Casket (Reward pool)",
     "revision": 15190143,
-    "fetchedAt": "2026-10-06T04:20:59.978507+00:00",
+    "fetchedAt": "2026-10-06T05:52:05.335852+00:00",
     "url": "https://oldschool.runescape.wiki/w/Casket_%28Reward_pool%29",
     "sha256": "9c8569700fc4dbdc3c6074cf2ad3927e8c963e6de1bdf867bebe138707fcb456",
     "rows": [
@@ -29155,7 +29155,7 @@
         "line": 0
       }
     ],
-    "renderSha256": "611e771bb95babb914b9d57a04c4814f15474a1c51c7e42b746e188dc0c991f5",
+    "renderSha256": "3afa9a9dc8fc3f3827dd1773fa4bfaaec612bd058a55463498913aa82035c07d",
     "corrections": []
   },
   "Rewards Guardian": {
@@ -29239,7 +29239,7 @@
       },
       {
         "table": "Rewards Guardian",
-        "item": "Large pouch",
+        "item": "Large pouch#New",
         "rate": "15/140",
         "quantity": "1",
         "notes": " ",
@@ -29566,7 +29566,7 @@
       },
       {
         "table": "Rewards Guardian",
-        "item": "Large pouch",
+        "item": "Large pouch#New",
         "rate": "15/140",
         "quantity": "1",
         "notes": "",
@@ -51650,7 +51650,7 @@
   "Brutus": {
     "owner": "Brutus",
     "revision": 15364604,
-    "fetchedAt": "2026-10-06T04:21:49.420053+00:00",
+    "fetchedAt": "2026-10-06T05:52:02.848821+00:00",
     "url": "https://oldschool.runescape.wiki/w/Brutus",
     "sha256": "699fea9ffdf19b5511eec024ce485343fef27db00e053edea5def8818ce50916",
     "rows": [
@@ -52065,7 +52065,7 @@
         "line": 0
       }
     ],
-    "renderSha256": "65f33feb066f1617da8158343669692afe5155c7751c3ef394f6682cb5d115c1",
+    "renderSha256": "6a2ac36cd53f496aa6793dcf85a4ab0da0f38b1b5ede453bfa11bed3998d9398",
     "corrections": []
   },
   "Fishing spot (karambwanji)": {
@@ -63411,7 +63411,7 @@
   "Imp": {
     "owner": "Imp",
     "revision": 15359433,
-    "fetchedAt": "2026-10-06T04:22:18.176242+00:00",
+    "fetchedAt": "2026-10-06T05:51:55.944307+00:00",
     "url": "https://oldschool.runescape.wiki/w/Imp",
     "sha256": "bfb9044380bd01dee2c22a0e68149ced234d39859dbe6c33be76a7af35b33cfd",
     "rows": [
@@ -64010,7 +64010,7 @@
         "line": 0
       }
     ],
-    "renderSha256": "f6b61a27d29958c7559630cc776ec7191cc0014d9dbd9c26699f90f568b89abf",
+    "renderSha256": "163eed8f2e6926e6f4b5154bb4ccdadda8859b16080af99d2fbb14b5fc26681d",
     "corrections": []
   },
   "Menaphite Thug": {
@@ -72176,7 +72176,7 @@
       },
       {
         "table": "Teak tree",
-        "item": "Medallion fragment",
+        "item": "Medallion fragment#6",
         "rate": "Always[d 7]",
         "quantity": "1",
         "notes": "",
@@ -72247,7 +72247,7 @@
   "Master Farmer": {
     "owner": "Master Farmer",
     "revision": 15267392,
-    "fetchedAt": "2026-10-06T04:22:31.832113+00:00",
+    "fetchedAt": "2026-10-06T05:51:51.886741+00:00",
     "url": "https://oldschool.runescape.wiki/w/Master_Farmer",
     "sha256": "22efa26de640e3858ae181ecaac289930821c2218dd4a680dff5bad318855ceb",
     "rows": [
@@ -72995,7 +72995,7 @@
         "line": 0
       }
     ],
-    "renderSha256": "0802515ba9e7febe0e0be75d2cb4ed469fa387c0a394d6d0be7bbc34f0bb4d06",
+    "renderSha256": "655a80ce3946b3545ef3a56af00920b53438971962b0fafc94c1124329c6a4d9",
     "corrections": []
   },
   "Monumental chest": {
@@ -77856,6 +77856,4352 @@
       }
     ],
     "renderSha256": "0f9171f6cac5a879e11583a51ae45ebac5352dee707fe24a0c7c18a0c1ee06d6",
+    "corrections": []
+  },
+  "Unicorn": {
+    "owner": "Unicorn",
+    "revision": 15285003,
+    "fetchedAt": "2026-10-06T05:51:49.121019+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Unicorn",
+    "sha256": "90c023546d33b5dd6108d58a72a33534b8b24a7c14d44f57ea91e2c6b7b0f0a4",
+    "rows": [
+      {
+        "table": "Unicorn",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 247
+      },
+      {
+        "table": "Unicorn",
+        "item": "Unicorn horn",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "{{(m)}} ",
+        "line": 248
+      },
+      {
+        "table": "Unicorn",
+        "item": "Unicorn bone",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Unicorn bones are dropped only during [[Rag and Bone Man I]].</ref>",
+        "line": 253
+      },
+      {
+        "table": "Unicorn",
+        "item": "Ensouled unicorn head",
+        "rate": "1/35",
+        "quantity": "1",
+        "notes": "{{(m)}} ",
+        "line": 254
+      }
+    ],
+    "tableLevels": {},
+    "tableNpcIds": {},
+    "npcLevels": {
+      "2837": 15,
+      "14043": 15
+    },
+    "itemNames": {},
+    "exportHash": "f978649c6c3da4c1ba8cfba8c7286afa6ece7a98a6782f24281151344c420da8",
+    "renderedRows": [
+      {
+        "table": "Unicorn",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Unicorn",
+        "item": "Unicorn horn",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Unicorn",
+        "item": "Unicorn bone",
+        "rate": "Always[d 1]",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Unicorn",
+        "item": "Ensouled unicorn head",
+        "rate": "1/35",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "9b2dd98a3c0f5144171d624c0a875b4f6c89aee83cd4f5f29b2ea1b449420ba5",
+    "corrections": []
+  },
+  "Jail guard": {
+    "owner": "Jail guard",
+    "revision": 15199200,
+    "fetchedAt": "2026-10-06T05:51:49.877742+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Jail_guard",
+    "sha256": "74fc4dbfa4641c1021aeb90bb526314bdbb29ddee9633b0663b82eee6ec73f38",
+    "rows": [
+      {
+        "table": "Jail guard",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 84
+      }
+    ],
+    "tableLevels": {},
+    "tableNpcIds": {},
+    "npcLevels": {
+      "4276": 26,
+      "4277": 26,
+      "4278": 26,
+      "4279": 26
+    },
+    "itemNames": {},
+    "exportHash": "f36ab5d2f98a05f1761cec7c03893972896c8fc39c07d8eae2971c1513e61f15",
+    "renderedRows": [
+      {
+        "table": "Jail guard",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "4220b47f1916c159a8cba7ee416d2841aad5593894d350797a2a5d21baf79ecf",
+    "corrections": []
+  },
+  "Black Knight": {
+    "owner": "Black Knight",
+    "revision": 15332965,
+    "fetchedAt": "2026-10-06T05:51:50.883328+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Black_Knight",
+    "sha256": "aa90e2927353ce1b89db6d868b246fd00483de006a9621e49193c387a3eb2fc3",
+    "rows": [
+      {
+        "table": "Black Knight",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 231
+      },
+      {
+        "table": "Black Knight",
+        "item": "Iron sword",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 236
+      },
+      {
+        "table": "Black Knight",
+        "item": "Iron full helm",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 237
+      },
+      {
+        "table": "Black Knight",
+        "item": "Steel mace",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 238
+      },
+      {
+        "table": "Black Knight",
+        "item": "Mithril arrow",
+        "rate": "4/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 243
+      },
+      {
+        "table": "Black Knight",
+        "item": "Body rune",
+        "rate": "3/128",
+        "quantity": "9",
+        "notes": " ",
+        "line": 244
+      },
+      {
+        "table": "Black Knight",
+        "item": "Chaos rune",
+        "rate": "3/128",
+        "quantity": "6",
+        "notes": " ",
+        "line": 245
+      },
+      {
+        "table": "Black Knight",
+        "item": "Earth rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": " ",
+        "line": 246
+      },
+      {
+        "table": "Black Knight",
+        "item": "Death rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 247
+      },
+      {
+        "table": "Black Knight",
+        "item": "Law rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 248
+      },
+      {
+        "table": "Black Knight",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "7",
+        "notes": " ",
+        "line": 249
+      },
+      {
+        "table": "Black Knight",
+        "item": "Mind rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 250
+      },
+      {
+        "table": "Black Knight",
+        "item": "Steel bar",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 267
+      },
+      {
+        "table": "Black Knight",
+        "item": "Tin ore",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 268
+      },
+      {
+        "table": "Black Knight",
+        "item": "Pot of flour",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 269
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "21/128",
+        "quantity": "35",
+        "notes": " ",
+        "line": 274
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "18/128",
+        "quantity": "5",
+        "notes": "{{(f)}} <ref group=d name=f2p>Only dropped in [[free-to-play]].</ref>",
+        "line": 274
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "11/128",
+        "quantity": "6",
+        "notes": " ",
+        "line": 275
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "10/128",
+        "quantity": "58",
+        "notes": " ",
+        "line": 276
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "9/128",
+        "quantity": "12",
+        "notes": " ",
+        "line": 277
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "{{(f)}} <ref group=d name=f2p />",
+        "line": 277
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "80",
+        "notes": " ",
+        "line": 278
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "14/128",
+        "quantity": "1",
+        "notes": " <ref group=d>The drop rate for a 1 coin drop turns into a guaranteed drop if a black knight is killed as a part of the [[Wanted!]] quest.</ref>",
+        "line": 279
+      },
+      {
+        "table": "Black Knight",
+        "item": "Nothing",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 285
+      },
+      {
+        "table": "Black Knight",
+        "item": "Bread",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 286
+      },
+      {
+        "table": "Black Knight",
+        "item": "Looting bag",
+        "rate": "1/9",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 294
+      }
+    ],
+    "tableLevels": {},
+    "tableNpcIds": {},
+    "npcLevels": {
+      "517": 33,
+      "4331": 33,
+      "11953": 33,
+      "516": 33,
+      "11952": 33
+    },
+    "itemNames": {},
+    "exportHash": "f12db8188b78ceee087a43125c44382dc0e158e342864e6f93a8b7d413a446d3",
+    "renderedRows": [
+      {
+        "table": "Black Knight",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Iron sword",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Iron full helm",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Steel mace",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Mithril arrow",
+        "rate": "4/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Body rune",
+        "rate": "3/128",
+        "quantity": "9",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Chaos rune",
+        "rate": "3/128",
+        "quantity": "6",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Earth rune",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Death rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Law rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "7",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Mind rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy guam leaf",
+        "rate": "1/170.7",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy marrentill",
+        "rate": "1/227.6",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy tarromin",
+        "rate": "1/303.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy harralander",
+        "rate": "1/390.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy ranarr weed",
+        "rate": "1/496.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy irit leaf",
+        "rate": "1/682.7",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy avantoe",
+        "rate": "1/910.2",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy kwuarm",
+        "rate": "1/1,092.3",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy cadantine",
+        "rate": "1/1,365.3",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy lantadyme",
+        "rate": "1/1,820.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Grimy dwarf weed",
+        "rate": "1/1,820.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Potato seed",
+        "rate": "1/19",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Onion seed",
+        "rate": "1/25",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Cabbage seed",
+        "rate": "1/38",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Tomato seed",
+        "rate": "1/77",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Sweetcorn seed",
+        "rate": "1/155",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Strawberry seed",
+        "rate": "1/311",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Watermelon seed",
+        "rate": "1/651",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Snape grass seed",
+        "rate": "1/896",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Steel bar",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Tin ore",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Pot of flour",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "21/128",
+        "quantity": "35",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "18/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "11/128",
+        "quantity": "6",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "10/128",
+        "quantity": "58",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "9/128",
+        "quantity": "12",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "80",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Coins",
+        "rate": "14/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Bread",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Uncut sapphire",
+        "rate": "1/170.67",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Uncut emerald",
+        "rate": "1/341.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Uncut ruby",
+        "rate": "1/682.67",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Chaos talisman",
+        "rate": "1/1,820.44",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Nature talisman",
+        "rate": "1/1,820.44",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Uncut diamond",
+        "rate": "1/2,730.67",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Rune javelin",
+        "rate": "1/5,461.33",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Loop half of key",
+        "rate": "1/5,461.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Tooth half of key",
+        "rate": "1/5,461.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Rune spear",
+        "rate": "1/87,381.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Shield left half",
+        "rate": "1/174,762.67",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Dragon spear",
+        "rate": "1/233,016.89",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Looting bag",
+        "rate": "1/9",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Larran's key",
+        "rate": "1/762",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Black Knight",
+        "item": "Slayer's enchantment",
+        "rate": "1/287",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "55b0253e2d928ec6d19cc92460bb4769397c3db1d7acddc613bf0db91667f58c",
+    "corrections": []
+  },
+  "Zombie": {
+    "owner": "Zombie",
+    "revision": 15339798,
+    "fetchedAt": "2026-10-06T05:51:52.899922+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Zombie",
+    "sha256": "a887f6f9611dfedcbaaecb0c3417a9e654a22b19975dd8db6568e0528879a5fc",
+    "rows": [
+      {
+        "table": "Zombie#Level 13",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 426
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Bronze med helm",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 431
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Bronze longsword",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 432
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Iron axe",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 433
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Iron arrow",
+        "rate": "7/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 438
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Body rune",
+        "rate": "5/128",
+        "quantity": "6",
+        "notes": " ",
+        "line": 439
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Mind rune",
+        "rate": "5/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 440
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Air rune",
+        "rate": "4/128",
+        "quantity": "13",
+        "notes": " ",
+        "line": 441
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Iron arrow",
+        "rate": "4/128",
+        "quantity": "8",
+        "notes": " ",
+        "line": 442
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Steel arrow",
+        "rate": "2/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 443
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Nature rune",
+        "rate": "1/128",
+        "quantity": "6",
+        "notes": " ",
+        "line": 444
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "36/128",
+        "quantity": "10",
+        "notes": " <ref group=d>The drop rate decreases to 11/128 on a [[members]] world.</ref>",
+        "line": 455
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 456
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 457
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "13",
+        "notes": " ",
+        "line": 458
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "28",
+        "notes": " ",
+        "line": 459
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Fishing bait",
+        "rate": "37/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 465
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Nothing",
+        "rate": "8/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 466
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Copper ore",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 467
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Zombie bone#Unpolished",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Zombie bones are only dropped during [[Rag and Bone Man II]].</ref>",
+        "line": 472
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Zombie champion scroll",
+        "rate": "1/5000",
+        "quantity": "1",
+        "notes": "{{(m)}} ",
+        "line": 473
+      },
+      {
+        "table": "Zombie#Level 18",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 484
+      },
+      {
+        "table": "Zombie#Level 18",
+        "item": "Zombie bone#Unpolished",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Zombie bones are only dropped during [[Rag and Bone Man II]].</ref>",
+        "line": 489
+      },
+      {
+        "table": "Zombie#Level 18",
+        "item": "Zombie champion scroll",
+        "rate": "1/5000",
+        "quantity": "1",
+        "notes": "{{(m)}} ",
+        "line": 490
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 501
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Iron mace",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 506
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Iron dagger",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 507
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Bronze kiteshield",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 508
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Mithril arrow",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 513
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Body rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 514
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 515
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Chaos rune",
+        "rate": "1/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 516
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 517
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Fire rune",
+        "rate": "1/128",
+        "quantity": "7",
+        "notes": " ",
+        "line": 518
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "40/128",
+        "quantity": "10",
+        "notes": " <ref group=d>The drop rate decreases to 10/128 on a [[members]] world.</ref>",
+        "line": 529
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "21/128",
+        "quantity": "18",
+        "notes": " ",
+        "line": 530
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "8/128",
+        "quantity": "26",
+        "notes": " ",
+        "line": 531
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "6/128",
+        "quantity": "35",
+        "notes": " ",
+        "line": 532
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 533
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Fishing bait",
+        "rate": "26/128",
+        "quantity": "7",
+        "notes": " ",
+        "line": 539
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Nothing",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 540
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Tinderbox",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 541
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Eye of newt",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 542
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Tin ore",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 543
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Zombie bone#Unpolished",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Zombie bones are only dropped during [[Rag and Bone Man II]].</ref>",
+        "line": 551
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Zombie champion scroll",
+        "rate": "1/5000",
+        "quantity": "1",
+        "notes": "{{(m)}} ",
+        "line": 552
+      }
+    ],
+    "tableLevels": {
+      "Zombie#Level 13": [
+        13,
+        24
+      ],
+      "Zombie#Level 24": [
+        13,
+        24
+      ],
+      "Zombie#Level 18": [
+        18
+      ]
+    },
+    "tableNpcIds": {
+      "Zombie#Level 13": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        34,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "Zombie#Level 18": [
+        42,
+        43,
+        44
+      ],
+      "Zombie#Level 24": [
+        49,
+        50,
+        51,
+        52,
+        54,
+        55,
+        56,
+        57,
+        58
+      ]
+    },
+    "npcLevels": {
+      "26": 13,
+      "27": 13,
+      "28": 13,
+      "29": 13,
+      "30": 13,
+      "31": 13,
+      "32": 13,
+      "34": 13,
+      "37": 13,
+      "38": 13,
+      "39": 13,
+      "40": 13,
+      "41": 13,
+      "42": 18,
+      "43": 18,
+      "44": 18,
+      "49": 24,
+      "50": 24,
+      "51": 24,
+      "52": 24,
+      "54": 24,
+      "55": 24,
+      "56": 24,
+      "57": 24,
+      "58": 24
+    },
+    "itemNames": {},
+    "exportHash": "4e689aa3bbae596cb7e98c00a20469a4cd729b6aa23c49104a317fbc64350406",
+    "renderedRows": [
+      {
+        "table": "Zombie",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Zombie#Level 13",
+          "Zombie#Level 18",
+          "Zombie#Level 24"
+        ]
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Bronze med helm",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Bronze longsword",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Iron axe",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Iron arrow",
+        "rate": "7/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Body rune",
+        "rate": "5/128",
+        "quantity": "6",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Mind rune",
+        "rate": "5/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Air rune",
+        "rate": "4/128",
+        "quantity": "13",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Iron arrow",
+        "rate": "4/128",
+        "quantity": "8",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Steel arrow",
+        "rate": "2/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Nature rune",
+        "rate": "1/128",
+        "quantity": "6",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy guam leaf",
+        "rate": "1/20.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy marrentill",
+        "rate": "1/27.3",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy tarromin",
+        "rate": "1/36.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy harralander",
+        "rate": "1/46.8",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy ranarr weed",
+        "rate": "1/59.6",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy irit leaf",
+        "rate": "1/81.9",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy avantoe",
+        "rate": "1/109.2",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy kwuarm",
+        "rate": "1/131.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy cadantine",
+        "rate": "1/163.8",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy lantadyme",
+        "rate": "1/218.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy dwarf weed",
+        "rate": "1/218.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "36/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "13",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "28",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Fishing bait",
+        "rate": "37/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 13",
+        "item": "Copper ore",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Zombie bone#Unpolished",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Zombie#Level 13",
+          "Zombie#Level 18",
+          "Zombie#Level 24"
+        ]
+      },
+      {
+        "table": "Zombie",
+        "item": "Zombie champion scroll",
+        "rate": "1/5,000",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Zombie#Level 13",
+          "Zombie#Level 18",
+          "Zombie#Level 24"
+        ]
+      },
+      {
+        "table": "Zombie",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Zombie#Level 13",
+          "Zombie#Level 18",
+          "Zombie#Level 24"
+        ]
+      },
+      {
+        "table": "Zombie",
+        "item": "Zombie bone#Unpolished",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Zombie#Level 13",
+          "Zombie#Level 18",
+          "Zombie#Level 24"
+        ]
+      },
+      {
+        "table": "Zombie",
+        "item": "Zombie champion scroll",
+        "rate": "1/5,000",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Zombie#Level 13",
+          "Zombie#Level 18",
+          "Zombie#Level 24"
+        ]
+      },
+      {
+        "table": "Zombie",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Zombie#Level 13",
+          "Zombie#Level 18",
+          "Zombie#Level 24"
+        ]
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Iron mace",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Iron dagger",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Bronze kiteshield",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Mithril arrow",
+        "rate": "3/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Body rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Chaos rune",
+        "rate": "1/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Fire rune",
+        "rate": "1/128",
+        "quantity": "7",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy guam leaf",
+        "rate": "1/17.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy marrentill",
+        "rate": "1/22.8",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy tarromin",
+        "rate": "1/30.3",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy harralander",
+        "rate": "1/39",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy ranarr weed",
+        "rate": "1/49.6",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy irit leaf",
+        "rate": "1/68.3",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy avantoe",
+        "rate": "1/91",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy kwuarm",
+        "rate": "1/109.2",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy cadantine",
+        "rate": "1/136.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy lantadyme",
+        "rate": "1/182",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Grimy dwarf weed",
+        "rate": "1/182",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "40/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "21/128",
+        "quantity": "18",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "8/128",
+        "quantity": "26",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "6/128",
+        "quantity": "35",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Fishing bait",
+        "rate": "26/128",
+        "quantity": "7",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Tinderbox",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Eye of newt",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie#Level 24",
+        "item": "Tin ore",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Uncut sapphire",
+        "rate": "1/512",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Uncut emerald",
+        "rate": "1/1,024",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Uncut ruby",
+        "rate": "1/2,048",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Chaos talisman",
+        "rate": "1/5,461.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Nature talisman",
+        "rate": "1/5,461.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Uncut diamond",
+        "rate": "1/8,192",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Rune javelin",
+        "rate": "1/16,384",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Loop half of key",
+        "rate": "1/16,384",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Tooth half of key",
+        "rate": "1/16,384",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Rune spear",
+        "rate": "1/262,144",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Shield left half",
+        "rate": "1/524,288",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Dragon spear",
+        "rate": "1/699,050.67",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Zombie",
+        "item": "Zombie bone#Unpolished",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Zombie#Level 13",
+          "Zombie#Level 18",
+          "Zombie#Level 24"
+        ]
+      },
+      {
+        "table": "Zombie",
+        "item": "Zombie champion scroll",
+        "rate": "1/5,000",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Zombie#Level 13",
+          "Zombie#Level 18",
+          "Zombie#Level 24"
+        ]
+      }
+    ],
+    "renderSha256": "bba5d1c29c87be9e206d61fe6f43d59eb75b8132eec151d43bb57fe9b7a287a4",
+    "corrections": []
+  },
+  "Skeleton": {
+    "owner": "Skeleton",
+    "revision": 15323222,
+    "fetchedAt": "2026-10-06T05:51:53.994657+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Skeleton",
+    "sha256": "e8aeab0ba48257a6ee3d802a68c6a12363682013b038463adcf1cc92f1600c28",
+    "rows": [
+      {
+        "table": "Skeleton#Plain",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 762
+      },
+      {
+        "table": "Skeleton#Plain",
+        "item": "Looting bag",
+        "rate": "1/6",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 767
+      },
+      {
+        "table": "Skeleton#Plain",
+        "item": "Skeleton champion scroll",
+        "rate": "1/5000",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Only dropped if access to [[Champions' Guild]] is available, and the [[Skeleton Champion]] hasn't been previously killed in the [[Champions' Challenge]].</ref>",
+        "line": 768
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 782
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Bronze arrow",
+        "rate": "7/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 787
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Bronze arrow",
+        "rate": "4/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 788
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Iron arrow",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 789
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Air rune",
+        "rate": "2/128",
+        "quantity": "15",
+        "notes": " ",
+        "line": 790
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 791
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 792
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Chaos rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 793
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Nature rune",
+        "rate": "1/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 794
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Steel arrow",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 795
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "21/128",
+        "quantity": "10",
+        "notes": "{{(f)}} <ref group=\"d\" name=\"f2\">Only dropped in [[Free-to-play]]</ref>",
+        "line": 806
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "18/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 807
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "15/128",
+        "quantity": "12",
+        "notes": " ",
+        "line": 808
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "7/128",
+        "quantity": "4",
+        "notes": " ",
+        "line": 809
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "16",
+        "notes": " ",
+        "line": 810
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "25",
+        "notes": " ",
+        "line": 811
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "33",
+        "notes": " ",
+        "line": 812
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "48",
+        "notes": " ",
+        "line": 813
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Nothing",
+        "rate": "18/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 819
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Iron dagger",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 820
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Fire talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 821
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Iron ore",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 822
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Grain",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 823
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Looting bag",
+        "rate": "1/14",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 831
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/100",
+        "quantity": "1",
+        "notes": " ",
+        "line": 832
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Skeleton champion scroll",
+        "rate": "1/5000",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Only dropped if access to [[Champions' Guild]] is available, and the [[Skeleton Champion]] hasn't been previously killed in the [[Champions' Challenge]].</ref>",
+        "line": 833
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 847
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron med helm",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 852
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron sword",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 853
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron axe",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 854
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron scimitar",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 855
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "12,15",
+        "notes": " ",
+        "line": 860
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Water rune",
+        "rate": "3/128",
+        "quantity": "9",
+        "notes": " ",
+        "line": 861
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Chaos rune",
+        "rate": "3/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 862
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron arrow",
+        "rate": "2/128",
+        "quantity": "12",
+        "notes": " ",
+        "line": 863
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Law rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 864
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 865
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "44/128",
+        "quantity": "10",
+        "notes": " <ref group=d>The drop rate decreases to 24/128 on a [[members]] world.</ref>",
+        "line": 876
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "25/128",
+        "quantity": "5",
+        "notes": " ",
+        "line": 877
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "8/128",
+        "quantity": "25",
+        "notes": " ",
+        "line": 878
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "45",
+        "notes": " ",
+        "line": 879
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "65",
+        "notes": " ",
+        "line": 880
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 881
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Nothing",
+        "rate": "8/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 887
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Bronze bar",
+        "rate": "5/128",
+        "quantity": "1",
+        "notes": " <ref group=d>For the level 25 variant, only the skeleton with round shield & warhammer drops bronze bars.</ref>",
+        "line": 888
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Looting bag",
+        "rate": "1/14",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 896
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/100",
+        "quantity": "1",
+        "notes": " ",
+        "line": 897
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Skeleton champion scroll",
+        "rate": "1/5000",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Only dropped if access to [[Champions' Guild]] is available, and the [[Skeleton Champion]] hasn't been previously killed in the [[Champions' Challenge]].</ref>",
+        "line": 898
+      }
+    ],
+    "tableLevels": {
+      "Skeleton#Armed": [
+        21,
+        22,
+        25,
+        29,
+        45
+      ],
+      "Skeleton#Plain": [
+        22,
+        25,
+        29,
+        45
+      ],
+      "Skeleton#Unarmed": [
+        21,
+        22,
+        25,
+        45
+      ]
+    },
+    "tableNpcIds": {
+      "Skeleton#Unarmed": [
+        70,
+        74
+      ],
+      "Skeleton#Plain": [
+        71,
+        72,
+        73,
+        75,
+        76,
+        78,
+        79,
+        80,
+        81,
+        83,
+        14426,
+        14427,
+        14428
+      ],
+      "Skeleton#Armed": [
+        77,
+        82
+      ]
+    },
+    "npcLevels": {
+      "74": 21,
+      "75": 21,
+      "76": 21,
+      "70": 22,
+      "71": 22,
+      "72": 22,
+      "73": 22,
+      "77": 25,
+      "78": 25,
+      "79": 25,
+      "80": 25,
+      "81": 25,
+      "14426": 29,
+      "14427": 29,
+      "14428": 29,
+      "82": 45,
+      "83": 45
+    },
+    "itemNames": {},
+    "exportHash": "2c2ed55aefe3d613ec6b4e2833172a120579a5d9a5fc2dd2d16ae412e66f2f5e",
+    "renderedRows": [
+      {
+        "table": "Skeleton",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Plain",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton#Plain",
+        "item": "Looting bag",
+        "rate": "1/6",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Skeleton champion scroll",
+        "rate": "1/5,000",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Plain",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton",
+        "item": "Larran's key",
+        "rate": "1/1,144",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Slayer's enchantment",
+        "rate": "1/301",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Plain",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Bronze arrow",
+        "rate": "7/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Bronze arrow",
+        "rate": "4/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Iron arrow",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Air rune",
+        "rate": "2/128",
+        "quantity": "15",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Fire rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Chaos rune",
+        "rate": "2/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Nature rune",
+        "rate": "1/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Steel arrow",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy guam leaf",
+        "rate": "1/24.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy marrentill",
+        "rate": "1/32.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy tarromin",
+        "rate": "1/43.3",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy harralander",
+        "rate": "1/55.7",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy ranarr weed",
+        "rate": "1/70.9",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy irit leaf",
+        "rate": "1/97.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy avantoe",
+        "rate": "1/130",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy kwuarm",
+        "rate": "1/156",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy cadantine",
+        "rate": "1/195",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy lantadyme",
+        "rate": "1/260.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy dwarf weed",
+        "rate": "1/260.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "21/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "18/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "15/128",
+        "quantity": "12",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "7/128",
+        "quantity": "4",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "16",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "25",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "33",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "48",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Iron dagger",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Fire talisman",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Iron ore",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Unarmed",
+        "item": "Grain",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Uncut sapphire",
+        "rate": "1/512",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Uncut emerald",
+        "rate": "1/1,024",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Uncut ruby",
+        "rate": "1/2,048",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Chaos talisman",
+        "rate": "1/5,461.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Nature talisman",
+        "rate": "1/5,461.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Uncut diamond",
+        "rate": "1/8,192",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Rune javelin",
+        "rate": "1/16,384",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Loop half of key",
+        "rate": "1/16,384",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Tooth half of key",
+        "rate": "1/16,384",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Rune spear",
+        "rate": "1/262,144",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Shield left half",
+        "rate": "1/524,288",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Dragon spear",
+        "rate": "1/699,050.67",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Looting bag",
+        "rate": "1/14",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/100",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton",
+        "item": "Skeleton champion scroll",
+        "rate": "1/5,000",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Plain",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton",
+        "item": "Larran's key",
+        "rate": "1/1,109",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Slayer's enchantment",
+        "rate": "1/301",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Plain",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron med helm",
+        "rate": "6/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron sword",
+        "rate": "4/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron axe",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron scimitar",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "12; 15",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Water rune",
+        "rate": "3/128",
+        "quantity": "9",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Chaos rune",
+        "rate": "3/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Iron arrow",
+        "rate": "2/128",
+        "quantity": "12",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Law rune",
+        "rate": "2/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Cosmic rune",
+        "rate": "1/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy guam leaf",
+        "rate": "1/25.6",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy marrentill",
+        "rate": "1/34.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy tarromin",
+        "rate": "1/45.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy harralander",
+        "rate": "1/58.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy ranarr weed",
+        "rate": "1/74.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy irit leaf",
+        "rate": "1/102.4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy avantoe",
+        "rate": "1/136.5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy kwuarm",
+        "rate": "1/163.8",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy cadantine",
+        "rate": "1/204.8",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy lantadyme",
+        "rate": "1/273.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Grimy dwarf weed",
+        "rate": "1/273.1",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "44/128",
+        "quantity": "10",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "25/128",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "8/128",
+        "quantity": "25",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "4/128",
+        "quantity": "45",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "65",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Coins",
+        "rate": "2/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton#Armed",
+        "item": "Bronze bar",
+        "rate": "5/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Uncut sapphire",
+        "rate": "1/256",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Uncut emerald",
+        "rate": "1/512",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Uncut ruby",
+        "rate": "1/1,024",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Chaos talisman",
+        "rate": "1/2,730.67",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Nature talisman",
+        "rate": "1/2,730.67",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Uncut diamond",
+        "rate": "1/4,096",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Rune javelin",
+        "rate": "1/8,192",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Loop half of key",
+        "rate": "1/8,192",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Tooth half of key",
+        "rate": "1/8,192",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Rune spear",
+        "rate": "1/131,072",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Shield left half",
+        "rate": "1/262,144",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Dragon spear",
+        "rate": "1/349,525.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Looting bag",
+        "rate": "1/14",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/100",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton",
+        "item": "Skeleton champion scroll",
+        "rate": "1/5,000",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Skeleton#Armed",
+          "Skeleton#Plain",
+          "Skeleton#Unarmed"
+        ]
+      },
+      {
+        "table": "Skeleton",
+        "item": "Larran's key",
+        "rate": "1/1,144",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Skeleton",
+        "item": "Slayer's enchantment",
+        "rate": "1/301",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "bd6126dfdf020e3675bd83132bf1e589a23a02cfe255bd018aecb1d0eae6fc4a",
+    "corrections": []
+  },
+  "Rat": {
+    "owner": "Rat",
+    "revision": 15353339,
+    "fetchedAt": "2026-10-06T05:51:54.943052+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Rat",
+    "sha256": "973598645177f999b69ab7e98e8d754d5bc5996cebe4488f8164fc177da1ee24",
+    "rows": [
+      {
+        "table": "Rat#Regular",
+        "item": "Rat's tail",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " <ref group=\"d\">Rat's tails is only dropped during [[Witch's Potion]].</ref>",
+        "line": 1296
+      },
+      {
+        "table": "Rat#Regular",
+        "item": "Rat bone",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=\"d\">Rat bones are only dropped during [[Rag and Bone Man II]].</ref>",
+        "line": 1297
+      },
+      {
+        "table": "Rat#Regular",
+        "item": "Looting bag",
+        "rate": "1/15",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=\"d\">Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 1298
+      },
+      {
+        "table": "Rat#Stronghold of Security",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 1305
+      },
+      {
+        "table": "Rat#Stronghold of Security",
+        "item": "Rat's tail",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " <ref group=\"d\">Rat's tails is only dropped during [[Witch's Potion]].</ref>",
+        "line": 1310
+      },
+      {
+        "table": "Rat#Stronghold of Security",
+        "item": "Rat bone",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=\"d\">Rat bones are only dropped during [[Rag and Bone Man II]].</ref>",
+        "line": 1311
+      }
+    ],
+    "tableLevels": {
+      "Rat#Regular": [
+        1
+      ],
+      "Rat#Stronghold of Security": [
+        1
+      ]
+    },
+    "tableNpcIds": {
+      "Rat#Regular": [
+        2854,
+        2855
+      ],
+      "Rat#Stronghold of Security": [
+        2492,
+        2513
+      ]
+    },
+    "npcLevels": {
+      "2854": 1,
+      "2855": 1,
+      "2492": 1,
+      "2513": 1
+    },
+    "itemNames": {},
+    "exportHash": "de13ec276ce5ce319cf4088b5d1cdbf0b9f17ce7502c0ec61641fb60d137365c",
+    "renderedRows": [
+      {
+        "table": "Rat",
+        "item": "Rat's tail",
+        "rate": "Always[d 1]",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Rat#Regular",
+          "Rat#Stronghold of Security"
+        ]
+      },
+      {
+        "table": "Rat",
+        "item": "Rat bone",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Rat#Regular",
+          "Rat#Stronghold of Security"
+        ]
+      },
+      {
+        "table": "Rat#Regular",
+        "item": "Looting bag",
+        "rate": "1/15",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Rat#Stronghold of Security",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Rat",
+        "item": "Rat's tail",
+        "rate": "Always[d 1]",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Rat#Regular",
+          "Rat#Stronghold of Security"
+        ]
+      },
+      {
+        "table": "Rat",
+        "item": "Rat bone",
+        "rate": "1/4",
+        "quantity": "1",
+        "notes": "",
+        "line": 0,
+        "tables": [
+          "Rat#Regular",
+          "Rat#Stronghold of Security"
+        ]
+      }
+    ],
+    "renderSha256": "e39b8133466979de044fc9edaf293f5c2654356c5abeb34f16515d52d481c292",
+    "corrections": []
+  },
+  "Giant bat": {
+    "owner": "Giant bat",
+    "revision": 15258141,
+    "fetchedAt": "2026-10-06T05:51:56.898501+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Giant_bat",
+    "sha256": "72fd86a8731465398b37f000ad87e9137f6c2f763d27655fc5125e9b8e5c600f",
+    "rows": [
+      {
+        "table": "Giant bat",
+        "item": "Bat bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 399
+      },
+      {
+        "table": "Giant bat",
+        "item": "Giant bat wing",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " <ref group=d>Giant bat wings are only dropped during the [[Rag and Bone Man I]]. The giant bats located around [[Arceuus]] do not drop this.</ref>",
+        "line": 404
+      },
+      {
+        "table": "Giant bat",
+        "item": "Looting bag",
+        "rate": "1/5",
+        "quantity": "1",
+        "notes": " <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 405
+      }
+    ],
+    "tableLevels": {},
+    "tableNpcIds": {},
+    "npcLevels": {
+      "2834": 27,
+      "6824": 27
+    },
+    "itemNames": {},
+    "exportHash": "30ae6a928c2f528a20b1545e14194656f54124da222f7c7652586303b5f62c52",
+    "renderedRows": [
+      {
+        "table": "Giant bat",
+        "item": "Bat bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Giant bat",
+        "item": "Giant bat wing",
+        "rate": "Always[d 1]",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Giant bat",
+        "item": "Looting bag",
+        "rate": "1/5",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "4bd7168688962706b7ab50434fb2d05afa3e147877d982e991ed7b841a0b4181",
+    "corrections": []
+  },
+  "Chaos druid": {
+    "owner": "Chaos druid",
+    "revision": 15259337,
+    "fetchedAt": "2026-10-06T05:51:57.802746+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Chaos_druid",
+    "sha256": "07709859a2fcb6996b8077099792f8d78bf538b1a9c9bc75dba8399eddf61dd8",
+    "rows": [
+      {
+        "table": "Chaos druid",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 124
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Law rune",
+        "rate": "7/128",
+        "quantity": "2",
+        "notes": " ",
+        "line": 129
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Mithril bolts",
+        "rate": "4/128",
+        "quantity": "2-12",
+        "notes": " <ref group=d>If [[Observatory Quest]] has not been completed, the drop rate of mithril bolts are 5/128.</ref>",
+        "line": 130
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "36",
+        "notes": " ",
+        "line": 131
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Body rune",
+        "rate": "2/128",
+        "quantity": "9",
+        "notes": " ",
+        "line": 132
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "9",
+        "notes": " ",
+        "line": 133
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "12",
+        "notes": " ",
+        "line": 134
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Nature rune",
+        "rate": "1/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 135
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Coins",
+        "rate": "5/128",
+        "quantity": "3",
+        "notes": " ",
+        "line": 147
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Coins",
+        "rate": "5/128",
+        "quantity": "8",
+        "notes": " ",
+        "line": 148
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "29",
+        "notes": " ",
+        "line": 149
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "35",
+        "notes": " ",
+        "line": 150
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Nothing",
+        "rate": "33/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 155
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Vial of water",
+        "rate": "10/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 156
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Bronze longsword",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 157
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Snape grass",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " ",
+        "line": 158
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Unholy mould",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": " <ref group=d>Unholy moulds are only dropped after completion of [[Observatory Quest]].</ref>",
+        "line": 159
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Looting bag",
+        "rate": "1/11",
+        "quantity": "1",
+        "notes": " <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 168
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Ensouled chaos druid head",
+        "rate": "1/35",
+        "quantity": "1",
+        "notes": " ",
+        "line": 169
+      }
+    ],
+    "tableLevels": {},
+    "tableNpcIds": {},
+    "npcLevels": {
+      "520": 13
+    },
+    "itemNames": {},
+    "exportHash": "76387c531664ff371996ecd1c83fa6999c3a93ebb5db322bac9f4b12855bb791",
+    "renderedRows": [
+      {
+        "table": "Chaos druid",
+        "item": "Bones",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Law rune",
+        "rate": "7/128",
+        "quantity": "2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Mithril bolts",
+        "rate": "4/128",
+        "quantity": "2–12",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Air rune",
+        "rate": "3/128",
+        "quantity": "36",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Body rune",
+        "rate": "2/128",
+        "quantity": "9",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Earth rune",
+        "rate": "2/128",
+        "quantity": "9",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Mind rune",
+        "rate": "2/128",
+        "quantity": "12",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Nature rune",
+        "rate": "1/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy guam leaf",
+        "rate": "1/11.1",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy marrentill",
+        "rate": "1/14.8",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy tarromin",
+        "rate": "1/19.8",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy harralander",
+        "rate": "1/25.4",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy ranarr weed",
+        "rate": "1/32.4",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy irit leaf",
+        "rate": "1/44.5",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy avantoe",
+        "rate": "1/59.4",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy kwuarm",
+        "rate": "1/71.2",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy cadantine",
+        "rate": "1/89",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy lantadyme",
+        "rate": "1/118.7",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Grimy dwarf weed",
+        "rate": "1/118.7",
+        "quantity": "1–2",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Coins",
+        "rate": "5/128",
+        "quantity": "3",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Coins",
+        "rate": "5/128",
+        "quantity": "8",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Coins",
+        "rate": "3/128",
+        "quantity": "29",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Coins",
+        "rate": "1/128",
+        "quantity": "35",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Vial of water",
+        "rate": "10/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Bronze longsword",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Snape grass",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Unholy mould",
+        "rate": "1/128",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Uncut sapphire",
+        "rate": "1/512",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Uncut emerald",
+        "rate": "1/1,024",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Uncut ruby",
+        "rate": "1/2,048",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Chaos talisman",
+        "rate": "1/5,461.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Nature talisman",
+        "rate": "1/5,461.33",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Uncut diamond",
+        "rate": "1/8,192",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Rune javelin",
+        "rate": "1/16,384",
+        "quantity": "5",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Loop half of key",
+        "rate": "1/16,384",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Tooth half of key",
+        "rate": "1/16,384",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Rune spear",
+        "rate": "1/262,144",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Shield left half",
+        "rate": "1/524,288",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Dragon spear",
+        "rate": "1/699,050.67",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Looting bag",
+        "rate": "1/11",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Ensouled chaos druid head",
+        "rate": "1/35",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Larran's key",
+        "rate": "1/1,446",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Chaos druid",
+        "item": "Slayer's enchantment",
+        "rate": "1/304",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "149d3b988e5b5ec0f6a6eedcf48d8117265c6da3180caa5685cf0e93266649ee",
+    "corrections": []
+  },
+  "Magic axe": {
+    "owner": "Magic axe",
+    "revision": 15242120,
+    "fetchedAt": "2026-10-06T05:51:58.593386+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Magic_axe",
+    "sha256": "cc45f2fd00c6681ecab0c2795cfe277a1e657aebd8e558982358b921dbe2cb8e",
+    "rows": [
+      {
+        "table": "Magic axe",
+        "item": "Iron battleaxe",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": " ",
+        "line": 96
+      },
+      {
+        "table": "Magic axe",
+        "item": "Looting bag",
+        "rate": "1/3",
+        "quantity": "1",
+        "notes": " <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 101
+      },
+      {
+        "table": "Magic axe",
+        "item": "Iron battleaxe",
+        "rate": "475/500",
+        "quantity": "1",
+        "notes": " ",
+        "line": 112
+      },
+      {
+        "table": "Magic axe",
+        "item": "Steel battleaxe",
+        "rate": "10/500",
+        "quantity": "1",
+        "notes": " ",
+        "line": 113
+      },
+      {
+        "table": "Magic axe",
+        "item": "Mithril battleaxe",
+        "rate": "10/500",
+        "quantity": "1",
+        "notes": " ",
+        "line": 114
+      },
+      {
+        "table": "Magic axe",
+        "item": "Adamant battleaxe",
+        "rate": "4/500",
+        "quantity": "1",
+        "notes": " ",
+        "line": 115
+      },
+      {
+        "table": "Magic axe",
+        "item": "Rune battleaxe",
+        "rate": "1/500",
+        "quantity": "1",
+        "notes": " ",
+        "line": 116
+      },
+      {
+        "table": "Magic axe",
+        "item": "Clue scroll (medium)",
+        "rate": "1/256",
+        "quantity": "1",
+        "notes": " <ref group=d>Medium clue scrolls have a drop rate of 1/64 if a [[ring of wealth (i)]] is worn.</ref>",
+        "line": 121
+      }
+    ],
+    "tableLevels": {},
+    "tableNpcIds": {},
+    "npcLevels": {
+      "2844": 42,
+      "7269": 42
+    },
+    "itemNames": {},
+    "exportHash": "ab63e1018407df572c4913694c83fab9e7f353e81f13734c826f90be1ac5338f",
+    "renderedRows": [
+      {
+        "table": "Magic axe",
+        "item": "Iron battleaxe",
+        "rate": "Always",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Looting bag",
+        "rate": "1/3",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Larran's key",
+        "rate": "1/533",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Slayer's enchantment",
+        "rate": "1/284",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Iron battleaxe",
+        "rate": "475/500",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Steel battleaxe",
+        "rate": "10/500",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Mithril battleaxe",
+        "rate": "10/500",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Adamant battleaxe",
+        "rate": "4/500",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Rune battleaxe",
+        "rate": "1/500",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Clue scroll (medium)",
+        "rate": "1/256",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Ancient shard",
+        "rate": "1/303",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Dark totem base",
+        "rate": "1/455",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Dark totem middle",
+        "rate": "1/455",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Magic axe",
+        "item": "Dark totem top",
+        "rate": "1/455",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "4f7acb87ae2b2e0fc76bb4bd80c382d7530184e6694aca0713cd723264ae657f",
+    "corrections": []
+  },
+  "Ghost": {
+    "owner": "Ghost",
+    "revision": 15212981,
+    "fetchedAt": "2026-10-06T05:52:06.285283+00:00",
+    "url": "https://oldschool.runescape.wiki/w/Ghost",
+    "sha256": "95bbd0585d6a005f44690ba96e1c0dc825f6d8f9ef5d9c63404422d92074f1b6",
+    "rows": [
+      {
+        "table": "Ghost",
+        "item": "Looting bag",
+        "rate": "1/7",
+        "quantity": "1",
+        "notes": "{{(m)}} <ref group=d>Looting bags are only dropped by those found in the [[Wilderness]].</ref>",
+        "line": 294
+      },
+      {
+        "table": "Ghost",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/90",
+        "quantity": "1",
+        "notes": " ",
+        "line": 295
+      }
+    ],
+    "tableLevels": {
+      "Ghost#Level 19": [
+        19
+      ],
+      "Ghost#Level 76": [
+        76,
+        77
+      ],
+      "Ghost#Level 77": [
+        76,
+        77
+      ]
+    },
+    "tableNpcIds": {
+      "Ghost#Level 19": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        95,
+        97,
+        99,
+        472,
+        473,
+        474,
+        505,
+        506,
+        507,
+        7263,
+        7264
+      ],
+      "Ghost#Level 76": [
+        2531,
+        2532,
+        2533,
+        2534
+      ],
+      "Ghost#Level 77": [
+        2527,
+        2528,
+        2529,
+        2530
+      ]
+    },
+    "npcLevels": {
+      "85": 19,
+      "86": 19,
+      "87": 19,
+      "88": 19,
+      "89": 19,
+      "90": 19,
+      "91": 19,
+      "92": 19,
+      "93": 19,
+      "95": 19,
+      "97": 19,
+      "99": 19,
+      "472": 19,
+      "473": 19,
+      "474": 19,
+      "505": 19,
+      "506": 19,
+      "507": 19,
+      "7263": 19,
+      "7264": 19,
+      "2531": 76,
+      "2532": 76,
+      "2533": 76,
+      "2534": 76,
+      "2527": 77,
+      "2528": 77,
+      "2529": 77,
+      "2530": 77
+    },
+    "itemNames": {},
+    "exportHash": "60d9fc84d9c5891993bade32d3904d23b3e2c7f1dfe14116c5254d133aca01a1",
+    "renderedRows": [
+      {
+        "table": "Ghost",
+        "item": "Looting bag",
+        "rate": "1/7",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      },
+      {
+        "table": "Ghost",
+        "item": "Clue scroll (beginner)",
+        "rate": "1/90",
+        "quantity": "1",
+        "notes": "",
+        "line": 0
+      }
+    ],
+    "renderSha256": "ef36cf34e7d24814a928347eb79dda80280d913faedd7c178b7fa9c19f704aea",
     "corrections": []
   }
 }

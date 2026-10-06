@@ -12,7 +12,10 @@ for item in raw["bucket"]:
     ids = item.get("item_id", [])
     if not isinstance(ids, list):
         ids = [ids]
-    for key in {normalize(item["page_name"]), normalize(item.get("item_name", ""))} - {""}:
+    keys = {normalize(item["page_name"]), normalize(item.get("item_name", ""))} - {""}
+    if item.get("version_anchor"):
+        keys.add(normalize(item["page_name"] + "#" + item["version_anchor"]))
+    for key in keys:
         items[key]["ids"].update(int(value) for value in ids if str(value).isdigit() and int(value) > 0)
         if item.get("item_name"):
             items[key]["names"].add(item["item_name"])

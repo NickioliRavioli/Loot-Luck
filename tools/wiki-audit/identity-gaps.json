@@ -1,75 +1,5 @@
 [
   {
-    "owner": "A corpse",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Abyssal guardian",
-    "item": "Large pouch#New",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Abyssal leech",
-    "item": "Large pouch#New",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Abyssal walker",
-    "item": "Large pouch#New",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Albatross",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Albatross",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Albatross",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Amoxliatl",
-    "item": "Pendant of Ates#Inert",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Armoured zombie (Defender of Varrock)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Armoured zombie (Zemouregal's Base)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Armoured zombie (Zemouregal's Fort)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Birdhouse (scenery)",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Birdhouse (scenery)",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Birdhouse (scenery)",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
     "owner": "Camphor tree",
     "item": "Clue nest",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
@@ -141,57 +71,7 @@
   },
   {
     "owner": "Ent seed",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Ent seed",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Ent seed",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Ent seed",
     "item": "Clue nest",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Friendly Ent (Forestry event)",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Friendly Ent (Forestry event)",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Friendly Ent (Forestry event)",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Frigatebird",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Frigatebird",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Frigatebird",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Frost Nagua",
-    "item": "Pendant of Ates#Inert",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
@@ -202,11 +82,6 @@
   {
     "owner": "H.A.M. Member",
     "item": "Coin pouch (H.A.M. member)",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Hero",
-    "item": "Coin pouch#Hero",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
@@ -270,38 +145,8 @@
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
-    "owner": "Magic birdhouse",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Magic birdhouse",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Magic birdhouse",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
     "owner": "Magic tree",
     "item": "Clue nest",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Mahogany birdhouse",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Mahogany birdhouse",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Mahogany birdhouse",
-    "item": "Bird nest (egg)#Blue egg",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
@@ -310,108 +155,8 @@
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Managing Miscellania",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Maple birdhouse",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Maple birdhouse",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Maple birdhouse",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
     "owner": "Maple tree",
     "item": "Clue nest",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Mogre (sea)",
-    "item": "Fishbowl#Water",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Nazastarool",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Oak birdhouse",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Oak birdhouse",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Oak birdhouse",
-    "item": "Bird nest (egg)#Blue egg",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
@@ -430,21 +175,6 @@
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
-    "owner": "Osprey",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Osprey",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Osprey",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
     "owner": "Panning point",
     "item": "Panning tray (mud)",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
@@ -452,31 +182,6 @@
   {
     "owner": "Pile of Rock (Big Cats & WWF)",
     "item": "Stone (Big Cats & WWF)",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Pirate (Thieving)",
-    "item": "Medallion fragment#3",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Pirate (Thieving)",
-    "item": "Medallion fragment#3",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Redwood birdhouse",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Redwood birdhouse",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Redwood birdhouse",
-    "item": "Bird nest (egg)#Blue egg",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
@@ -495,11 +200,6 @@
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
-    "owner": "Rewards Guardian",
-    "item": "Large pouch#New",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
     "owner": "Rosewood tree",
     "item": "Clue nest",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
@@ -510,16 +210,6 @@
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
-    "owner": "Rusty chest",
-    "item": "Medallion fragment#1",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Silver stall (Port Roberts)",
-    "item": "Medallion fragment#5",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
     "owner": "Skeleton (Ancient Cavern)",
     "item": "Skeleton heavy",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
@@ -527,26 +217,6 @@
   {
     "owner": "Skeleton (Ancient Cavern)",
     "item": "Skeleton hero",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Sorebones",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Teak birdhouse",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Teak birdhouse",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Teak birdhouse",
-    "item": "Bird nest (egg)#Blue egg",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
@@ -565,41 +235,6 @@
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
-    "owner": "Teak tree",
-    "item": "Medallion fragment#6",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Tern",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Tern",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Tern",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Vale offerings",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Vale offerings",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Vale offerings",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
     "owner": "Wardrobe (stealing valuables)",
     "item": "Blessed bone statuette (eagle)",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
@@ -612,21 +247,6 @@
   {
     "owner": "Wardrobe (stealing valuables)",
     "item": "Blessed bone statuette (buffalo)",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Willow birdhouse",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Willow birdhouse",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Willow birdhouse",
-    "item": "Bird nest (egg)#Blue egg",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
@@ -650,108 +270,8 @@
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   },
   {
-    "owner": "Yew birdhouse",
-    "item": "Bird nest (egg)#Red egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Yew birdhouse",
-    "item": "Bird nest (egg)#Green egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Yew birdhouse",
-    "item": "Bird nest (egg)#Blue egg",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
     "owner": "Yew tree",
     "item": "Clue nest",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie (Entrana Dungeon)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie (Kourend)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie (Melzar's Maze)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie (Tarn's Lair)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie (Tarn's Lair)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie (Tarn's Lair)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie (Temple Trekking)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie (Wilderness)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie (Zogre Flesh Eaters)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie pirate",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie pirate",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie pirate (Braindeath Island)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie pirate (Harmony Island)",
-    "item": "Zombie bone#Unpolished",
-    "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
-  },
-  {
-    "owner": "Zombie swab",
-    "item": "Zombie bone#Unpolished",
     "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"
   }
 ]

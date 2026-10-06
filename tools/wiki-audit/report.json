@@ -154,16 +154,16 @@
     "Yommi tree",
     "Zulrah"
   ],
-  "evidencePages": 150,
+  "evidencePages": 160,
   "coverage": {
-    "directRowsCompared": 4324,
-    "rowsWithoutDirectPageTemplate": 789
+    "directRowsCompared": 4326,
+    "rowsWithoutDirectPageTemplate": 787
   },
   "pageChanges": [],
   "unresolved": [],
   "identityCoverage": {
-    "rowsWithWikiItemIds": 39635,
-    "rowsWithDifferentPageAndGameNames": 1187,
-    "rowsWithoutWikiItemIds": 151
+    "rowsWithWikiItemIds": 39731,
+    "rowsWithDifferentPageAndGameNames": 1283,
+    "rowsWithoutWikiItemIds": 55
   }
 }

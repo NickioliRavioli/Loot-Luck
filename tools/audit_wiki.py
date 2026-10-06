@@ -191,7 +191,7 @@ def page_evidence(owner, data):
                         for item_id in re.findall(r"\d+", value):
                             names[item_id] = item_name
         elif name.startswith("dropsline"):
-            item = params.get("name", "")
+            item = params.get("bucketname", params.get("name", ""))
             if name == "dropslineclue":
                 item = "Clue scroll (" + params.get("type", "") + ")"
             if item:
@@ -342,6 +342,12 @@ def main():
                 rendered = DropHTML(owner)
                 rendered.feed(data["dropHtml"])
                 for row in rendered.rows:
+                    anchored = {direct["item"] for direct in page["rows"]
+                                if "#" in direct["item"] and normalize(direct["item"].split("#")[0]) == normalize(row["item"]) and
+                                quantity(direct["quantity"]) == quantity(row["quantity"]) and
+                                probability(direct["rate"]) is not None and probability(direct["rate"]) == probability(row["rate"])}
+                    if len(anchored) == 1:
+                        row["item"] = anchored.pop()
                     if row["table"] != owner:
                         continue
                     # Rendered image alt text sometimes omits dropversion. Recover only

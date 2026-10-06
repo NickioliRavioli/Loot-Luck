@@ -28,8 +28,8 @@ public final class ItemRateMatcher
 		List<RateRow> byId = rows.stream().filter(row -> row.itemIds.contains(canonicalId) || row.itemIds.contains(id)).collect(Collectors.toList());
 		if (!byId.isEmpty()) { return match(name, byId, false); }
 		String key = lookupName(baseName(name), source);
-		return match(name, rows.stream().filter(row -> key.equals(lookupName(row.itemName)) ||
-			(row.gameName != null && key.equals(lookupName(row.gameName)))).collect(Collectors.toList()), false);
+		return match(name, rows.stream().filter(row -> (!row.itemName.contains("#") || row.itemIds.isEmpty()) &&
+			(key.equals(lookupName(row.itemName)) || (row.gameName != null && key.equals(lookupName(row.gameName))))).collect(Collectors.toList()), false);
 	}
 	public static String lookupName(String name,com.lootluck.model.SourceIdentity source)
 	{

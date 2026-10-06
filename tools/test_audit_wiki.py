@@ -1,10 +1,17 @@
 """Offline regressions for the independent Wiki-page audit reader."""
 from fractions import Fraction
 import unittest
-from audit_wiki import DropHTML, arithmetic, fields, probability, quantity, templates
+from audit_wiki import DropHTML, arithmetic, fields, probability, quantity, templates, page_evidence
 
 
 class WikiAuditReaderTest(unittest.TestCase):
+    def test_bucket_item_anchor_and_quest_notes_are_preserved(self):
+        text = '{{DropsTableHead|dropversion=Level 24}}{{DropsLine|name=Zombie bone|bucketname=Zombie bone#Unpolished|quantity=1|rarity=1/4|raritynotes=Only during Rag and Bone Man II}}'
+        data = {"parse": {"wikitext": {"*": text}, "revid": 1}, "fetchedAt": "2026-10-06"}
+        row = page_evidence("Zombie", data)["rows"][0]
+        self.assertEqual("Zombie bone#Unpolished", row["item"])
+        self.assertIn("Only during", row["notes"])
+
     def test_decimal_denominator_and_fixed_roll_prefix(self):
         self.assertEqual(Fraction(5, 1079), probability("1/215.8"))
         self.assertEqual(Fraction(1, 1024), probability("2 × 1/1,024[1]"))

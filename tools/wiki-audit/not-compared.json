@@ -4608,14 +4608,6 @@
     "reason": "No independently resolved rendered table/item/quantity match; rate not certified"
   },
   {
-    "owner": "Rewards Guardian",
-    "table": "Rewards Guardian",
-    "item": "Large pouch#New",
-    "quantity": "1",
-    "rate": "15/140",
-    "reason": "No independently resolved rendered table/item/quantity match; rate not certified"
-  },
-  {
     "owner": "Rogue",
     "table": "Rogue#Level 15",
     "item": "Grimy guam leaf",
@@ -4781,14 +4773,6 @@
     "item": "Crystal shard",
     "quantity": "1",
     "rate": "1/40",
-    "reason": "No independently resolved rendered table/item/quantity match; rate not certified"
-  },
-  {
-    "owner": "Teak tree",
-    "table": "Teak tree",
-    "item": "Medallion fragment#6",
-    "quantity": "1",
-    "rate": "Always",
     "reason": "No independently resolved rendered table/item/quantity match; rate not certified"
   },
   {
