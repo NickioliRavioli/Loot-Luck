@@ -342,7 +342,7 @@ public final class LootLuckPanel extends PluginPanel
 	private JPanel collectionCard(PanelState.Source collection)
 	{
 		JPanel card=new JPanel(new BorderLayout(0,3)) { @Override public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE,getPreferredSize().height); } };
-		card.setBackground(ROW);card.setAlignmentX(LEFT_ALIGNMENT);card.setBorder(BorderFactory.createLineBorder(new Color(65,58,45)));
+		card.setBackground(ROW);card.setAlignmentX(LEFT_ALIGNMENT);card.setBorder(BorderFactory.createLineBorder(new Color(45,45,45)));
 		JPanel header=new JPanel(new BorderLayout(0,3));header.setBackground(new Color(16,16,16));header.setBorder(BorderFactory.createEmptyBorder(6,6,6,6));
 		JLabel name=new JLabel(collection.name) { @Override public Dimension getPreferredSize() { return new Dimension(1,getFontMetrics(getFont()).getHeight()); } };
 		name.setFont(FontManager.getRunescapeSmallFont());name.setForeground(GOLD);header.add(name,BorderLayout.NORTH);
