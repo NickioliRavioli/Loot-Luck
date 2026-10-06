@@ -79,8 +79,9 @@ public final class LootLuckPanel extends PluginPanel
 		top.setOpaque(false);
 		JPanel heading=new JPanel(new BorderLayout());heading.setOpaque(false);
 		JLabel title=new JLabel("Loot Luck");title.setForeground(GOLD);title.setFont(FontManager.getRunescapeFont());heading.add(title,BorderLayout.CENTER);
-		JButton settingsButton=new JButton("⚙");settingsButton.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,18));settingsButton.getAccessibleContext().setAccessibleName("Settings");top.add(heading);
+		JButton settingsButton=new JButton("⚙");settingsButton.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,18));settingsButton.getAccessibleContext().setAccessibleName("Settings");settingsButton.setToolTipText("Settings");top.add(heading);
 		JPanel headerActions=new JPanel(new GridLayout(1,4,2,0));headerActions.setOpaque(false);headerActions.add(toggleUnobtained);headerActions.add(toggleGrid);headerActions.add(toggleSources);headerActions.add(settingsButton);heading.add(headerActions,BorderLayout.EAST);
+		for(java.awt.Component action:headerActions.getComponents()) { action.setForeground(Color.WHITE); }
 		toggleGrid.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,16));toggleGrid.setMargin(new java.awt.Insets(2,4,2,4));
 		toggleGrid.addActionListener(e->{state.gridView=!state.gridView;gridChanged.accept(state.gridView);render();});
 		toggleSources.addActionListener(e->{boolean collapse=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));for(PanelState.Source source:state.sourceRows()) { if(collapse) { collapsed.add(source.key); }else { collapsed.remove(source.key); } }render();});
@@ -108,7 +109,7 @@ public final class LootLuckPanel extends PluginPanel
 			public int getIconHeight() { return 18; }
 			public void paintIcon(java.awt.Component component,java.awt.Graphics graphics,int x,int y)
 			{
-				java.awt.Graphics2D g=(java.awt.Graphics2D)graphics.create();try { g.translate(x,y);g.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,java.awt.RenderingHints.VALUE_ANTIALIAS_ON);g.setColor(component.isEnabled()?GOLD:MUTED);g.setStroke(new java.awt.BasicStroke(1.5f));java.awt.geom.Path2D eye=new java.awt.geom.Path2D.Double();eye.moveTo(1,9);eye.curveTo(5,2,13,2,17,9);eye.curveTo(13,16,5,16,1,9);g.draw(eye);g.fillOval(7,7,4,4);if(slashed) { g.setStroke(new java.awt.BasicStroke(2));g.drawLine(2,2,16,16); } }finally { g.dispose(); }
+				java.awt.Graphics2D g=(java.awt.Graphics2D)graphics.create();try { g.translate(x,y);g.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,java.awt.RenderingHints.VALUE_ANTIALIAS_ON);g.setColor(Color.WHITE);g.setStroke(new java.awt.BasicStroke(1.5f));java.awt.geom.Path2D eye=new java.awt.geom.Path2D.Double();eye.moveTo(1,9);eye.curveTo(5,2,13,2,17,9);eye.curveTo(13,16,5,16,1,9);g.draw(eye);g.fillOval(7,7,4,4);if(slashed) { g.setStroke(new java.awt.BasicStroke(2));g.drawLine(2,2,16,16); } }finally { g.dispose(); }
 			}
 		};
 	}
@@ -141,9 +142,11 @@ public final class LootLuckPanel extends PluginPanel
 	private void render()
 	{
 		content.removeAll();itemButtons.clear();
-		boolean showingUnobtained=state.includeUnobtained||driest();toggleUnobtained.setIcon(eyeIcon(!showingUnobtained));toggleUnobtained.setSelected(showingUnobtained);toggleUnobtained.setEnabled(view.getSelectedIndex()==0&&!driest());toggleUnobtained.getAccessibleContext().setAccessibleDescription(showingUnobtained?"Unobtained items shown":"Unobtained items hidden");
+		boolean showingUnobtained=state.includeUnobtained||driest();toggleUnobtained.setIcon(eyeIcon(!showingUnobtained));toggleUnobtained.setSelected(showingUnobtained);toggleUnobtained.setEnabled(view.getSelectedIndex()==0&&!driest());toggleUnobtained.getAccessibleContext().setAccessibleDescription(showingUnobtained?"Unobtained items shown":"Unobtained items hidden");toggleUnobtained.setToolTipText(showingUnobtained?"Hide unobtained items":"Show unobtained items");
 		toggleGrid.setText(state.gridView?"☰":"▦");toggleGrid.getAccessibleContext().setAccessibleName(state.gridView?"Switch to list view":"Switch to grid view");toggleGrid.setEnabled(view.getSelectedIndex()==0);
+		toggleGrid.setToolTipText(toggleGrid.getAccessibleContext().getAccessibleName());
 		boolean anyExpanded=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));toggleSources.setText(anyExpanded?"▴":"▾");toggleSources.getAccessibleContext().setAccessibleName(anyExpanded?"Collapse all sources":"Expand all sources");toggleSources.setEnabled(view.getSelectedIndex()==0&&!state.sources.isEmpty());
+		toggleSources.setToolTipText(toggleSources.getAccessibleContext().getAccessibleName());
 		dataSettings.setEnabled(state.canManageData);
 		if(configSettings!=null) { configSettings.sync(); }
 		if(!state.notice.isEmpty()) { JLabel notice=label(state.notice,MUTED);content.add(notice); }
