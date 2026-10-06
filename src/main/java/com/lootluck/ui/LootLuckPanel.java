@@ -43,7 +43,7 @@ public final class LootLuckPanel extends PluginPanel
 	private final JComboBox<String> view=new JComboBox<>(new String[]{"By source","Recent collections","All items"});
 	private final JComboBox<String> itemSort=new JComboBox<>(new String[]{"Most recent","Most occurrences","Most quantity"});
 	private final JPanel controls=new JPanel(new GridLayout(1,2,4,0));
-	private final JButton dataSettings=new JButton("Data settings");
+	private final JButton exportData=new JButton("Export data"),importData=new JButton("Import data"),deleteData=new JButton("Delete data");
 	private final JButton refreshButton=new JButton("Refresh"),resetButton=new JButton("Reset session");
 	private Consumer<String> dataAction=action->{};
 	private Consumer<String> validationAction=source->{};
@@ -93,11 +93,8 @@ public final class LootLuckPanel extends PluginPanel
 		top.add(view);
 		controls.setOpaque(false);controls.add(scope);controls.add(sort);top.add(controls);
 		add(top,BorderLayout.NORTH);
-		dataSettings.addActionListener(e->{
-			javax.swing.JPopupMenu menu=new javax.swing.JPopupMenu();
-			for(String action:new String[]{"Export data","Import data","Delete data"}) { javax.swing.JMenuItem entry=new javax.swing.JMenuItem(action);entry.addActionListener(event->dataAction.accept(action));menu.add(entry); }
-			menu.show(dataSettings,0,dataSettings.getHeight());
-		});
+		for(JButton action:java.util.List.of(exportData,importData,deleteData)) { action.addActionListener(e->dataAction.accept(action.getText())); }
+		deleteData.setBackground(new Color(145,45,45));deleteData.setForeground(Color.WHITE);deleteData.setOpaque(true);
 		content.setLayout(new javax.swing.BoxLayout(content,javax.swing.BoxLayout.Y_AXIS));content.setOpaque(false);add(content,BorderLayout.CENTER);
 		scope.addActionListener(e->scopeChanged.accept(session()));sort.addActionListener(e->{scopeChanged.accept(session());render();});
 		refreshButton.addActionListener(e->refresh.run());resetButton.addActionListener(e->reset.run());
@@ -118,8 +115,8 @@ public final class LootLuckPanel extends PluginPanel
 	public void setSettings(com.lootluck.LootLuckConfig config,java.util.function.BiConsumer<String,Object> changed,java.util.function.Function<Boolean,Icon> previewIcons)
 	{
 		state.includeUnobtained=config.includeUnobtained();state.itemEffect=config.itemEffect();state.gridView=config.gridView();gridChanged=value->changed.accept("gridView",value);
-		dataSettings.setAlignmentX(LEFT_ALIGNMENT);dataSettings.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));
-		configSettings=new LootLuckSettingsPanel(config,changed,previewIcons,refreshButton,resetButton,dataSettings);settings.add(configSettings);settings.setLayout(new javax.swing.BoxLayout(settings,javax.swing.BoxLayout.Y_AXIS));
+		JPanel dataActions=new JPanel(new GridLayout(0,1,0,4));dataActions.setOpaque(false);dataActions.add(exportData);dataActions.add(importData);dataActions.add(deleteData);
+		configSettings=new LootLuckSettingsPanel(config,changed,previewIcons,refreshButton,resetButton,dataActions);settings.add(configSettings);settings.setLayout(new javax.swing.BoxLayout(settings,javax.swing.BoxLayout.Y_AXIS));
 		for(java.awt.Component child:settings.getComponents()) { if(child instanceof javax.swing.JComponent) { ((javax.swing.JComponent)child).setAlignmentX(LEFT_ALIGNMENT);((javax.swing.JComponent)child).setMaximumSize(new Dimension(Integer.MAX_VALUE,child.getPreferredSize().height)); } }
 	}
 	static JButton stylePreview(ItemDisplayStyle style,Icon icon)
@@ -152,7 +149,7 @@ public final class LootLuckPanel extends PluginPanel
 		toggleGrid.setToolTipText(toggleGrid.getAccessibleContext().getAccessibleName());
 		boolean anyExpanded=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));toggleSources.setText(anyExpanded?"▴":"▾");toggleSources.getAccessibleContext().setAccessibleName(anyExpanded?"Collapse all sources":"Expand all sources");toggleSources.setEnabled(view.getSelectedIndex()==0&&!state.sources.isEmpty());
 		toggleSources.setToolTipText(toggleSources.getAccessibleContext().getAccessibleName());
-		dataSettings.setEnabled(state.canManageData);
+		for(JButton action:java.util.List.of(resetButton,exportData,importData,deleteData)) { action.setEnabled(state.canManageData); }
 		if(configSettings!=null) { configSettings.sync(); }
 		if(!state.notice.isEmpty()) { JLabel notice=label(state.notice,MUTED);content.add(notice); }
 		if(view.getSelectedIndex()!=0) { renderObservations();content.revalidate();content.repaint();return; }

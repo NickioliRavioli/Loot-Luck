@@ -45,17 +45,6 @@ final class LootLuckSettingsPanel extends JPanel
 		toggle("Show GE values","showGe",config::showGe,"Uses current prices, not the price when an item was collected.",changed);
 		toggle("Show HA values","showHa",config::showHa,"High Alchemy totals exclude rune costs.",changed);
 		if(PanelState.LUCK_STATISTICS_VISIBLE) { toggle("Luck colors","luckColors",config::luckColors,"Colors actual/expected ratios; colors do not indicate statistical significance.",changed); }
-		section("History and data");
-		JLabel history=new JLabel("Collection history limit");history.setForeground(Color.LIGHT_GRAY);history.setAlignmentX(LEFT_ALIGNMENT);add(history);
-		JSpinner limit=new JSpinner(new SpinnerNumberModel(Math.max(0,config.historyLimit()),0,Integer.MAX_VALUE,1000));limit.setAlignmentX(LEFT_ALIGNMENT);limit.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));add(limit);
-		hint("0 keeps unlimited history. Lowering the limit removes the oldest collection entries; lifetime totals stay intact.");
-		limit.addChangeListener(e->{if(!syncing) { changed.accept("historyLimit",limit.getValue()); }});updates.add(()->limit.setValue(Math.max(0,config.historyLimit())));
-		if(reset!=null)
-		{
-			reset.setAlignmentX(LEFT_ALIGNMENT);reset.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));add(reset);
-			hint("Clears the current session's loot totals and collection history. Lifetime data is kept. New loot starts a fresh session.");
-		}
-		if(dataActions!=null) { dataActions.setAlignmentX(LEFT_ALIGNMENT);dataActions.setMaximumSize(new Dimension(Integer.MAX_VALUE,dataActions.getPreferredSize().height));add(dataActions); }
 		section("Item counts");
 		javax.swing.ButtonGroup styleGroup=new javax.swing.ButtonGroup();
 		for(ItemDisplayStyle style:ItemDisplayStyle.values())
@@ -81,6 +70,17 @@ final class LootLuckSettingsPanel extends JPanel
 			button.addActionListener(event->{if(!syncing) { changed.accept("itemEffect",effect);sync(); }});
 			updates.add(()->{boolean selected=config.itemEffect()==effect;button.setSelected(selected);button.setBorder(javax.swing.BorderFactory.createLineBorder(selected?new Color(223,192,113):new Color(65,65,65),2));});
 		}
+		section("History and data");
+		JLabel history=new JLabel("Collection history limit");history.setForeground(Color.LIGHT_GRAY);history.setAlignmentX(LEFT_ALIGNMENT);add(history);
+		JSpinner limit=new JSpinner(new SpinnerNumberModel(Math.max(0,config.historyLimit()),0,Integer.MAX_VALUE,1000));limit.setAlignmentX(LEFT_ALIGNMENT);limit.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));add(limit);
+		hint("0 keeps unlimited history. Lowering the limit removes the oldest collection entries; lifetime totals stay intact.");
+		limit.addChangeListener(e->{if(!syncing) { changed.accept("historyLimit",limit.getValue()); }});updates.add(()->limit.setValue(Math.max(0,config.historyLimit())));
+		if(reset!=null)
+		{
+			reset.setAlignmentX(LEFT_ALIGNMENT);reset.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));add(reset);
+			hint("Clears the current session's loot totals and collection history. Lifetime data is kept. New loot starts a fresh session.");
+		}
+		if(dataActions!=null) { dataActions.setAlignmentX(LEFT_ALIGNMENT);dataActions.setMaximumSize(new Dimension(Integer.MAX_VALUE,dataActions.getPreferredSize().height));add(dataActions); }
 		sync();
 	}
 	private void section(String title)

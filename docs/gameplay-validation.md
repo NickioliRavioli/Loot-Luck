@@ -71,7 +71,8 @@ Until these checks pass, keep the source observable with its probability statist
 
 - Open settings and check the section titles, wrapped hints and preview controls at the normal sidebar width. Obvious action buttons should have no extra hint paragraphs.
 - Scroll down through settings: Back to loot should remain in the fixed top header and return to the loot view. Reset session should have an inline hint explaining that only session totals and collections are cleared, with lifetime data preserved.
-- With Allow Wiki refresh off, check its explanation and disabled Refresh button. With it on, check the explanation, existing third-party confirmation and enabled Refresh button. Switching it off must retain saved rates and recorded loot. Reset session and Data settings belong under History and data.
+- With Allow Wiki refresh off, check its explanation and disabled Refresh button. With it on, check the explanation, existing third-party confirmation and enabled Refresh button. Switching it off must retain saved rates and recorded loot.
+- At the bottom, History and data should contain the history limit, Reset session and separate Export data, Import data and red Delete data buttons. Cancel Reset session, Import and Delete confirmations; no counts or history should change. Confirm Reset session clears only the session, preserving lifetime data. If an account changes during a confirmation, the queued action must not affect either account.
 
 - Export the current account, collect more loot, then import the export. Confirm
   lifetime totals return to the export and the session is empty.

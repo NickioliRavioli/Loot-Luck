@@ -279,7 +279,17 @@ public class LootLuckPlugin extends Plugin
 	{
 		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(id,(int)Math.max(1,Math.min(Integer.MAX_VALUE,quantity)),config.iconQuantities()&&!config.stackCounts()&&quantity>0);if(image==null) { return null; }image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));return new ImageIcon(image);
 	}
-	private void resetSession() { submit(r->{if(r.engine!=null) { r.engine.resetSession(); }publishOnWorker(r,generation.get());}); }
+	private void resetSession()
+	{
+		if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); }
+		String profile=activeProfile;RuntimeData selected=runtime;long token=generation.get();
+		if(profile==null||selected==null) { return; }
+		if(javax.swing.JOptionPane.showConfirmDialog(panel,"Clear this account's current session loot totals and collection history?\nLifetime data will be kept. New loot starts a fresh session.","Reset session",javax.swing.JOptionPane.OK_CANCEL_OPTION,javax.swing.JOptionPane.WARNING_MESSAGE)!=javax.swing.JOptionPane.OK_OPTION) { return; }
+		submit(r->{
+			if(r!=selected||token!=generation.get()||!profile.equals(activeProfile)||!profile.equals(r.profile)||r.engine==null) { return; }
+			r.engine.resetSession();publishOnWorker(r,token);
+		});
+	}
 	private void manageData(String action)
 	{
 		if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); }

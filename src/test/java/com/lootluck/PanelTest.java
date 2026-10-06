@@ -18,13 +18,21 @@ public class PanelTest
 	{
 		SwingUtilities.invokeAndWait(()->{
 			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});
-			panel.setSettings(new LootLuckConfig(){},(key,value)->{},value->null);panel.update(new PanelState());findButton(panel,"Settings").doClick();
+			java.util.List<String> actions=new java.util.ArrayList<>();panel.setDataAction(actions::add);
+			PanelState state=new PanelState();state.canManageData=true;
+			panel.setSettings(new LootLuckConfig(){},(key,value)->{},value->null);panel.update(state);findButton(panel,"Settings").doClick();
 			javax.swing.JPanel wrapper=panel.getWrappedPanel();wrapper.setSize(242,400);layoutChildren(wrapper);
 			JButton back=findButton(wrapper,"← Back to loot");assertNotNull(back);assertNull(SwingUtilities.getAncestorOfClass(javax.swing.JViewport.class,back));
 			int before=SwingUtilities.convertPoint(back,0,0,wrapper).y;
 			javax.swing.JScrollPane scroll=(javax.swing.JScrollPane)wrapper.getComponent(0);scroll.getViewport().setViewPosition(new java.awt.Point(0,600));layoutChildren(wrapper);
 			assertEquals(before,SwingUtilities.convertPoint(back,0,0,wrapper).y);assertTrue(scroll.getViewport().getViewPosition().y>0);
-			assertNotNull(findButton(wrapper,"Reset session"));back.doClick();assertNull(findButton(wrapper,"← Back to loot"));assertNotNull(findButton(wrapper,"Settings"));
+			assertNull(findButton(wrapper,"Data settings"));assertNotNull(findButton(wrapper,"Reset session"));
+			for(String action:java.util.List.of("Export data","Import data","Delete data")) { findButton(wrapper,action).doClick(); }
+			assertEquals(java.util.List.of("Export data","Import data","Delete data"),actions);
+			java.awt.Color deleteColor=findButton(wrapper,"Delete data").getBackground();assertTrue(deleteColor.getRed()>deleteColor.getGreen());
+			assertTrue(SwingUtilities.convertPoint(findLabel(wrapper,"Collection history limit"),0,0,wrapper).y>SwingUtilities.convertPoint(findLabel(wrapper,"Background effects"),0,0,wrapper).y);
+			state.canManageData=false;panel.update(state);assertFalse(findButton(wrapper,"Reset session").isEnabled());assertFalse(findButton(wrapper,"Delete data").isEnabled());
+			back.doClick();assertNull(findButton(wrapper,"← Back to loot"));assertNotNull(findButton(wrapper,"Settings"));
 		});
 	}
 	@Test public void mainHeaderShowsItemsDirectlyWithoutConditionHeaders() throws Exception
