@@ -114,6 +114,9 @@ Expanded quantities, occurrences and GE/HA totals use exact comma-separated
 numbers beside their labels, aligned right. Values move onto their own line only
 when the full label/value pair would not fit. Table occurrence counts use the
 same fallback. Summary values remain compact.
+Compact quantities and money support K, M, B and T, always rounded down without
+decimals. Source headers reserve space for their compact count and GE value;
+source names wrap across up to two lines, then end with an ellipsis.
 New notifications can be assigned by a unique quantity-range match when the
 reported amount and published roll count are both one. Overlapping matches,
 batches, missing roll/quantity metadata and multiple rolls remain under Unknown
