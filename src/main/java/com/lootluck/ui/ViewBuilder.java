@@ -37,7 +37,8 @@ public final class ViewBuilder
 		for(Map.Entry<String,Ledger.Source> entry:SourceGroups.build(ledger).entrySet())
 		{
 			Ledger.Source s=entry.getValue();PanelState.Source family=sourceView(entry.getKey(),s,rates,unobtained,identities,hideOtherWorld,membersWorld);
-			if(com.lootluck.rates.SourceConditions.hasVariants(rates.rows(s.identity)))
+			List<PanelState.Source> variants=new ArrayList<>();
+			if(separateVariants&&com.lootluck.rates.SourceConditions.hasVariants(rates.rows(s.identity)))
 			{
 				Map<String,Ledger.Source> groups=SourceGroups.conditions(ledger,entry.getKey(),rates);
 				boolean multipleWorlds=groups.values().stream().map(value->value.identity.context).distinct().count()>1;
@@ -46,11 +47,11 @@ public final class ViewBuilder
 					Ledger.Source member=group.getValue();PanelState.Source child=sourceView(group.getKey(),member,rates,unobtained,identities,hideOtherWorld,membersWorld);
 					String label=com.lootluck.rates.SourceConditions.label(member.identity,rates.rows(member.identity));
 					if(multipleWorlds) { label+=" / "+("[MEMBERS]".equals(member.identity.context)?"Members":"[]".equals(member.identity.context)?"Free-to-play":"Special/unknown world"); }
-					child.name=separateVariants?family.name+" ("+label+")":label;family.children.add(child);
+					child.name=family.name+" ("+label+")";variants.add(child);
 				}
-				family.children.sort(Comparator.comparingLong((PanelState.Source value)->value.lastReceived).reversed());
+				variants.sort(Comparator.comparingLong((PanelState.Source value)->value.lastReceived).reversed());
 			}
-			if(separateVariants&&!family.children.isEmpty()) { state.sources.addAll(family.children); }else { state.sources.add(family); }
+			if(!variants.isEmpty()) { state.sources.addAll(variants); }else { state.sources.add(family); }
 		}
 		state.sources.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());
 		Map<Integer,PanelState.Item> totals=new LinkedHashMap<>();

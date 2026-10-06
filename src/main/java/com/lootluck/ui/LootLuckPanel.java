@@ -49,7 +49,6 @@ public final class LootLuckPanel extends PluginPanel
 	private final Consumer<Boolean> scopeChanged;
 	private final Consumer<String> openWiki;
 	private final Set<String> collapsed=new HashSet<>();
-	private final Set<String> knownConditionKeys=new HashSet<>();
 	private final JButton toggleSources=new JButton();
 	private final JButton toggleGrid=new JButton();
 	private final JButton toggleUnobtained=new JButton();
@@ -137,7 +136,7 @@ public final class LootLuckPanel extends PluginPanel
 	public void setDataAction(Consumer<String> action) { dataAction=action; }
 	public void setValidationAction(Consumer<String> action) { validationAction=action; }
 	public boolean driest() { return sort.getSelectedIndex()==2; }
-	public void update(PanelState state) { if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); } this.state=state;for(PanelState.Source source:state.sources) { for(PanelState.Source child:source.children) { if(knownConditionKeys.add(child.key)) { collapsed.add(child.key); } } }render(); }
+	public void update(PanelState state) { if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); } this.state=state;render(); }
 	private void render()
 	{
 		content.removeAll();itemButtons.clear();
@@ -178,8 +177,7 @@ public final class LootLuckPanel extends PluginPanel
 				JPanel rows=new JPanel();rows.setOpaque(false);rows.setLayout(new javax.swing.BoxLayout(rows,javax.swing.BoxLayout.Y_AXIS));
 				ArrayList<PanelState.Item> ordered=new ArrayList<>(source.items);
 				ordered.sort(ItemOrdering.comparator(sort.getSelectedIndex(),state.groupByDropTable));
-				if(!source.children.isEmpty()) { rows.setBorder(BorderFactory.createEmptyBorder(0,8,0,0));for(PanelState.Source child:source.children) { rows.add(sourceCard(child)); }group.add(rows,BorderLayout.CENTER); }
-				else if(state.gridView) { group.add(sourceGrid(ordered),BorderLayout.CENTER); }
+				if(state.gridView) { group.add(sourceGrid(ordered),BorderLayout.CENTER); }
 				else if(ordered.size()>100) { group.add(virtualSourceItems(ordered),BorderLayout.CENTER); }
 				else { for(PanelState.Item item:ordered) { rows.add(itemRow(item));if(item.key.equals(expanded)) { rows.add(details(item)); } }group.add(rows,BorderLayout.CENTER); }
 			}

@@ -96,8 +96,8 @@ Confirm the gameplay results to the developer before considering this validation
 
 - Restart into the development build; an already running JVM cannot load the new code.
 - During Rag and Bone Man II, collect an unpolished Zombie bone and check its published rate is 1/4. Rat bone should remain 1/4. Historical unknown-at-collection entries should remain unchanged.
-- Kill low and high Dark wizards. Expand the combined header and confirm Low level and High level groups. Check the Earth rune quantity alternatives, including 36 at 1/32. Energy potion(2) may legitimately remain unknown.
-- Toggle Show variants separately. Compare source totals, All items and Recent collections before/after; quantities and notification counts must not change. Return to the combined view and confirm condition groups expand independently.
+- Kill low and high Dark wizards. Expand the main header and confirm items appear directly underneath without subheaders. Check the Earth rune quantity/table alternatives in item details, including 36 at 1/32. Energy potion(2) may legitimately remain unknown.
+- Toggle Show variants separately and confirm Low level and High level appear as top-level headers. Compare source totals, All items and Recent collections before/after; quantities and notification counts must not change. Return to the combined view and confirm the main header collapses and expands its item rows.
 - Compare Giant rat levels 3/6 versus 26 and Goblin's verified Drop Table 1/2. Cosmetic variants with the same conditions should share a group.
 - If testing Ghosts, compare Taverley and ordinary Wilderness kills, including empty outcomes. Newly captured contexts should distinguish known outside/Wilderness locations; old missing context must remain Unknown location. Moving after death must not rewrite the kill location. Wilderness-only unobtained loot should be absent from known outside groups. Ghost exact-luck statistics remain unavailable.
 - Restart and export/import: preserved variant observations must keep their counts. Instances or ambiguous deaths should remain unresolved instead of selecting a guessed location.

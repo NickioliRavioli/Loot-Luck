@@ -50,7 +50,8 @@ final class SourceGroups
 	private static Ledger.Source combine(List<Ledger.Source> members)
 	{
 		Ledger.Source combined=new Ledger.Source();SourceIdentity first=members.get(0).identity;
-		combined.identity=new SourceIdentity(first.type,first.name,"Combined "+members.size()+" variants: "+members.stream().map(s->s.identity.variant).collect(java.util.stream.Collectors.joining("; ")),members.stream().map(s->s.identity.context).distinct().collect(java.util.stream.Collectors.joining("; ")),first.wikiOwner==null?"":first.wikiOwner);
+		// A combined display must not accidentally parse one member's NPC ID/level as its own.
+		combined.identity=new SourceIdentity(first.type,first.name,"conditions=combined",members.stream().map(s->s.identity.context).distinct().collect(java.util.stream.Collectors.joining("; ")),first.wikiOwner==null?"":first.wikiOwner);
 		for(Ledger.Source source:members)
 		{
 			for(Map.Entry<String,Ledger.Segment> segment:source.segments.entrySet()) { combined.segments.put(source.identity.key()+"/"+segment.getKey(),segment.getValue()); }

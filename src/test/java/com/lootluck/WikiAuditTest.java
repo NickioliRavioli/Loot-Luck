@@ -72,23 +72,25 @@ public class WikiAuditTest
 		for(int n=0;n<5;n++) { engine.observe(observation(npc("Ghost",19,85),Map.of()),AttemptAdapter.Assessment.unsupported("Unknown old location")); }
 		RateProvider rates=new RateProvider() { public List<RateRow> rows(SourceIdentity source) { return catalogue.get("Ghost"); }public void refresh(SourceIdentity source,boolean force) {} };
 		com.lootluck.ui.PanelState combined=com.lootluck.ui.ViewBuilder.build(engine.lifetime(),rates,true,Map.of());
-		assertEquals(1,combined.sources.size());assertEquals(85,combined.sources.get(0).count);assertEquals(3,combined.sources.get(0).children.size());
+		assertEquals(1,combined.sources.size());assertEquals(85,combined.sources.get(0).count);
 		assertEquals(10,combined.sources.get(0).items.stream().filter(item->item.id==id).findFirst().orElseThrow().attempts.longValue());
-		com.lootluck.ui.PanelState.Source outsideView=combined.sources.get(0).children.stream().filter(source->source.name.contains("Outside Wilderness")).findFirst().orElseThrow();
-		assertTrue(outsideView.items.stream().noneMatch(item->item.id==id));
 		com.lootluck.ui.PanelState separate=com.lootluck.ui.ViewBuilder.build(engine.lifetime(),rates,true,Map.of(),false,null,true);
 		assertEquals(3,separate.sources.size());assertEquals(85,separate.sources.stream().mapToLong(source->source.count).sum());
+		com.lootluck.ui.PanelState.Source outsideView=separate.sources.stream().filter(source->source.name.contains("Outside Wilderness")).findFirst().orElseThrow();
+		assertTrue(outsideView.items.stream().noneMatch(item->item.id==id));
 		assertEquals(combined.allItems.get(0).quantity,separate.allItems.get(0).quantity);assertEquals(85,engine.lifetime().history.size());
 		assertTrue(separate.sources.stream().anyMatch(source->source.name.startsWith("Ghost (")&&source.name.contains("Unknown location")));
 	}
-	@Test public void cosmeticGoblinIdsShareConditionChildrenButDifferentTablesDoNot()
+	@Test public void cosmeticGoblinIdsShareSeparateConditionHeadersButDifferentTablesDoNot()
 	{
 		LedgerEngine engine=new LedgerEngine(new Ledger());
 		for(int id:new int[]{3032,3033,3045}) { engine.observe(observation(npc("Goblin",id==3045?5:2,id),Map.of(526,1L)),AttemptAdapter.Assessment.unsupported("unapproved")); }
 		RateProvider rates=new RateProvider() { public List<RateRow> rows(SourceIdentity source) { return catalogue.get("Goblin"); }public void refresh(SourceIdentity source,boolean force) {} };
-		com.lootluck.ui.PanelState view=com.lootluck.ui.ViewBuilder.build(engine.lifetime(),rates,false,Map.of());
-		assertEquals(2,view.sources.get(0).children.size());assertEquals(3,view.sources.get(0).children.stream().mapToLong(source->source.count).sum());
-		assertTrue(view.sources.get(0).children.stream().anyMatch(source->source.name.equals("Drop table 1")&&source.count==2));
+		com.lootluck.ui.PanelState combined=com.lootluck.ui.ViewBuilder.build(engine.lifetime(),rates,false,Map.of());
+		assertEquals(1,combined.sources.size());assertEquals(3,combined.sources.get(0).count);assertEquals(3,combined.sources.get(0).items.get(0).quantity);
+		com.lootluck.ui.PanelState view=com.lootluck.ui.ViewBuilder.build(engine.lifetime(),rates,false,Map.of(),false,null,true);
+		assertEquals(2,view.sources.size());assertEquals(3,view.sources.stream().mapToLong(source->source.count).sum());
+		assertTrue(view.sources.stream().anyMatch(source->source.name.contains("Drop table 1")&&source.count==2));
 		assertEquals(3,engine.lifetime().sourceVariants().size());
 	}
 	@Test public void anchoredQuestBoneUsesExactVariantId()

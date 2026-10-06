@@ -14,18 +14,18 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
-	@Test public void conditionHeadersExpandWithoutDuplicatingTheParentItems() throws Exception
+	@Test public void mainHeaderShowsItemsDirectlyWithoutConditionHeaders() throws Exception
 	{
 		javax.swing.SwingUtilities.invokeAndWait(()->{
 			PanelState state=new PanelState();state.notice="";state.showGe=false;state.showWikiLinks=false;
 			PanelState.Source family=new PanelState.Source();family.key="ghost";family.name="Ghost";family.count=80;
-			PanelState.Source child=new PanelState.Source();child.key="ghost:wild";child.familyKey="ghost";child.name="Wilderness";child.count=10;
 			PanelState.Item item=new PanelState.Item();item.key="bag";item.name="Looting bag";item.quantity=1;item.rate="1/7";item.rarity=java.awt.Color.GRAY;
-			family.items.add(item);child.items.add(item);family.children.add(child);state.sources.add(family);
+			family.items.add(item);state.sources.add(family);
 			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);
-			assertNull(findLabel(panel,"Looting bag"));JButton condition=findButton(panel,"Wilderness");assertNotNull(condition);condition.doClick();
+			assertNull(findButton(panel,"Wilderness"));
 			assertNotNull(findLabel(panel,"Looting bag"));assertEquals(1,countLabels(panel,"Looting bag"));
-			condition=findButton(panel,"Wilderness");condition.doClick();assertNull(findLabel(panel,"Looting bag"));
+			findButton(panel,"Ghost").doClick();assertNull(findLabel(panel,"Looting bag"));
+			findButton(panel,"Ghost").doClick();assertEquals(1,countLabels(panel,"Looting bag"));
 		});
 	}
 	@Test public void singleDropTableAppearsInExpandedDetails() throws Exception

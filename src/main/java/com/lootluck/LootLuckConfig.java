@@ -14,7 +14,7 @@ public interface LootLuckConfig extends Config
 	default boolean gridView() { return false; }
 	@ConfigItem(keyName="groupByDropTable",name="Group by drop table",description="Keep items from the same published table together without table headers. Sorting applies within each table.")
 	default boolean groupByDropTable() { return false; }
-	@ConfigItem(keyName="separateConditionVariants",name="Show variants separately",description="Display verified drop-condition variants as separate source headers instead of expandable children. Does not change tracking or eligibility.")
+	@ConfigItem(keyName="separateConditionVariants",name="Show variants separately",description="Display verified drop-condition variants as separate source headers instead of grouping items under the main source. Does not change tracking or eligibility.")
 	default boolean separateConditionVariants() { return false; }
 	@ConfigItem(keyName="wikiRefresh",name="Allow Wiki refresh",description="Refresh the full public drop catalogue and source tables from the OSRS Wiki. Sends IP and game-content queries; never account names or loot history.",warning="This feature submits your IP address to a 3rd-party server not controlled or verified by RuneLite developers")
 	default boolean wikiRefresh() { return false; }
