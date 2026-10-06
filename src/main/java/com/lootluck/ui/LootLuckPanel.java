@@ -162,11 +162,9 @@ public final class LootLuckPanel extends PluginPanel
 			JPanel group=new JPanel(new BorderLayout()) { @Override public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE,getPreferredSize().height); } };group.setOpaque(false);group.setAlignmentX(LEFT_ALIGNMENT);
 			JButton header=new JButton();header.setLayout(new BorderLayout(4,0));header.setBackground(new Color(16,16,16));header.setBorder(BorderFactory.createEmptyBorder(8,4,8,4));
 			JPanel summary=new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT,4,0));summary.setOpaque(false);
-			summary.add(label("x"+CountFormat.compact(source.count),MUTED));
 			if(state.showGe) { summary.add(label(source.value==null?"— gp":source.value,MUTED)); }
 			header.add(summary,BorderLayout.EAST);
-			int wikiWidth=state.showWikiLinks&&source.wikiUrl!=null?22:0;
-			JLabel name=new SourceHeaderLabel((collapsed.contains(source.key)?"▸ ":"▾ ")+source.name,()->Math.max(1,(getWidth()>0?getWidth():230)-getInsets().left-getInsets().right-wikiWidth-12-summary.getPreferredSize().width));
+			JLabel name=new SourceHeaderLabel((collapsed.contains(source.key)?"▸ ":"▾ ")+source.name,"x"+CountFormat.compact(source.count),MUTED);
 			name.setFont(FontManager.getRunescapeSmallFont());name.setForeground(GOLD);header.add(name,BorderLayout.CENTER);
 			header.getAccessibleContext().setAccessibleName(source.name+", "+source.count+" recorded outcomes, "+(collapsed.contains(source.key)?"collapsed":"expanded"));
 			header.addActionListener(e->{if(!collapsed.add(source.key)) { collapsed.remove(source.key); }render();});

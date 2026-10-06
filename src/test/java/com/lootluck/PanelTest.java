@@ -18,18 +18,19 @@ public class PanelTest
 	{
 		SwingUtilities.invokeAndWait(()->{
 			PanelState state=new PanelState();state.notice="";state.showGe=true;state.showWikiLinks=true;
-			for(String name:java.util.List.of("Example: large quantities","Example: a very long source label which must end after its second line"))
+			for(String name:java.util.List.of("Cow","Example: large quantities","Example: a very long source label which must end with an ellipsis"))
 			{
 				PanelState.Source source=new PanelState.Source();source.key=name;source.name=name;source.count=1_234_567_890L;source.value=LootLuckPanel.money(4_702_500_000_000L);source.wikiUrl="https://oldschool.runescape.wiki/w/Ghost";state.sources.add(source);
 			}
 			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);layout(panel,230);
 			for(PanelState.Source source:state.sources)
 			{
-				JButton header=findButton(panel,source.name);Component name=findLabel(header,"▾ "+source.name),count=findLabel(header,"x1B"),value=findLabel(header,"4T gp");
-				assertNotNull(name);assertNotNull(count);assertNotNull(value);
+				JButton header=findButton(panel,source.name);Component name=findLabel(header,"▾ "+source.name),value=findLabel(header,"4T gp");
+				assertNotNull(name);assertNotNull(value);
 				assertTrue(name.getWidth()>0);assertTrue(name.getHeight()>=name.getPreferredSize().height);
-				assertTrue(count.getWidth()>=count.getPreferredSize().width);assertTrue(value.getWidth()>=value.getPreferredSize().width);
-				assertTrue(SwingUtilities.convertPoint(count,0,0,header).x>=name.getX()+name.getWidth());
+				assertEquals(name.getFontMetrics(name.getFont()).getHeight(),name.getPreferredSize().height);
+				assertTrue(value.getWidth()>=value.getPreferredSize().width);
+				assertTrue(SwingUtilities.convertPoint(value,0,0,header).x>=name.getX()+name.getWidth());
 			}
 			BufferedImage image=new BufferedImage(230,panel.getHeight(),BufferedImage.TYPE_INT_ARGB);panel.paint(image.getGraphics());
 			try { ImageIO.write(image,"png",new java.io.File("build/source-header-values.png")); } catch(Exception e) { throw new IllegalStateException(e); }

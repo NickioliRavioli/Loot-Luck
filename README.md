@@ -115,8 +115,8 @@ numbers beside their labels, aligned right. Values move onto their own line only
 when the full label/value pair would not fit. Table occurrence counts use the
 same fallback. Summary values remain compact.
 Compact quantities and money support K, M, B and T, always rounded down without
-decimals. Source headers reserve space for their compact count and GE value;
-source names wrap across up to two lines, then end with an ellipsis.
+decimals. Source headers show a single-line name with ellipsis overflow, followed
+immediately by the compact occurrence count. The GE value stays on the right.
 The expanded-item information button opens a scrollable HTML popover, with gold
 headings, bold field labels and published-rate colors instead of a text editor.
 All grid item styles show the yellow abbreviated quantity at the top left,
