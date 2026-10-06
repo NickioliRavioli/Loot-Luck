@@ -33,6 +33,8 @@ public class PanelTest
 				{
 					assertNotNull(text,findLabel(body,text));assertNumericLabelFits(body,text);
 				}
+				Component geLabel=findLabel(body,"GE total"),geValue=findLabel(body,"2,149,631,130,647 gp");
+				assertEquals(geLabel.getY(),geValue.getY());assertTrue(geValue.getX()>=geLabel.getX()+geLabel.getWidth());
 				if(!grid)
 				{
 					BufferedImage image=new BufferedImage(230,panel.getHeight(),BufferedImage.TYPE_INT_ARGB);panel.paint(image.getGraphics());

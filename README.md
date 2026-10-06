@@ -111,8 +111,9 @@ See [THIRD_PARTY.md](THIRD_PARTY.md) for licenses and network disclosures. This 
 Expanded rate breakdowns group rows by their published table name. Columns show
 published drop quantity/range, rarity, and recorded occurrences assigned to that row.
 Expanded quantities, occurrences and GE/HA totals use exact comma-separated
-numbers on full-width lines; large table occurrence counts move onto their own
-right-aligned line. Summary values remain compact.
+numbers beside their labels, aligned right. Values move onto their own line only
+when the full label/value pair would not fit. Table occurrence counts use the
+same fallback. Summary values remain compact.
 New notifications can be assigned by a unique quantity-range match when the
 reported amount and published roll count are both one. Overlapping matches,
 batches, missing roll/quantity metadata and multiple rolls remain under Unknown

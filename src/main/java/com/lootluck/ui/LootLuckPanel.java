@@ -441,13 +441,15 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private void stat(JPanel grid,String name,String value,String tip,Color color)
 	{
-		JPanel cell=new JPanel(new BorderLayout(0,1));cell.setOpaque(false);JLabel label=label(name,MUTED),number=label(value,color==null?Color.LIGHT_GRAY:color);cell.add(label,BorderLayout.NORTH);cell.add(number,BorderLayout.CENTER);grid.add(cell);
+		JLabel number=label(value,color==null?Color.LIGHT_GRAY:color);number.setHorizontalAlignment(JLabel.RIGHT);grid.add(detailCountRow(label(name,MUTED),number));
 	}
 	private JPanel detailCountRow(javax.swing.JComponent description,JLabel count)
 	{
-		// Reserve a full-width line for counts that would crowd the published table fields.
+		// Details span the sidebar minus the outer panel and disclosure borders.
+		// Fall back to two lines only when the complete label/value pair cannot fit.
 		JPanel row=new JPanel(new BorderLayout(4,1));row.setOpaque(false);
-		boolean large=count.getPreferredSize().width>70;
+		int available=(getWidth()>0?getWidth():230)-getInsets().left-getInsets().right-18;
+		boolean large=description.getPreferredSize().width+4+count.getPreferredSize().width>available;
 		row.add(description,large?BorderLayout.NORTH:BorderLayout.CENTER);row.add(count,large?BorderLayout.SOUTH:BorderLayout.EAST);return row;
 	}
 	private static JLabel label(String text,Color color) { JLabel l=new JLabel(text);l.setAlignmentX(LEFT_ALIGNMENT);l.setFont(FontManager.getRunescapeSmallFont());l.setForeground(color);return l; }
