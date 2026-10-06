@@ -14,6 +14,34 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void recentCollectionCardsSupportHoverGridSecondsAndPaging() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			PanelState state=new PanelState();state.notice="";state.itemEffect=ItemEffect.NONE;long time=java.time.Instant.parse("2026-10-06T03:04:05Z").toEpochMilli();
+			for(int n=0;n<3;n++)
+			{
+				PanelState.Source record=new PanelState.Source();record.key="collection:"+n;record.name=n==2?"Empty notification":"Cow";record.lastReceived=time-n*1000;
+				if(n<2) { PanelState.Item item=new PanelState.Item();item.key=record.key+":coins";item.name="Coins";item.id=net.runelite.api.gameval.ItemID.COINS;item.quantity=12500;item.occurrences=1;record.items.add(item); }
+				state.collections.add(record);
+			}
+			java.util.List<String> opened=new java.util.ArrayList<>();LootLuckPanel panel=new LootLuckPanel(id->new javax.swing.ImageIcon(new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB)),value->{},value->{},()->{},()->{},opened::add);panel.update(state);findViewSelector(panel).setSelectedItem("Recent collections");
+			javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,700);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);
+			assertEquals(2,countLabels(panel,"Cow"));assertEquals(2,countLabels(panel,"1 item"));assertNotNull(findLabel(panel,"0 items"));assertNotNull(findLabel(panel,"No items reported"));
+			java.time.format.DateTimeFormatter format=java.time.format.DateTimeFormatter.ofPattern("d MMM yyyy HH:mm:ss").withZone(java.time.ZoneId.systemDefault());assertNotNull(findLabel(panel,format.format(java.time.Instant.ofEpochMilli(time))));assertNotNull(findLabel(panel,format.format(java.time.Instant.ofEpochMilli(time-1000))));
+			JButton row=findButton(panel,"Coins");for(Component text:new Component[]{findLabel(row,"Coins"),findLabel(row,"x1"),findIcon(row)})
+			{
+				assertNotNull(text);text.dispatchEvent(new java.awt.event.MouseEvent(text,java.awt.event.MouseEvent.MOUSE_ENTERED,0,0,1,1,0,0,0,false,java.awt.event.MouseEvent.NOBUTTON));assertTrue(row.getModel().isRollover());java.awt.Point outside=SwingUtilities.convertPoint(row,new java.awt.Point(-1,-1),text);text.dispatchEvent(new java.awt.event.MouseEvent(text,java.awt.event.MouseEvent.MOUSE_EXITED,0,0,outside.x,outside.y,0,0,0,false,java.awt.event.MouseEvent.NOBUTTON));assertFalse(row.getModel().isRollover());
+			}
+			clickLabel(panel,"Coins");assertNotNull(findLabel(panel,"12,500"));assertNull(findLabel(panel,"Rate unknown"));assertWikiMenuTree(findButton(panel,"Coins"));clickLabel(panel,"Coins");assertNull(findLabel(panel,"Quantity"));viewport.doLayout();layoutChildren(panel);saveCollectionPreview(panel,"build/recent-collections-list.png");
+			JButton gridToggle=findButton(panel,"Switch to grid view");assertTrue(gridToggle.isEnabled());gridToggle.doClick();viewport.doLayout();layoutChildren(panel);JButton icon=findButton(panel,"Coins");assertNotNull(icon);assertEquals(icon.getWidth(),icon.getHeight());assertEquals(2,countLabels(panel,"Cow"));assertNotNull(findLabel(panel,"No items reported"));assertWikiMenuTree(icon);openWikiMenu(icon);assertEquals(1,opened.size());saveCollectionPreview(panel,"build/recent-collections-grid.png");
+			icon.doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"12,500"));assertNull(findLabel(panel,"Rate unknown"));assertNull(findLabel(panel,"Source breakdown"));assertNull(findLabel(panel,"Occurrences"));findButton(panel,"Switch to list view").doClick();assertNotNull(findLabel(panel,"12,500"));
+			for(int n=3;n<51;n++) { PanelState.Source record=new PanelState.Source();record.key="collection:"+n;record.name="Record "+n;record.lastReceived=time-n*1000;state.collections.add(record); }panel.update(state);assertNotNull(findLabel(panel,"Page 1 / 2"));assertNull(findLabel(panel,"Record 50"));findButton(panel,"›").doClick();assertNotNull(findLabel(panel,"Page 2 / 2"));assertNotNull(findLabel(panel,"Record 50"));assertNotNull(findLabel(panel,"No items reported"));assertNull(findLabel(panel,"Cow"));viewport.removeNotify();
+		});
+	}
+	private static void saveCollectionPreview(LootLuckPanel panel,String path)
+	{
+		BufferedImage image=new BufferedImage(230,Math.min(700,panel.getHeight()),BufferedImage.TYPE_INT_ARGB);java.awt.Graphics2D graphics=image.createGraphics();try { panel.paint(graphics);ImageIO.write(image,"png",new java.io.File(path)); }catch(Exception error) { throw new IllegalStateException(error); }finally { graphics.dispose(); }
+	}
 	@Test public void segmentedScopeSitsAboveViewsAndKeepsItsSelection() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
@@ -62,7 +90,7 @@ public class PanelTest
 			assertEquals("/w/Special:Lookup",itemUrl.encodedPath());assertEquals("item",itemUrl.queryParameter("type"));assertEquals(Integer.toString(item.id),itemUrl.queryParameter("id"));assertEquals("Coins",itemUrl.queryParameter("name"));assertNull(findLabel(panel,"Quantity"));
 			row.doClick();assertNotNull(findLabel(panel,"Quantity"));header.doClick();assertNull(findButton(panel,"Coins"));findButton(panel,"Cow").doClick();assertNotNull(findButton(panel,"Coins"));
 			javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,700);viewport.setView(panel);viewport.addNotify();state.gridView=true;panel.update(state);viewport.doLayout();layoutChildren(panel);assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findButton(panel,"Coins"));assertEquals(opened.get(1),opened.get(2));
-			JComboBox<?> views=findViewSelector(panel);views.setSelectedItem("Recent collections");assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findLabel(panel,"Cow"));assertEquals(source.wikiUrl,opened.get(3));
+			JComboBox<?> views=findViewSelector(panel);views.setSelectedItem("Recent collections");viewport.doLayout();layoutChildren(panel);assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findLabel(panel,"Cow"));assertEquals(source.wikiUrl,opened.get(3));
 			views.setSelectedItem("All items");assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findButton(panel,"Coins"));assertEquals(opened.get(1),opened.get(4));
 			item.id=0;item.name="Unknown & unusual item";panel.update(state);openWikiMenu(findButton(panel,item.name));okhttp3.HttpUrl fallback=okhttp3.HttpUrl.get(opened.get(5));assertNull(fallback.queryParameter("id"));assertEquals(item.name,fallback.queryParameter("name"));
 			viewport.removeNotify();
@@ -317,7 +345,7 @@ public class PanelTest
 	private static void clickLabel(Container panel,String text)
 	{
 		Component label=findLabel(panel,text);assertNotNull(label);
-		label.dispatchEvent(new java.awt.event.MouseEvent(label,java.awt.event.MouseEvent.MOUSE_CLICKED,0,0,1,1,1,false,java.awt.event.MouseEvent.BUTTON1));
+		label.dispatchEvent(new java.awt.event.MouseEvent(label,java.awt.event.MouseEvent.MOUSE_CLICKED,0,0,1,1,0,0,1,false,java.awt.event.MouseEvent.BUTTON1));
 	}
 	private static void assertNoTooltips(Container container)
 	{

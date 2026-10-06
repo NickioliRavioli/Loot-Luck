@@ -157,7 +157,7 @@ public final class LootLuckPanel extends PluginPanel
 	{
 		content.removeAll();itemButtons.clear();
 		boolean showingUnobtained=state.includeUnobtained||driest();toggleUnobtained.setIcon(eyeIcon(!showingUnobtained));toggleUnobtained.setSelected(showingUnobtained);toggleUnobtained.setEnabled(view.getSelectedIndex()==0&&!driest());toggleUnobtained.getAccessibleContext().setAccessibleDescription(showingUnobtained?"Unobtained items shown":"Unobtained items hidden");toggleUnobtained.setToolTipText(showingUnobtained?"Hide unobtained items":"Show unobtained items");
-		toggleGrid.setText(state.gridView?"☰":"▦");toggleGrid.getAccessibleContext().setAccessibleName(state.gridView?"Switch to list view":"Switch to grid view");toggleGrid.setEnabled(view.getSelectedIndex()==0);
+		toggleGrid.setText(state.gridView?"☰":"▦");toggleGrid.getAccessibleContext().setAccessibleName(state.gridView?"Switch to list view":"Switch to grid view");toggleGrid.setEnabled(view.getSelectedIndex()!=2);
 		toggleGrid.setToolTipText(toggleGrid.getAccessibleContext().getAccessibleName());
 		boolean anyExpanded=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));toggleSources.setText(anyExpanded?"▴":"▾");toggleSources.getAccessibleContext().setAccessibleName(anyExpanded?"Collapse all sources":"Expand all sources");toggleSources.setEnabled(view.getSelectedIndex()==0&&!state.sources.isEmpty());
 		toggleSources.setToolTipText(toggleSources.getAccessibleContext().getAccessibleName());
@@ -221,6 +221,10 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private JPanel sourceGrid(java.util.List<PanelState.Item> items)
 	{
+		return sourceGrid(items,false);
+	}
+	private JPanel sourceGrid(java.util.List<PanelState.Item> items,boolean collection)
+	{
 		final int columns=5;int rowCount=(items.size()+columns-1)/columns;
 		int selected=-1;for(int i=0;i<items.size();i++) { if(items.get(i).key.equals(expanded)) { selected=i;break; } }
 		final int selectedRow=selected<0?-1:selected/columns;
@@ -230,7 +234,7 @@ public final class LootLuckPanel extends PluginPanel
 		else
 		{
 			disclosure=new JPanel(new BorderLayout(0,3));disclosure.setOpaque(false);JPanel title=new JPanel(new GridLayout(0,1));title.setOpaque(false);
-			title.add(label(selectedItem.name+(!state.hideUnobtainedOtherWorld&&!selectedItem.worldMarker.isEmpty()?" "+selectedItem.worldMarker:""),GOLD));title.add(rateLabel(selectedItem.rate,selectedItem.rarity));disclosure.add(title,BorderLayout.NORTH);disclosure.add(details(selectedItem),BorderLayout.CENTER);
+			title.add(label(selectedItem.name+(!state.hideUnobtainedOtherWorld&&!selectedItem.worldMarker.isEmpty()?" "+selectedItem.worldMarker:""),GOLD));if(!collection) { title.add(rateLabel(selectedItem.rate,selectedItem.rarity)); }disclosure.add(title,BorderLayout.NORTH);disclosure.add(collection?collectionItemDetails(selectedItem):details(selectedItem),BorderLayout.CENTER);
 		}
 		return new VirtualItemList(rowCount,columns,selectedRow,disclosure==null?0:disclosure.getPreferredSize().height+6,index->{
 			JPanel iconsRow=new JPanel(null) {
@@ -303,7 +307,7 @@ public final class LootLuckPanel extends PluginPanel
 		};button.setLayout(null);button.setBackground(ROW);button.setMargin(new java.awt.Insets(0,0,0,0));
 		button.setBorder(BorderFactory.createLineBorder(item.key.equals(expanded)?GOLD:BG,2));
 		JLabel icon=new JLabel(itemIcon(item,false));icon.setHorizontalAlignment(JLabel.CENTER);if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.CENTER);
-		button.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);button.getAccessibleContext().setAccessibleDescription(item.rate+(item.key.equals(expanded)?", expanded":", collapsed"));
+		button.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);button.getAccessibleContext().setAccessibleDescription((item.rate==null?"Recorded collection item":item.rate)+(item.key.equals(expanded)?", expanded":", collapsed"));
 		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;gridReveal=expanded;render();});makeRowClickable(button,button);addWikiMenu(button,itemWikiUrl(item));return button;
 	}
 	private void renderObservations()
@@ -315,9 +319,7 @@ public final class LootLuckPanel extends PluginPanel
 			if(state.collections.isEmpty()) { content.add(label("No collection history yet.",MUTED));content.add(label("History starts with new loot notifications.",MUTED)); }
 			for(int index=historyPage*50;index<Math.min(state.collections.size(),(historyPage+1)*50);index++)
 			{
-				PanelState.Source collection=state.collections.get(index);JLabel heading=label(collection.name,GOLD);heading.setBorder(BorderFactory.createEmptyBorder(8,4,2,4));addWikiMenu(heading,collection.wikiUrl==null?ViewBuilder.sourceWikiUrl(collection.name):collection.wikiUrl);content.add(heading);content.add(label(date(collection.lastReceived),MUTED));
-				if(collection.items.isEmpty()) { content.add(label("No items reported",MUTED)); }
-				for(PanelState.Item item:collection.items) { content.add(observationRow(item,false)); }
+				content.add(collectionCard(state.collections.get(index)));content.add(javax.swing.Box.createVerticalStrut(7));
 			}
 		}
 		else
@@ -337,6 +339,31 @@ public final class LootLuckPanel extends PluginPanel
 		}
 		content.add(label(state.dataStatus,MUTED));
 	}
+	private JPanel collectionCard(PanelState.Source collection)
+	{
+		JPanel card=new JPanel(new BorderLayout(0,3)) { @Override public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE,getPreferredSize().height); } };
+		card.setBackground(ROW);card.setAlignmentX(LEFT_ALIGNMENT);card.setBorder(BorderFactory.createLineBorder(new Color(65,58,45)));
+		JPanel header=new JPanel(new BorderLayout(0,3));header.setBackground(new Color(16,16,16));header.setBorder(BorderFactory.createEmptyBorder(6,6,6,6));
+		JLabel name=new JLabel(collection.name) { @Override public Dimension getPreferredSize() { return new Dimension(1,getFontMetrics(getFont()).getHeight()); } };
+		name.setFont(FontManager.getRunescapeSmallFont());name.setForeground(GOLD);header.add(name,BorderLayout.NORTH);
+		JPanel metadata=new JPanel(new BorderLayout(6,0));metadata.setOpaque(false);metadata.add(label(date(collection.lastReceived),MUTED),BorderLayout.CENTER);
+		metadata.add(label(collection.items.size()+ (collection.items.size()==1?" item":" items"),MUTED),BorderLayout.EAST);header.add(metadata,BorderLayout.CENTER);
+		addWikiMenu(header,collection.wikiUrl==null?ViewBuilder.sourceWikiUrl(collection.name):collection.wikiUrl);card.add(header,BorderLayout.NORTH);
+		if(collection.items.isEmpty()) { JLabel empty=label("No items reported",MUTED);empty.setBorder(BorderFactory.createEmptyBorder(5,6,7,6));card.add(empty,BorderLayout.CENTER); }
+		else if(state.gridView) { JPanel grid=new JPanel(new BorderLayout());grid.setOpaque(false);grid.setBorder(BorderFactory.createEmptyBorder(2,4,4,4));grid.add(sourceGrid(collection.items,true));card.add(grid,BorderLayout.CENTER); }
+		else
+		{
+			JPanel rows=new JPanel();rows.setOpaque(false);rows.setLayout(new javax.swing.BoxLayout(rows,javax.swing.BoxLayout.Y_AXIS));
+			for(PanelState.Item item:collection.items) { rows.add(observationRow(item,false));if(item.key.equals(expanded)) { rows.add(collectionItemDetails(item)); } }card.add(rows,BorderLayout.CENTER);
+		}
+		return card;
+	}
+	private JPanel collectionItemDetails(PanelState.Item item)
+	{
+		JPanel details=new JPanel(new GridLayout(0,1));details.setOpaque(false);details.setBorder(BorderFactory.createEmptyBorder(5,8,7,6));
+		stat(details,"Quantity",NUMBER.format(item.quantity),"Units in this recorded notification.",Color.YELLOW);
+		details.setAlignmentX(LEFT_ALIGNMENT);details.setMaximumSize(new Dimension(Integer.MAX_VALUE,details.getPreferredSize().height));return details;
+	}
 	private JPanel sourceBreakdown(PanelState.Item item)
 	{
 		JPanel details=new JPanel(new GridLayout(0,1,0,3));details.setOpaque(false);details.setBorder(BorderFactory.createEmptyBorder(5,8,8,4));details.add(label("Source breakdown",GOLD));
@@ -348,7 +375,7 @@ public final class LootLuckPanel extends PluginPanel
 		JButton row=new EffectButton(item.quantity>0?state.itemEffect:ItemEffect.NONE,effectColor(item));row.setLayout(new BorderLayout(5,0));row.setBackground(ROW);row.setBorder(BorderFactory.createEmptyBorder(4,2,4,4));row.setAlignmentX(LEFT_ALIGNMENT);
 		JLabel sprite=new JLabel(itemIcon(item));sprite.setPreferredSize(new Dimension(40,32));sprite.setHorizontalAlignment(JLabel.CENTER);row.add(sprite,BorderLayout.WEST);
 		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.add(label(item.name,Color.LIGHT_GRAY));if(combined&&!state.stackCounts&&!state.iconQuantities) { text.add(label("x"+NUMBER.format(item.occurrences),MUTED)); }row.add(text,BorderLayout.CENTER);row.add(itemCounts(item),BorderLayout.EAST);row.setMaximumSize(new Dimension(Integer.MAX_VALUE,42));row.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);
-		if(combined) { itemButtons.put(item.key,row);row.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;render();JButton current=itemButtons.get(item.key);if(current!=null) { current.requestFocusInWindow(); }});makeRowClickable(row,row); }
+		itemButtons.put(item.key,row);row.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;render();JButton current=itemButtons.get(item.key);if(current!=null) { current.requestFocusInWindow(); }});makeRowClickable(row,row);
 		addWikiMenu(row,itemWikiUrl(item));
 		return row;
 	}
@@ -508,7 +535,7 @@ public final class LootLuckPanel extends PluginPanel
 	private int sortMode() { int index=sort.getSelectedIndex();return !PanelState.LUCK_STATISTICS_VISIBLE&&index>=2?index+1:index; }
 	private static String value(Double value) { return value==null?"—":DECIMAL.format(value); }
 	private static String percent(Double p) { return p==null?"—":new DecimalFormat("0.####",DecimalFormatSymbols.getInstance(Locale.US)).format(p*100)+"%"; }
-	private static String date(long time) { return time==0?"Never observed":DateTimeFormatter.ofPattern("d MMM yyyy HH:mm").withZone(ZoneId.systemDefault()).format(Instant.ofEpochMilli(time)); }
+	private static String date(long time) { return time==0?"Never observed":DateTimeFormatter.ofPattern("d MMM yyyy HH:mm:ss").withZone(ZoneId.systemDefault()).format(Instant.ofEpochMilli(time)); }
 	public static String money(long value) { return CountFormat.compact(value)+" gp"; }
 }
 
