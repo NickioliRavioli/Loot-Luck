@@ -45,7 +45,7 @@ public final class ViewBuilder
 			{
 				PanelState.Item row=new PanelState.Item();row.id=item.id;row.key=source.key+":"+item.id;row.name=item.name;row.quantity=item.quantity;row.occurrences=item.occurrences;row.lastReceived=item.lastReceived;
 				boolean ambiguousNotes=item.originalIds.stream().anyMatch(original->original!=item.id)&&!com.lootluck.rates.ItemRateMatcher.notedName(item.name);
-				List<RateRow> matching=byName.get(com.lootluck.rates.ItemRateMatcher.lookupName(item.name));
+				List<RateRow> matching=byName.get(com.lootluck.rates.ItemRateMatcher.lookupName(item.name,s.identity));
 				if(ambiguousNotes) { matching=sourceRates.stream().filter(rate->normalize(rate.itemName).equals(normalize(item.name))).collect(java.util.stream.Collectors.toList()); }
 				applyRate(row,matching);applySegment(row,s);display.put("id:"+item.id,row);
 				if(ambiguousNotes) { row.rateTooltip+="\n\nLegacy aggregate may mix noted and unnoted loot; quantities cannot be split retrospectively."; }
@@ -62,7 +62,7 @@ public final class ViewBuilder
 				for(Map.Entry<String,List<RateRow>> group:byName.entrySet())
 				{
 					Integer id=identities.get(group.getKey());
-					boolean obtained=display.values().stream().anyMatch(i->(id!=null&&i.id==id)||com.lootluck.rates.ItemRateMatcher.lookupName(i.name).equals(group.getKey()));
+					boolean obtained=display.values().stream().anyMatch(i->(id!=null&&i.id==id)||com.lootluck.rates.ItemRateMatcher.lookupName(i.name,s.identity).equals(group.getKey()));
 					if(obtained) { continue; }
 					PanelState.Item row=new PanelState.Item();row.id=id==null?0:id;RateRow first=group.getValue().get(0);row.name=first.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(first)?" (noted)":"");row.key=source.key+":rate:"+group.getKey();
 					applyRate(row,group.getValue());
@@ -72,7 +72,7 @@ public final class ViewBuilder
 			}
 			Map<String,Integer> tables=new LinkedHashMap<>(),positions=new LinkedHashMap<>();
 			for(int index=0;index<sourceRates.size();index++) { RateRow rate=sourceRates.get(index);tables.computeIfAbsent(com.lootluck.rates.DropTableGroups.table(rate),key->tables.size());positions.putIfAbsent(com.lootluck.rates.ItemRateMatcher.lookupName(rate.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(rate)?" (noted)":"")),index); }
-			for(PanelState.Item item:display.values()) { item.tableOrder=tables.getOrDefault(item.dropTable,Integer.MAX_VALUE);item.wikiOrder=positions.getOrDefault(com.lootluck.rates.ItemRateMatcher.lookupName(item.name),Integer.MAX_VALUE); }
+			for(PanelState.Item item:display.values()) { item.tableOrder=tables.getOrDefault(item.dropTable,Integer.MAX_VALUE);item.wikiOrder=positions.getOrDefault(com.lootluck.rates.ItemRateMatcher.lookupName(item.name,s.identity),Integer.MAX_VALUE); }
 			source.items.addAll(display.values());state.sources.add(source);
 		}
 		state.sources.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());

@@ -37,7 +37,7 @@ public final class LedgerEngine
 			item.quantity = Math.addExact(item.quantity, qty); item.occurrences = Math.addExact(item.occurrences, 1);
 			item.lastReceived = Math.max(item.lastReceived, o.timestamp);
 			String observedName=o.names.getOrDefault(id,item.name);
-			String baseName=com.lootluck.rates.ItemRateMatcher.lookupName(com.lootluck.rates.ItemRateMatcher.baseName(observedName));
+			String baseName=com.lootluck.rates.ItemRateMatcher.lookupName(com.lootluck.rates.ItemRateMatcher.baseName(observedName),o.source);
 			java.util.List<com.lootluck.rates.RateRow> candidates=knownRates.stream().filter(rate->com.lootluck.ui.ViewBuilder.normalize(rate.itemName).equals(baseName)).collect(java.util.stream.Collectors.toList());
 			java.util.List<com.lootluck.rates.RateRow> matching=com.lootluck.rates.ItemRateMatcher.matchCollection(o.names.getOrDefault(id,item.name),candidates,qty,o.reportedAmount);
 			String version=matching.isEmpty()?"unknown":com.lootluck.rates.WikiParser.hash(matching.stream().map(rate->rate.hash+"@"+rate.fetchedAt).sorted().collect(java.util.stream.Collectors.joining("|")));

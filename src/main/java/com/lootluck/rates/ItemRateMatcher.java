@@ -15,6 +15,12 @@ public final class ItemRateMatcher
 		if(normalized.matches("scroll box \\((beginner|easy|medium|hard|elite|master)\\)")) { return "clue scroll"+normalized.substring("scroll box".length()); }
 		return normalized;
 	}
+	public static String lookupName(String name,com.lootluck.model.SourceIdentity source)
+	{
+		String normalized=lookupName(name);
+		if("EVENT".equals(source.type)&&"Reward pool".equalsIgnoreCase(RewardSources.wikiOwner(source))&&"casket".equals(normalized)) { return "casket (reward pool)"; }
+		return normalized;
+	}
 	public static boolean notedName(String name) { return name.toLowerCase(Locale.ROOT).endsWith(" (noted)"); }
 	public static String baseName(String name) { return notedName(name)?name.substring(0,name.length()-8):name; }
 	public static boolean notedRow(RateRow row) { String quantity=row.quantity==null?"":row.quantity.toLowerCase(Locale.ROOT);return quantity.contains("noted")&&!quantity.contains("unnoted"); }

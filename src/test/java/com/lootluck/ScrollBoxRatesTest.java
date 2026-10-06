@@ -27,6 +27,14 @@ public class ScrollBoxRatesTest
 		engine.observe(observation,AttemptAdapter.Assessment.unsupported("pending"),rates);
 		assertTrue(engine.lifetime().source(source).items.get(1).recordedRates.values().stream().anyMatch(history->history.rows.size()==2&&history.rows.stream().allMatch(row->row.itemName.equals("Clue scroll (easy)"))));
 	}
+	@Test public void rewardPoolCasketAliasResolvesObtainedRateWithoutDuplicate()
+	{
+		SourceIdentity source=new SourceIdentity("EVENT","Reward pool (Tempoross)","","");RateRow row=new RateRow();row.owner="Reward pool";row.itemName="Casket (Reward pool)";row.rawRate="1/20";row.quantity="1";row.mechanics.put("Rolls","1");row.hash="fixture";row.fetchedAt="2026-10-06T00:00:00Z";
+		LedgerEngine engine=new LedgerEngine(new Ledger());engine.observe(new Observation(source,1,1,Map.of(1,1L),Map.of(1,"Casket"),Map.of()),AttemptAdapter.Assessment.unsupported("pending"),List.of(row));
+		RateProvider provider=new RateProvider() { public List<RateRow> rows(SourceIdentity identity) { return List.of(row); }public void refresh(SourceIdentity identity,boolean force) {} };
+		PanelState state=ViewBuilder.build(engine.lifetime(),provider,true,Map.of());assertEquals(1,state.sources.get(0).items.size());assertEquals("1/20",state.sources.get(0).items.get(0).rate);assertEquals("Casket",state.sources.get(0).items.get(0).name);assertEquals(1,engine.lifetime().source(source).items.get(1).recordedRates.values().iterator().next().rows.size());
+		assertEquals("casket",ItemRateMatcher.lookupName("Casket",new SourceIdentity("NPC","Reward pool","","")));assertEquals("casket",ItemRateMatcher.lookupName("Casket",new SourceIdentity("EVENT","Other","","")));
+	}
 	@Test public void aliasIsTierSpecificAndDoesNotMatchRewardContainers()
 	{
 		for(String tier:List.of("beginner","easy","medium","hard","elite","master")) { assertEquals("clue scroll ("+tier+")",ItemRateMatcher.lookupName("Scroll box ("+tier+")")); }
