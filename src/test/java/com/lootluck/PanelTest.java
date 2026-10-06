@@ -122,7 +122,7 @@ public class PanelTest
 			for(String rate:new String[]{"1/8.5","1/14.2"}) { PanelState.RateOption option=new PanelState.RateOption();option.table="Table "+(item.rateOptions.size()+1);option.rate=rate;option.color=java.awt.Color.GREEN;item.rateOptions.add(option); }
 			source.items.add(item);state.sources.add(source);LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);
 			assertNotNull(findLabel(panel,"Multiple published rates"));assertNull(((javax.swing.JLabel)findLabel(panel,"Multiple published rates")).getToolTipText());assertNull(findLabel(panel,"1/8.5"));state.showAllRates=true;panel.update(state);assertNotNull(findLabel(panel,"1/8.5"));assertNotNull(findLabel(panel,"1/14.2"));assertNull(((javax.swing.JLabel)findLabel(panel,"1/8.5")).getToolTipText());
-			findButton(panel,"Hammer").doClick();assertNotNull(findLabel(panel,"Unknown table    x1"));layout(panel,230);assertTrue(panel.getPreferredSize().width<=280);
+			findButton(panel,"Hammer").doClick();assertNotNull(findLabel(panel,"Unknown table    1 occ."));layout(panel,230);assertTrue(panel.getPreferredSize().width<=280);
 		});
 	}
 	@Test public void inlineExpansionCollapseSortAndStandardSidebar() throws Exception

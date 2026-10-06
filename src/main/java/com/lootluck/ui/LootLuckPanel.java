@@ -379,10 +379,10 @@ public final class LootLuckPanel extends PluginPanel
 				{
 					JPanel line=new JPanel(new GridLayout(1,4,2,0));line.setOpaque(false);line.add(label(option.dropQuantity==null?"—":option.dropQuantity,MUTED));
 					JLabel rate=rateLabel(option.rate,option.color);line.add(rate);
-					JLabel quantity=label("x"+NUMBER.format(option.quantity==null?0:option.quantity),Color.YELLOW);quantity.setHorizontalAlignment(JLabel.RIGHT);line.add(quantity);breakdown.add(line);
+					JLabel occurrences=label(NUMBER.format(option.occurrences==null?0:option.occurrences)+" occ.",Color.YELLOW);occurrences.setHorizontalAlignment(JLabel.RIGHT);line.add(occurrences);breakdown.add(line);
 				}
 			}
-			if(item.unresolvedOccurrences>0) { JLabel unknown=label("Unknown table    x"+NUMBER.format(item.unresolvedQuantity),MUTED);breakdown.add(unknown); }
+			if(item.unresolvedOccurrences>0) { JLabel unknown=label("Unknown table    "+NUMBER.format(item.unresolvedOccurrences)+" occ.",MUTED);breakdown.add(unknown); }
 			body.add(breakdown);
 		}
 		else { body.add(label("Unknown table",MUTED)); }
