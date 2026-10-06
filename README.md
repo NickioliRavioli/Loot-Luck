@@ -19,6 +19,7 @@ For Jagex accounts, follow RuneLite's development-client login instructions: htt
 
 - Source headers show recorded notification count and optional current GE total. They do not claim an unvalidated count is kills or openings.
 - The **W** button opens that source's OSRS Wiki page in your browser. **Show source Wiki links** defaults on and can hide these buttons independently of background Wiki refresh.
+- Right-click a source header or item (including grid icons, Recent collections and All items) and choose **Open Wiki** to open its OSRS Wiki page. Item lookup uses the game item ID when available. These menus remain available when the source **W** buttons are hidden.
 - Cosmetic variants share a source header; original NPC/world contexts remain separate underneath. Wiki NPC IDs distinguish same-named enemies belonging to different source pages. Overall expected drops sum validated segments; binomial tails require a shared probability. Dry streaks use only the latest continuous validated segment.
 - Item rows show the real ItemManager sprite, name, rarity-colored reciprocal rate, yellow quantity and muted `xoccurrences` where the style includes them.
 - **Quantity on icons (trial)** is the default for new settings: an overlay paints yellow integer quantities over the unlabelled sprite, with `xoccurrences` on the right. Unobtained sprites omit the overlay. Abbreviated counts round down (12,500 becomes 12K), using the full recorded quantity rather than a capped game-image count. Existing saved style choices are preserved.

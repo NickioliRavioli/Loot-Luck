@@ -168,6 +168,7 @@ public final class LootLuckPanel extends PluginPanel
 			name.setFont(FontManager.getRunescapeSmallFont());name.setForeground(GOLD);header.add(name,BorderLayout.CENTER);
 			header.getAccessibleContext().setAccessibleName(source.name+", "+source.count+" recorded outcomes, "+(collapsed.contains(source.key)?"collapsed":"expanded"));
 			header.addActionListener(e->{if(!collapsed.add(source.key)) { collapsed.remove(source.key); }render();});
+			addWikiMenu(header,source.wikiUrl==null?ViewBuilder.sourceWikiUrl(source.name):source.wikiUrl);
 			JPanel heading=new JPanel(new BorderLayout(2,0));heading.setBackground(new Color(16,16,16));heading.add(header,BorderLayout.CENTER);
 			if(state.showWikiLinks&&source.wikiUrl!=null)
 			{
@@ -290,7 +291,7 @@ public final class LootLuckPanel extends PluginPanel
 		button.setBorder(BorderFactory.createLineBorder(item.key.equals(expanded)?GOLD:BG,2));
 		JLabel icon=new JLabel(itemIcon(item,false));icon.setHorizontalAlignment(JLabel.CENTER);if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.CENTER);
 		button.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);button.getAccessibleContext().setAccessibleDescription(item.rate+(item.key.equals(expanded)?", expanded":", collapsed"));
-		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;gridReveal=expanded;render();});makeRowClickable(button,button);return button;
+		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;gridReveal=expanded;render();});makeRowClickable(button,button);addWikiMenu(button,itemWikiUrl(item));return button;
 	}
 	private void renderObservations()
 	{
@@ -301,7 +302,7 @@ public final class LootLuckPanel extends PluginPanel
 			if(state.collections.isEmpty()) { content.add(label("No collection history yet.",MUTED));content.add(label("History starts with new loot notifications.",MUTED)); }
 			for(int index=historyPage*50;index<Math.min(state.collections.size(),(historyPage+1)*50);index++)
 			{
-				PanelState.Source collection=state.collections.get(index);JLabel heading=label(collection.name,GOLD);heading.setBorder(BorderFactory.createEmptyBorder(8,4,2,4));content.add(heading);content.add(label(date(collection.lastReceived),MUTED));
+				PanelState.Source collection=state.collections.get(index);JLabel heading=label(collection.name,GOLD);heading.setBorder(BorderFactory.createEmptyBorder(8,4,2,4));addWikiMenu(heading,collection.wikiUrl==null?ViewBuilder.sourceWikiUrl(collection.name):collection.wikiUrl);content.add(heading);content.add(label(date(collection.lastReceived),MUTED));
 				if(collection.items.isEmpty()) { content.add(label("No items reported",MUTED)); }
 				for(PanelState.Item item:collection.items) { content.add(observationRow(item,false)); }
 			}
@@ -335,6 +336,7 @@ public final class LootLuckPanel extends PluginPanel
 		JLabel sprite=new JLabel(itemIcon(item));sprite.setPreferredSize(new Dimension(40,32));sprite.setHorizontalAlignment(JLabel.CENTER);row.add(sprite,BorderLayout.WEST);
 		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.add(label(item.name,Color.LIGHT_GRAY));if(combined&&!state.stackCounts&&!state.iconQuantities) { text.add(label("x"+NUMBER.format(item.occurrences),MUTED)); }row.add(text,BorderLayout.CENTER);row.add(itemCounts(item),BorderLayout.EAST);row.setMaximumSize(new Dimension(Integer.MAX_VALUE,42));row.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);
 		if(combined) { itemButtons.put(item.key,row);row.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;render();JButton current=itemButtons.get(item.key);if(current!=null) { current.requestFocusInWindow(); }});makeRowClickable(row,row); }
+		addWikiMenu(row,itemWikiUrl(item));
 		return row;
 	}
 	private JPanel itemRow(PanelState.Item item)
@@ -351,7 +353,23 @@ public final class LootLuckPanel extends PluginPanel
 		if(item.quantity>0) { button.add(itemCounts(item),BorderLayout.EAST); }
 
 		button.getAccessibleContext().setAccessibleName(item.name+", "+item.rate+", quantity "+item.quantity+", "+(item.key.equals(expanded)?"expanded":"collapsed"));
-		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;render();JButton current=itemButtons.get(item.key);if(current!=null) { current.requestFocusInWindow(); }});makeRowClickable(button,button);holder.add(button);holder.setMaximumSize(new Dimension(Integer.MAX_VALUE,Math.max(44,button.getPreferredSize().height)));return holder;
+		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;render();JButton current=itemButtons.get(item.key);if(current!=null) { current.requestFocusInWindow(); }});makeRowClickable(button,button);addWikiMenu(button,itemWikiUrl(item));holder.add(button);holder.setMaximumSize(new Dimension(Integer.MAX_VALUE,Math.max(44,button.getPreferredSize().height)));return holder;
+	}
+	private static String itemWikiUrl(PanelState.Item item)
+	{
+		okhttp3.HttpUrl.Builder url=okhttp3.HttpUrl.get("https://oldschool.runescape.wiki/w/Special:Lookup").newBuilder().addQueryParameter("type","item").addQueryParameter("name",item.name);
+		if(item.id>0) { url.addQueryParameter("id",Integer.toString(item.id)); }
+		return url.build().toString();
+	}
+	private void addWikiMenu(javax.swing.JComponent component,String url)
+	{
+		javax.swing.JPopupMenu menu=new javax.swing.JPopupMenu();javax.swing.JMenuItem wiki=new javax.swing.JMenuItem("Open Wiki");
+		wiki.addActionListener(event->openWiki.accept(url));menu.add(wiki);attachWikiMenu(component,menu);
+	}
+	private static void attachWikiMenu(javax.swing.JComponent component,javax.swing.JPopupMenu menu)
+	{
+		component.setComponentPopupMenu(menu);
+		for(java.awt.Component child:component.getComponents()) { if(child instanceof javax.swing.JComponent) { attachWikiMenu((javax.swing.JComponent)child,menu); } }
 	}
 	static void makeRowClickable(java.awt.Container container,JButton button)
 	{

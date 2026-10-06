@@ -14,6 +14,37 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void wikiContextMenusCoverHeadersItemsAndObservationViews() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			PanelState state=new PanelState();state.notice="";state.showWikiLinks=false;
+			PanelState.Source source=new PanelState.Source();source.key="cow";source.name="Cow";source.wikiUrl="https://oldschool.runescape.wiki/w/Cow";source.value="1K gp";
+			PanelState.Item item=new PanelState.Item();item.key="coins";item.id=net.runelite.api.gameval.ItemID.COINS;item.name="Coins";item.quantity=100;item.occurrences=1;item.rate="Always";
+			source.items.add(item);state.sources.add(source);state.collections.add(source);state.allItems.add(item);
+			java.util.List<String> opened=new java.util.ArrayList<>();LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{},opened::add);panel.update(state);
+			JButton header=findButton(panel,"Cow"),row=findButton(panel,"Coins");
+			assertWikiMenuTree(header);assertWikiMenuTree(row);openWikiMenu(findLabel(header,"▾ Cow"));
+			assertEquals(source.wikiUrl,opened.get(0));assertNotNull(findButton(panel,"Coins"));
+			openWikiMenu(findLabel(row,"Coins"));okhttp3.HttpUrl itemUrl=okhttp3.HttpUrl.get(opened.get(1));
+			assertEquals("/w/Special:Lookup",itemUrl.encodedPath());assertEquals("item",itemUrl.queryParameter("type"));assertEquals(Integer.toString(item.id),itemUrl.queryParameter("id"));assertEquals("Coins",itemUrl.queryParameter("name"));assertNull(findLabel(panel,"Quantity"));
+			row.doClick();assertNotNull(findLabel(panel,"Quantity"));header.doClick();assertNull(findButton(panel,"Coins"));findButton(panel,"Cow").doClick();assertNotNull(findButton(panel,"Coins"));
+			javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,700);viewport.setView(panel);viewport.addNotify();state.gridView=true;panel.update(state);viewport.doLayout();layoutChildren(panel);assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findButton(panel,"Coins"));assertEquals(opened.get(1),opened.get(2));
+			JComboBox<?> views=findViewSelector(panel);views.setSelectedItem("Recent collections");assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findLabel(panel,"Cow"));assertEquals(source.wikiUrl,opened.get(3));
+			views.setSelectedItem("All items");assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findButton(panel,"Coins"));assertEquals(opened.get(1),opened.get(4));
+			item.id=0;item.name="Unknown & unusual item";panel.update(state);openWikiMenu(findButton(panel,item.name));okhttp3.HttpUrl fallback=okhttp3.HttpUrl.get(opened.get(5));assertNull(fallback.queryParameter("id"));assertEquals(item.name,fallback.queryParameter("name"));
+			viewport.removeNotify();
+		});
+	}
+	private static void openWikiMenu(Component component)
+	{
+		assertNotNull(component);javax.swing.JPopupMenu menu=((javax.swing.JComponent)component).getComponentPopupMenu();assertNotNull(menu);
+		assertEquals(1,menu.getComponentCount());javax.swing.JMenuItem action=(javax.swing.JMenuItem)menu.getComponent(0);assertEquals("Open Wiki",action.getText());action.doClick();
+	}
+	private static void assertWikiMenuTree(Component component)
+	{
+		assertNotNull(component);assertNotNull(((javax.swing.JComponent)component).getComponentPopupMenu());
+		if(component instanceof Container) { for(Component child:((Container)component).getComponents()) { assertSame(((javax.swing.JComponent)component).getComponentPopupMenu(),((javax.swing.JComponent)child).getComponentPopupMenu());assertWikiMenuTree(child); } }
+	}
 	@Test public void sourceHeadersReserveSummarySpaceAndBoundLongNames() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
