@@ -88,7 +88,7 @@ public final class LootLuckPanel extends PluginPanel
 		toggleGrid.addActionListener(e->{state.gridView=!state.gridView;gridChanged.accept(state.gridView);render();});
 		toggleSources.addActionListener(e->{boolean collapse=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));for(PanelState.Source source:state.sourceRows()) { if(collapse) { collapsed.add(source.key); }else { collapsed.remove(source.key); } }render();});
 		settings.setOpaque(false);JButton back=new JButton("← Back to loot");back.setForeground(Color.WHITE);
-		settingsHeader.setBackground(BG);settingsHeader.setBorder(BorderFactory.createEmptyBorder(7,6,7,6));settingsHeader.add(back,BorderLayout.WEST);settingsHeader.add(label("Settings",GOLD),BorderLayout.CENTER);
+		settingsHeader.setBackground(BG);settingsHeader.setBorder(BorderFactory.createEmptyBorder(7,6,7,6));settingsHeader.add(back,BorderLayout.CENTER);settings.add(label("Settings",GOLD));
 		settingsButton.addActionListener(e->showSettings(true));back.addActionListener(e->showSettings(false));
 		top.add(view);
 		controls.setOpaque(false);controls.add(scope);controls.add(sort);top.add(controls);
