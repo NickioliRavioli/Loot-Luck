@@ -50,6 +50,7 @@ public final class LootLuckPanel extends PluginPanel
 	private final Set<String> collapsed=new HashSet<>();
 	private final JButton toggleSources=new JButton();
 	private final JButton toggleGrid=new JButton();
+	private final JButton toggleUnobtained=new JButton();
 	private Consumer<Boolean> gridChanged=value->{};
 	private PanelState state=new PanelState();
 	private String expanded;
@@ -70,12 +71,14 @@ public final class LootLuckPanel extends PluginPanel
 	public LootLuckPanel(java.util.function.BiFunction<Integer,Long,Icon> icons,Consumer<Boolean> scopeChanged,Consumer<Boolean> allChanged,Runnable reset,Runnable refresh,Consumer<String> openWiki)
 	{
 		this.icons=icons;this.scopeChanged=scopeChanged;this.openWiki=openWiki;
+		toggleUnobtained.setMargin(new java.awt.Insets(2,3,2,3));toggleUnobtained.setToolTipText("Show unobtained items");toggleUnobtained.getAccessibleContext().setAccessibleName("Show unobtained items");
+		toggleUnobtained.addActionListener(e->{state.includeUnobtained=!state.includeUnobtained;allChanged.accept(state.includeUnobtained);render();});
 		setLayout(new BorderLayout(0,5));setBackground(BG);setBorder(BorderFactory.createEmptyBorder(7,6,7,6));
 		top.setOpaque(false);
 		JPanel heading=new JPanel(new BorderLayout());heading.setOpaque(false);
 		JLabel title=new JLabel("Loot Luck");title.setForeground(GOLD);title.setFont(FontManager.getRunescapeFont());heading.add(title,BorderLayout.CENTER);
 		JButton settingsButton=new JButton("⚙");settingsButton.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,18));settingsButton.getAccessibleContext().setAccessibleName("Settings");top.add(heading);
-		JPanel headerActions=new JPanel(new GridLayout(1,3,4,0));headerActions.setOpaque(false);headerActions.add(toggleGrid);headerActions.add(toggleSources);headerActions.add(settingsButton);heading.add(headerActions,BorderLayout.EAST);
+		JPanel headerActions=new JPanel(new GridLayout(1,4,2,0));headerActions.setOpaque(false);headerActions.add(toggleUnobtained);headerActions.add(toggleGrid);headerActions.add(toggleSources);headerActions.add(settingsButton);heading.add(headerActions,BorderLayout.EAST);
 		toggleGrid.setFont(new java.awt.Font("Dialog",java.awt.Font.PLAIN,16));toggleGrid.setMargin(new java.awt.Insets(2,4,2,4));
 		toggleGrid.addActionListener(e->{state.gridView=!state.gridView;gridChanged.accept(state.gridView);render();});
 		toggleSources.addActionListener(e->{boolean collapse=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));for(PanelState.Source source:state.sources) { if(collapse) { collapsed.add(source.key); }else { collapsed.remove(source.key); } }render();});
@@ -96,10 +99,21 @@ public final class LootLuckPanel extends PluginPanel
 		refreshButton.addActionListener(e->refresh.run());resetButton.addActionListener(e->reset.run());
 		view.addActionListener(e->{historyPage=0;controls.removeAll();controls.setLayout(new GridLayout(1,view.getSelectedIndex()==1?1:2,4,0));controls.add(scope);if(view.getSelectedIndex()==0) { controls.add(sort); }else if(view.getSelectedIndex()==2) { controls.add(itemSort); }controls.revalidate();controls.repaint();render();});itemSort.addActionListener(e->render());
 	}
+	private static Icon eyeIcon(boolean slashed)
+	{
+		return new Icon() {
+			public int getIconWidth() { return 18; }
+			public int getIconHeight() { return 18; }
+			public void paintIcon(java.awt.Component component,java.awt.Graphics graphics,int x,int y)
+			{
+				java.awt.Graphics2D g=(java.awt.Graphics2D)graphics.create();try { g.translate(x,y);g.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,java.awt.RenderingHints.VALUE_ANTIALIAS_ON);g.setColor(component.isEnabled()?GOLD:MUTED);g.setStroke(new java.awt.BasicStroke(1.5f));java.awt.geom.Path2D eye=new java.awt.geom.Path2D.Double();eye.moveTo(1,9);eye.curveTo(5,2,13,2,17,9);eye.curveTo(13,16,5,16,1,9);g.draw(eye);g.fillOval(7,7,4,4);if(slashed) { g.setStroke(new java.awt.BasicStroke(2));g.drawLine(2,2,16,16); } }finally { g.dispose(); }
+			}
+		};
+	}
 	public boolean session() { return scope.getSelectedIndex()==1; }
 	public void setSettings(com.lootluck.LootLuckConfig config,java.util.function.BiConsumer<String,Object> changed,java.util.function.Function<Boolean,Icon> previewIcons)
 	{
-		state.itemEffect=config.itemEffect();state.gridView=config.gridView();gridChanged=value->changed.accept("gridView",value);
+		state.includeUnobtained=config.includeUnobtained();state.itemEffect=config.itemEffect();state.gridView=config.gridView();gridChanged=value->changed.accept("gridView",value);
 		configSettings=new LootLuckSettingsPanel(config,changed,previewIcons);settings.add(configSettings);settings.setLayout(new javax.swing.BoxLayout(settings,javax.swing.BoxLayout.Y_AXIS));
 		for(java.awt.Component child:settings.getComponents()) { if(child instanceof javax.swing.JComponent) { ((javax.swing.JComponent)child).setAlignmentX(LEFT_ALIGNMENT);((javax.swing.JComponent)child).setMaximumSize(new Dimension(Integer.MAX_VALUE,child.getPreferredSize().height)); } }
 	}
@@ -124,6 +138,7 @@ public final class LootLuckPanel extends PluginPanel
 	private void render()
 	{
 		content.removeAll();itemButtons.clear();
+		boolean showingUnobtained=state.includeUnobtained||driest();toggleUnobtained.setIcon(eyeIcon(!showingUnobtained));toggleUnobtained.setSelected(showingUnobtained);toggleUnobtained.setEnabled(view.getSelectedIndex()==0&&!driest());toggleUnobtained.getAccessibleContext().setAccessibleDescription(showingUnobtained?"Unobtained items shown":"Unobtained items hidden");
 		toggleGrid.setText(state.gridView?"☰":"▦");toggleGrid.getAccessibleContext().setAccessibleName(state.gridView?"Switch to list view":"Switch to grid view");toggleGrid.setEnabled(view.getSelectedIndex()==0);
 		boolean anyExpanded=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));toggleSources.setText(anyExpanded?"▴":"▾");toggleSources.getAccessibleContext().setAccessibleName(anyExpanded?"Collapse all sources":"Expand all sources");toggleSources.setEnabled(view.getSelectedIndex()==0&&!state.sources.isEmpty());
 		dataSettings.setEnabled(state.canManageData);
@@ -344,7 +359,7 @@ public final class LootLuckPanel extends PluginPanel
 				breakdown.add(label(table.getKey(),GOLD));
 				for(PanelState.RateOption option:table.getValue())
 				{
-					JPanel line=new JPanel(new GridLayout(1,3,4,0));line.setOpaque(false);line.add(label(option.dropQuantity==null?"—":option.dropQuantity,MUTED));
+					JPanel line=new JPanel(new GridLayout(1,4,2,0));line.setOpaque(false);line.add(label(option.dropQuantity==null?"—":option.dropQuantity,MUTED));
 					JLabel rate=rateLabel(option.rate,option.color);line.add(rate);
 					JLabel quantity=label("x"+NUMBER.format(option.quantity==null?0:option.quantity),Color.YELLOW);quantity.setHorizontalAlignment(JLabel.RIGHT);line.add(quantity);breakdown.add(line);
 				}

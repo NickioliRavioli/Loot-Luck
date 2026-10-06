@@ -14,6 +14,13 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void headerEyeToggleUpdatesPreferenceAndTracksState() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			java.util.List<Boolean> changes=new java.util.ArrayList<>();LootLuckPanel panel=new LootLuckPanel(id->null,value->{},changes::add,()->{},()->{});PanelState state=new PanelState();panel.update(state);
+			JButton eye=findButton(panel,"Show unobtained items");assertFalse(eye.isSelected());assertEquals("Show unobtained items",eye.getToolTipText());eye.doClick();assertEquals(java.util.List.of(true),changes);assertTrue(eye.isSelected());eye.doClick();assertEquals(java.util.List.of(true,false),changes);assertFalse(eye.isSelected());state.includeUnobtained=true;panel.update(state);assertTrue(eye.isSelected());
+		});
+	}
 	@Test public void unobtainedIconsKeepLiveColorAndTransparencyAcrossSelection() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
@@ -140,7 +147,7 @@ public class PanelTest
 	}
 	private static void assertNoTooltips(Container container)
 	{
-		for(Component child:container.getComponents()) { if(child instanceof javax.swing.JComponent) { assertNull(((javax.swing.JComponent)child).getToolTipText()); }if(child instanceof Container) { assertNoTooltips((Container)child); } }
+		for(Component child:container.getComponents()) { if(child instanceof javax.swing.JComponent) { if(child instanceof JButton&&"Show unobtained items".equals(((JButton)child).getAccessibleContext().getAccessibleName())) { assertEquals("Show unobtained items",((JButton)child).getToolTipText()); }else { assertNull(((javax.swing.JComponent)child).getToolTipText()); } }if(child instanceof Container) { assertNoTooltips((Container)child); } }
 	}
 	private static Component findLabel(Container c,String text) { for(Component child:c.getComponents()) { if(child instanceof javax.swing.JLabel && text.equals(((javax.swing.JLabel)child).getText())) { return child; } if(child instanceof Container) { Component found=findLabel((Container)child,text);if(found!=null) { return found; } } }return null; }
 	private static javax.swing.JLabel findIcon(Container c) { for(Component child:c.getComponents()) { if(child instanceof javax.swing.JLabel&&((javax.swing.JLabel)child).getIcon()!=null) { return (javax.swing.JLabel)child; }if(child instanceof Container) { javax.swing.JLabel found=findIcon((Container)child);if(found!=null) { return found; } } }return null; }
