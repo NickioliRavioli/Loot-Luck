@@ -4,7 +4,7 @@ Automated tests validate bookkeeping and presentation. Only user-driven gameplay
 
 ## First local review
 
-1. Launch with `.\gradlew.bat run`, log in using the official RuneLite development-client/Jagex-account instructions, and enable Loot Luck plus core Loot Tracker.
+1. Launch with `.\gradlew.bat run`, log in using [RuneLite's Using Jagex Accounts instructions](https://github.com/runelite/runelite/wiki/Using-Jagex-Accounts), and enable Loot Luck plus core Loot Tracker. The new `profiles-wiki-v1` namespace starts empty; older files are preserved.
 2. Obtain loot from Large salvage, an ordinary monster and a boss. Confirm source headings, real icons, reciprocal rates, quantities and dates. Unknown sources should still appear with unavailable rates.
 3. Open multiple item rows, collapse them, collapse a source and use keyboard activation. Only one item's inline details should be visible. GE/HA and luck-color settings should update immediately.
 4. Switch Session/Lifetime, reset Session and restart. Lifetime counts must persist. Switching accounts must show isolated data; resetting core Loot Tracker must not reset Loot Luck.
@@ -18,9 +18,43 @@ Separately establish the main-table and pre-roll gate relationship from primary 
 
 ## Monsters and bosses
 
+Check Giant rat levels 3/6 versus level 26: observations should select their respective source-page tables. Level-2 Goblin tables should resolve through NPC IDs even at identical combat levels. Missing/overlapping context must retain candidates and suppress exact luck. If convenient, compare Guard (Shayzien) and Guard (Auburnvale): their original event names remain Guard but Wiki links/source families must differ. Compare the source's **W** page and recorded provenance with the actual source page.
+
+Test a game name differing from its Wiki page title, a scroll box/casket and Brutus's noted/unnoted steak. Rates, icons and quantities must remain associated with the correct item and noted status. Qualitative Wiki rarities should show their wording without invented numeric probabilities.
+
 For Goblin, record variants/NPC identity and empty outcomes. For Vorkath and Zulrah, establish one completion boundary including late unique/clue rewards, contested kills and missing notifications. Preserve per-row rolls; only use `1-(1-q)^r` when independence and the relevant opportunities are established.
 
 If a narrow adapter is necessary, give it a reviewed completion identity/eligibility contract and captured tests. Never deduplicate by loot contents, infer successful rolls from quantity, or repost synthetic loot into RuneLite.
+
+## Candidate models and the validation button
+
+Before using the sidebar validation action, manually reconcile deliberate kills with complete notifications. Include consecutive identical rewards, existing inventory stacks, empty outcomes where possible, contested kills, late rewards and interruptions. One eligible kill must produce one complete notification. If that cannot be established, leave the source unapproved and report the difference.
+
+Approval applies to this account/source and the current reviewed rate/page/model contract. It affects future observations only. Exact luck stays unavailable before approval, and changed evidence requires approval again. Reviewed item scopes are:
+
+| Source | Items |
+| --- | --- |
+| Cow | Bones, cowhide, raw beef |
+| Chicken | Bones, raw chicken, feathers |
+| Giant rat | Bones, raw rat meat |
+| Vorkath | Dragonbone necklace, draconic visage, skeletal visage, jar of decay |
+| Zulrah | Tanzanite fang, magic fang, serpentine visage, uncut onyx, jar of swamp |
+
+For Chicken, compare a manually counted run with the notification count. After approval, feathers should have a 3/4 per-kill presence chance from two mutually exclusive Wiki outcomes. Several feathers in a stack count as one success; quantity is separate.
+
+For Zulrah, the published fang rate is 1/1,024 per roll. Two independent rolls give per-kill presence `1-(1023/1024)^2 = 2047/1048576`. Expanded details should show this separately from the Wiki rate. Two of the same item from one kill still count as one presence success. Confirm both reward rolls and late rewards arrive in one eligible notification before approval.
+
+For Vorkath, reconcile uncontested completions and late rewards against complete notifications. Heads, pets, clues and other conditional outcomes are outside the reviewed item scope. Do not approve if actual completion boundaries disagree with the event contract.
+
+## Dry streaks and overall luck
+
+1. After approval, record failures then a success. Dry count increases once per eligible kill and resets on presence, regardless of quantity. Before the first success it covers recorded tracking only.
+2. Restart, log out, hop or disable core Loot Tracker. The active streak should stop; lifetime overall validated counts and expected drops should remain.
+3. Reset Session and switch Session/Lifetime. Session clears while lifetime persists. Account switching isolates data and approvals.
+4. Distinct validated probability segments contribute to overall expectation and A/E. A combined binomial tail must remain unavailable when probabilities differ. Dry streak uses only its continuous segment.
+5. Batches, unsupported conditions and special worlds retain observations without gaining exact probability results.
+
+Caskets, reward pools and salvage remain in the rate corpus, but variable rolls/gates and missing eligibility context currently prevent exact production luck for them. Report the source page, event type/name/metadata, table, item ID/name, expected rate and displayed result for discrepancies. Runtime refresh covers structured rates; page prose and identity exports require the development refresh in README.
 
 ## Certification checklist
 
@@ -47,11 +81,13 @@ Until these checks pass, keep the source observable with its probability statist
 
 ## Grouped source storage
 
-- Start fresh with Data settings > Delete data after upgrading to schema 3.
+- Confirm the new ledger starts fresh automatically; old files should be left intact.
 - Loot several cosmetic cow variants. Confirm one Cow header and one top-level
   Cow entry in the export, with variants nested underneath and correct totals.
 - Loot goblins in multiple locations. Confirm one Goblin header while distinct
   contexts/recorded rate tables remain preserved in the export.
 - Compare By source, All items and Recent collections for double counting.
 - Export/import and restart: family totals, histories and nested contexts must
-  survive. Mixed variant/world contexts must not gain a shared certified statistic.
+  survive. Overall validated expectations can aggregate, but incompatible probabilities must not gain a shared binomial tail or continuous streak.
+
+Confirm the gameplay results to the developer before considering this validation complete. The source validation button records that you performed its boundary checks.

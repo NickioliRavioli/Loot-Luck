@@ -23,7 +23,16 @@ public final class WikiEvidence
 	{
 		if (rows.isEmpty()) { return; }
 		JsonObject sourcePage = pages.getAsJsonObject(rows.get(0).owner);
-		if (sourcePage == null || !sourcePage.has("exportHash") || !fingerprint(rows).equals(sourcePage.get("exportHash").getAsString())) { return; }
+		if (sourcePage == null || !sourcePage.has("exportHash") || !fingerprint(rows).equals(sourcePage.get("exportHash").getAsString()))
+		{
+			// Cached derived metadata cannot outlive the independent evidence that authorized it.
+			for(RateRow row:rows)
+			{
+				String original=row.mechanics.remove("Structured export rate");if(original!=null) { row.rawRate=original; }
+				for(String key:List.of("Table combat levels","Table NPC IDs","Wiki page revision","Wiki page evidence hash","Source page conditions")) { row.mechanics.remove(key); }
+			}
+			return;
+		}
 		for (RateRow row : rows)
 		{
 			if (!pages.has(row.owner)) { continue; }

@@ -143,6 +143,7 @@ public class LootLuckPlugin extends Plugin
 		if(!running||activeProfile==null||event.getType()==null||"PLAYER".equals(event.getType().name())||event.getName()==null||event.getName().isBlank()) { return; }
 		String metadata=event.getMetadata() instanceof Number?String.valueOf(event.getMetadata()):"unresolved";
 		SourceIdentity source=new SourceIdentity(event.getType().name(),event.getName(),"combat="+event.getCombatLevel()+";metadata="+metadata,client.getWorldType().toString());
+		RuntimeData current=runtime;if(current!=null&&current.rates!=null) { source=current.rates.resolveSource(source); }
 		if("Mystery box".equals(event.getName())) { mysteryBoxes.clear(); }
 		recordLoot(source,event.getItems(),Math.max(0,event.getAmount()));
 	}

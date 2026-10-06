@@ -27,6 +27,23 @@ public class WikiAuditTest
 	private SourceIdentity npc(String name,int combat,int id) { return new SourceIdentity("NPC",name,"combat="+combat+";metadata="+id,"[MEMBERS]"); }
 	private Observation observation(SourceIdentity source,Map<Integer,Long> items)
 	{ return new Observation(source,1,1,items,Map.of(),Map.of()); }
+	@Test public void sameNamedNpcSourcesUseWikiIdsAndPreserveRawIdentity() throws Exception
+	{
+		Gson gson=new Gson();WikiSourceIndex index=new WikiSourceIndex(gson);
+		JsonObject identities=gson.fromJson(Files.readString(Path.of("src/main/resources/rates/source-identities.json")),JsonObject.class);
+		List<SourceIdentity> guards=new ArrayList<>();
+		for(String owner:List.of("Guard (Shayzien)","Guard (Auburnvale)"))
+		{
+			String id=identities.entrySet().stream().filter(e->owner.equals(e.getValue().getAsString())).findFirst().orElseThrow().getKey();
+			SourceIdentity source=index.resolve(npc("Guard",20,Integer.parseInt(id)));
+			assertEquals("Guard",source.name);assertEquals(owner,RewardSources.wikiOwner(source));
+			SourceIdentity restored=gson.fromJson(gson.toJson(source),SourceIdentity.class);
+			assertEquals(source.key(),restored.key());assertEquals(owner,restored.family().wikiOwner);guards.add(source);
+		}
+		assertNotEquals(guards.get(0).family().key(),guards.get(1).family().key());
+		SourceIdentity unknown=npc("Guard",20,Integer.MAX_VALUE);assertSame(unknown,index.resolve(unknown));
+		SourceIdentity reward=new SourceIdentity("EVENT","Guard","metadata=1","[MEMBERS]");assertSame(reward,index.resolve(reward));
+	}
 	@Test public void fullCatalogueParsesAndRetainsEveryExportedRow() throws Exception
 	{
 		JsonObject raw=new Gson().fromJson(Files.readString(Path.of("tools/wiki-inputs/full-catalogue.json")),JsonObject.class);
@@ -87,8 +104,9 @@ public class WikiAuditTest
 	@Test public void changedExportDoesNotReuseOldPageConditions()
 	{
 		List<RateRow> changed=new ArrayList<>();for(RateRow row:catalogue.get("Giant rat")) { RateRow copy=row.snapshot();copy.mechanics.remove("Table combat levels");copy.mechanics.remove("Table NPC IDs");changed.add(copy); }
-		changed.get(0).rawRate="1/2";new WikiEvidence(new Gson()).apply(changed);
+		changed.get(0).rawRate="1/2";changed.get(0).mechanics.put("Table combat levels","3,6");new WikiEvidence(new Gson()).apply(changed);
 		assertFalse(changed.get(0).mechanics.containsKey("Table combat levels"));
+		assertFalse(changed.get(0).mechanics.containsKey("Wiki page revision"));
 	}
 	@Test public void wikiIdAndGameNameMatchingSurvivesDifferentPageTitles()
 	{

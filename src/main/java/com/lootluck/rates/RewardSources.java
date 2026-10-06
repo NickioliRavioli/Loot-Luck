@@ -24,6 +24,7 @@ public final class RewardSources
 	private RewardSources() { }
 	public static String wikiOwner(SourceIdentity source)
 	{
+		if(source.wikiOwner!=null&&!source.wikiOwner.isBlank()) { return source.wikiOwner; }
 		return "EVENT".equals(source.type)?OWNERS.getOrDefault(source.name.toLowerCase(Locale.ROOT),source.name):source.name;
 	}
 	public static String displayName(SourceIdentity source)

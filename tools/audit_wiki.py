@@ -275,6 +275,21 @@ def main():
     inventory = [{"owner": owner, "rows": len(rows), "tables": sorted({r["page_name_sub"] for r in rows}),
                   "features": sorted(features(rows)), "url": "https://oldschool.runescape.wiki/w/" + urllib.parse.quote(owner.replace(" ", "_"))}
                  for owner, rows in sorted(groups.items())]
+    identity_path = ROOT / "src/main/resources/rates/item-identities.json"
+    identity_coverage = Counter()
+    identity_gaps = []
+    if identity_path.exists():
+        identities = json.loads(identity_path.read_text(encoding="utf-8"))
+        for row in full["bucket"]:
+            item = identities.get(normalize(row["item_name"]))
+            if item and item.get("ids"):
+                identity_coverage["rowsWithWikiItemIds"] += 1
+                if item.get("name") and normalize(item["name"]) != normalize(row["item_name"]):
+                    identity_coverage["rowsWithDifferentPageAndGameNames"] += 1
+            else:
+                identity_gaps.append({"owner": row["page_name"], "item": row["item_name"],
+                                      "reason": "No numeric Wiki identity; preserve exact-name fallback or named placeholder"})
+        identity_coverage["rowsWithoutWikiItemIds"] = len(identity_gaps)
     priority = ["Giant rat", "Goblin", "Cow", "Chicken", "Man", "Woman", "Vorkath", "Zulrah", "Barrows",
                 "Reward casket (beginner)", "Reward casket (easy)", "Reward casket (medium)", "Reward casket (hard)",
                 "Reward casket (elite)", "Reward casket (master)", "Reward pool", "Reward Cart", "Mystery box",
@@ -307,7 +322,7 @@ def main():
         selected.extend(remaining[i * len(remaining) // needed] for i in range(needed))
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "sources.json").write_text(json.dumps(inventory, indent=2, ensure_ascii=False), encoding="utf-8")
-    evidence, conflicts, changes, coverage = {}, [], [], Counter()
+    evidence, conflicts, changes, coverage, not_compared = {}, [], [], Counter(), []
     old_path = OUT / "evidence.json"
     old = json.loads(old_path.read_text(encoding="utf-8")) if old_path.exists() else {}
     for index, owner in enumerate(selected):
@@ -356,6 +371,9 @@ def main():
                               quantity(r["quantity"]) == quantity(str(drop.get("Drop Quantity", "")))]
                 if not candidates:
                     coverage["rowsWithoutDirectPageTemplate"] += 1
+                    not_compared.append({"owner": owner, "table": row["page_name_sub"], "item": row["item_name"],
+                                         "quantity": drop.get("Drop Quantity", ""), "rate": drop["Rarity"],
+                                         "reason": "No independently resolved rendered table/item/quantity match; rate not certified"})
                     continue
                 actual = probability(str(drop["Rarity"]))
                 numeric = [r for r in candidates if probability(r["rate"]) is not None]
@@ -382,7 +400,9 @@ def main():
     old_path.write_text(json.dumps(evidence, indent=2, ensure_ascii=False), encoding="utf-8")
     report = {"catalogueFetchedAt": full["fetchedAt"], "sourceCount": len(groups), "rowCount": len(full["bucket"]),
               "selectedPages": selected, "evidencePages": len(evidence), "coverage": dict(coverage),
-              "pageChanges": changes, "unresolved": conflicts}
+              "pageChanges": changes, "unresolved": conflicts, "identityCoverage": dict(identity_coverage)}
+    (OUT / "identity-gaps.json").write_text(json.dumps(identity_gaps, indent=2, ensure_ascii=False), encoding="utf-8")
+    (OUT / "not-compared.json").write_text(json.dumps(not_compared, indent=2, ensure_ascii=False), encoding="utf-8")
     (OUT / "report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({k: v for k, v in report.items() if k not in ("selectedPages", "unresolved")}, indent=2))
     print(f"Unresolved entries: {len(conflicts)}; see tools/wiki-audit/report.json")

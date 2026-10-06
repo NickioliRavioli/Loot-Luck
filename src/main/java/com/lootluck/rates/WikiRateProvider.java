@@ -38,6 +38,7 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 	private final Gson gson;
 	private final WikiEvidence evidence;
 	private final WikiItemIndex itemIndex;
+	private final WikiSourceIndex sourceIndex;
 	private final OkHttpClient http;
 	private final Filepath cache;
 	private final BooleanSupplier enabled;
@@ -60,7 +61,7 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 	public WikiRateProvider(Gson gson, OkHttpClient http, Filepath cache, BooleanSupplier enabled, Runnable changed)
 	{
 		this.gson=gson; this.http=http.newBuilder().callTimeout(15,TimeUnit.SECONDS).build(); this.cache=cache; this.enabled=enabled; this.changed=changed;
-		evidence = new WikiEvidence(gson); itemIndex = new WikiItemIndex(gson);
+		evidence = new WikiEvidence(gson); itemIndex = new WikiItemIndex(gson);sourceIndex=new WikiSourceIndex(gson);
 	}
 	public void initialize() throws IOException
 	{
@@ -98,6 +99,7 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 		refreshCatalogue(false);
 	}
 	private void enrich(List<RateRow> rows) { evidence.apply(rows); itemIndex.apply(rows); }
+	public SourceIdentity resolveSource(SourceIdentity source) { return sourceIndex.resolve(source); }
 	public static String owner(SourceIdentity source)
 	{
 		if("PLAYER".equals(source.type)) { return null; }
@@ -111,11 +113,11 @@ public final class WikiRateProvider implements RateProvider, AutoCloseable
 		if(!force&&System.currentTimeMillis()-oldest<TTL) { return; }
 		if(pending.add(FULL)) { schedule(FULL,0,0); }
 	}
-	@Override public List<RateRow> rows(SourceIdentity source) { String owner=owner(source); return owner==null?List.of():catalogue.getOrDefault(owner,List.of()); }
+	@Override public List<RateRow> rows(SourceIdentity source) { String owner=owner(resolveSource(source)); return owner==null?List.of():catalogue.getOrDefault(owner,List.of()); }
 	@Override public void refresh(SourceIdentity source,boolean force)
 	{
 		refreshCatalogue(false);
-		String owner=owner(source);
+		String owner=owner(resolveSource(source));
 		if(owner==null||closed||!enabled.getAsBoolean()||pending.size()>=32) { return; }
 		if(!force&&System.currentTimeMillis()<lookupRetryAfter.getOrDefault(owner,0L)) { return; }
 		List<RateRow> rows=catalogue.get(owner);

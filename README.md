@@ -19,11 +19,11 @@ For Jagex accounts, follow RuneLite's development-client login instructions: htt
 
 - Source headers show recorded notification count and optional current GE total. They do not claim an unvalidated count is kills or openings.
 - The **W** button opens that source's OSRS Wiki page in your browser. **Show source Wiki links** defaults on and can hide these buttons independently of background Wiki refresh.
-- Same-named variants share one header within the same source type and world context. Display totals and rate history combine; persisted variant records remain separate. Different published rate variants remain labeled, and certified statistics are not mixed across variants.
+- Cosmetic variants share a source header; original NPC/world contexts remain separate underneath. Wiki NPC IDs distinguish same-named enemies belonging to different source pages. Overall expected drops sum validated segments; binomial tails require a shared probability. Dry streaks use only the latest continuous validated segment.
 - Item rows show the real ItemManager sprite, name, rarity-colored reciprocal rate and `xquantity`.
 - **Quantity on icons (trial)** is enabled for review: native game sprites draw stack quantity text with the game's own abbreviations/colors; the right-hand **x** number shows item-present occurrences. Disable it to restore right-hand quantities. Zero-observation sprites omit the overlay. Game quantity rendering uses a 32-bit amount; larger lifetime totals remain exact in the tooltip but the sprite amount is capped at the game maximum.
 - **Quantity and occurrences on right (trial)** is the latest review default. It overrides the icon-overlay trial: yellow stack-formatted quantity appears on the right, with a muted occurrence count below only when quantity exceeds occurrences. Disable this to return to the icon trial; disable both to use the original quantity-only layout. Exact quantities remain in tooltips.
-- Noted and unnoted items now retain separate game IDs and rows; noted rows are labeled **(noted)**. Published table rows are matched to their noted status, so Brutus's guaranteed unnoted steak is not mixed with the noted-steak reward. Older normalized aggregates are preserved; if they included both forms, their quantities cannot be split retrospectively.
+- Noted and unnoted items retain separate game IDs and rows; noted rows are labeled **(noted)**. Published table rows are matched to their noted status, so Brutus's guaranteed unnoted steak is not mixed with the noted-steak reward.
 - Click a row to expand detailed stats in place; click again to collapse. One row opens at a time. Item hover shows only the rate and last-received date; the expanded **i** button opens scrollable rate history, conditions, provenance and model information.
 - Choose Lifetime/Session and most-recent, rarity or driest ordering. Driest includes known unobtained items and ranks only certified event models.
 - The view selector provides **By source**, **Recent collections** and **All items**. Recent collections shows individual received notifications, newest first, in pages of 50; identical genuine rewards remain separate. All items totals quantities and item-present notifications across sources, with recent/occurrence/quantity sorting and expandable source breakdowns. These two observation views omit rates and luck statistics.
@@ -44,16 +44,30 @@ For deterministic native Swing layout inspection, `PanelTest` creates `build/ui-
 
 ## Rate data
 
-The bundled catalogue retains **39,786 rows across 2,244 Wiki source pages**, exported from the public `dropsline` Bucket table on 4 October 2026. This includes Small salvage, other salvage tiers, monsters, bosses and reward tables. Coverage is of the exported structured table; some game rates remain unpublished and some RuneLite source names need Wiki aliases. Conditions, variants and rolls remain intact. A published rate is not automatically an event-level probability.
+The bundled catalogue retains **39,786 rows across 2,244 Wiki source pages**, exported from the public `dropsline` Bucket table on 6 October 2026. This includes salvage, monsters, bosses, caskets and reward tables. Coverage is of the exported structured table; a published rate is not automatically an event-level probability.
+
+Source pages are the audit authority. A frozen 150-page sample covers different table features and source families. Preserved wikitext and rendered tables independently compare **4,324 rows**, with no numeric rate conflicts found in those comparisons. **789 sampled rows remain unverified** because a rendered table/item/quantity match could not be resolved. The full catalogue receives parser/identity checks; this does not certify every rate or mechanic on all 2,244 pages.
+
+Wiki item IDs cover 39,635 exported rows; 151 lack numeric Wiki IDs. The identity index includes page titles and game names, including 1,187 rows where they differ. A separate NPC index resolves 3,209 unambiguous NPC IDs to catalogue source pages. Ambiguous identities remain unresolved. Names also receive conservative Unicode, game-tag and whitespace normalization.
 
 Preserved primary responses are in `tools/wiki-inputs/`; the four original audit fixtures remain alongside `full-catalogue.json`. The generator and runtime share their parser. To fetch and generate a new full snapshot:
 
 ```powershell
 python tools/fetch_catalogue.py
+python tools/fetch_item_identities.py
+python tools/fetch_monster_identities.py
+python tools/audit_wiki.py --refresh --render
+python tools/build_wiki_metadata.py
 .\gradlew.bat generateRates
+.\gradlew.bat test
+python -m unittest discover -s tools -p test_*.py
 ```
 
-The complete export supplies its fetched timestamp. These explicit tasks do not run during standard builds. Rows preserve owner/variant, fraction, quantities, conditions/rolls, provenance and hashes. Unresolved item IDs retain a named placeholder instead of a guessed sprite.
+These explicit tasks do not run during standard builds. `audit_wiki.py --render` reruns offline against preserved pages; `--all-pages --refresh --render` expands page research to the whole catalogue and can take substantial time. Inspect `tools/wiki-audit/report.json`, `not-compared.json`, `identity-gaps.json` and `sources.json`. Rows retain owner/variant, fraction, quantities, conditions/rolls, provenance and hashes. Unresolved item IDs retain a named placeholder instead of a guessed sprite.
+
+Table selection uses event NPC ID, combat level, membership and source type against explicit Wiki evidence. Giant rat levels 3/6 and 26 resolve to their respective tables; same-level Goblin tables use NPC IDs. Missing or overlapping evidence retains candidate tables and suppresses exact luck. Arbitrary quest, location, equipment or completion conditions require additional observable context and a reviewed rule; there is no safe generic interpretation of all Wiki prose. Keep any exceptions in the evidence/model registry with page revisions and regression tests.
+
+Runtime refresh updates structured rates. Item/NPC identity exports and independently reviewed page prose remain bundled and require the development refresh above. A changed structured export removes stale derived conditions and invalidates gameplay approval. Prose-only Wiki edits cannot be detected by the current runtime refresh; maintainers must rerun page research to review them.
 
 Optional runtime refresh updates the full catalogue with throttled, paginated Wiki queries. Seven-day freshness is checked on startup, enabling networking and loot receipt; Refresh forces an update. Complete results are staged and cached before publication. Malformed, incomplete or unexpectedly shrunken results retain last-good data. Source lookups share the same single worker, one-second request spacing, coalescing, response limits, timeouts and backoff. Failures have a 15-minute automatic retry cooldown. Full refresh can take minutes. There is no hosted update service: opted-in clients query the Wiki directly, which uses more requests than downloading a hosted generated snapshot. Offline startup uses bundled/last-good data. Unmatched names retain observations with unavailable rates.
 
@@ -61,17 +75,19 @@ Optional runtime refresh updates the full catalogue with throttled, paginated Wi
 
 New observations retain immutable rate versions per item, with quantities, item-present notification counts and first/last timestamps. The expanded item's **i** button shows current published data and recorded history. Snapshots preserve fractions, conditions, variants, rolls, provenance and fetch time: the rate known at collection, not proof of the game's effective probability on that date. Unknown-at-collection observations stay unknown after later refreshes.
 
-Existing schema-1 files migrate to schema 2 without changing counters or inventing older rate history. Published-rate history remains aggregated by version; the new collection history separately preserves raw notifications under the configured limit. Exact probability statistics still require source certification.
+This private test build starts a fresh ledger in `profiles-wiki-v1`; no previous ledger is migrated. Older files are left in place. Published-rate history remains aggregated by version, while collection history preserves raw notifications under the configured limit.
 
 ## Important current limitation
 
-**No production source is certified for exact probability statistics yet.** `ValidationRegistry` deliberately returns unsupported for every event. Real loot quantities, notification occurrences, last-received dates, values and published rates work independently of certification. Attempts, A/E, dry probability and binomial tails remain `—` until gameplay boundary evidence and source mechanics are reviewed.
+**Gameplay validation remains pending.** Reviewed candidate models exist for selected Cow, Chicken, Giant rat, Vorkath and Zulrah items in `source-models.json`. Each account/source requires the sidebar validation action after the user confirms its real tracking boundary. Approval binds the rate/page/model evidence and affects future observations only. Unapproved sources still show quantities, notification occurrences, values and published rates; exact luck remains `—`.
 
-This is intentional: `amount=1` does not establish an eligible independent attempt. Large salvage pre-roll/main-table mechanics, missing empty NPC outcomes, boss split rewards and batch semantics still need validation. See [gameplay-validation.md](docs/gameplay-validation.md).
+Success means one eligible kill containing the item, regardless of its quantity. Published per-roll rates remain primary; expanded details show the separately derived per-attempt presence chance. Fixed independent rolls use `1-(1-q)^r`. Mutually exclusive outcomes are combined only under an explicit reviewed rule (Chicken feathers). Variable-roll caskets, salvage gates, batches, unresolved conditions and special worlds remain unsupported for exact production luck. See [gameplay-validation.md](docs/gameplay-validation.md).
+
+Dry probability is `(1-p)^d` within continuous recorded coverage; it never claims a pre-tracking streak. Login/restart/hop, disabled core tracking and other coverage interruptions end the active streak. Overall luck retains validated segments: expected drops are `sum(n*p)`, and A/E is recorded successes divided by that expectation. Different probabilities do not receive an averaged binomial tail. The probability tests use preserved Wiki dry-calculator source as an independent numerical reference; UI tails explicitly include the observed count.
 
 ## Storage and safety
 
-Filepath-managed data is under RuneLite's plugin directory, `plugin-data/loot-luck/`: hashed profile files in `profiles/` and public rate responses in `wiki-cache/`. Snapshots are versioned, validated and atomically installed where supported; last-good backups recover corrupted primary snapshots. Unrecoverable profiles pause tracking instead of overwriting history. Session reset never resets lifetime data.
+Filepath-managed data is under RuneLite's plugin directory, `plugin-data/loot-luck/`: hashed profile files in `profiles-wiki-v1/` and public rate responses in `wiki-cache/`. Snapshots are versioned, validated and atomically installed where supported; last-good backups recover corrupted primary snapshots. Unrecoverable profiles pause tracking instead of overwriting history. Session reset never resets lifetime data.
 
 No historical core Loot Tracker import, hosted service, account uploads, reflection, game-input automation or RuneLite public API modifications are included. Queued immutable observations are serialized on RuneLite's shared background executor and retain their captured account identity across plugin/profile changes.
 
@@ -101,8 +117,8 @@ confirmation where data is replaced or removed and run on the storage worker.
 Source storage now uses schema 3: one source family per loot type and source name,
 with original NPC variants/world contexts nested in `variants`. Item observations,
 recorded rates and statistical segments remain on those nested records. The sidebar
-combines family totals without combining certified segments across contexts. The
+combines family totals and validated overall expectations across contexts. The
 All items view and raw history still count each collection once. Compatibility
 migration was intentionally omitted for this private test build: old snapshots and
-old exports cannot load. Use Data settings > Delete data to start fresh; old files
-are not erased automatically. Current exports/imports use the grouped format.
+old exports cannot load. The new ledger namespace starts fresh automatically;
+old files are not erased. Current exports/imports use the grouped format.

@@ -160,5 +160,10 @@
     "rowsWithoutDirectPageTemplate": 789
   },
   "pageChanges": [],
-  "unresolved": []
+  "unresolved": [],
+  "identityCoverage": {
+    "rowsWithWikiItemIds": 39635,
+    "rowsWithDifferentPageAndGameNames": 1187,
+    "rowsWithoutWikiItemIds": 151
+  }
 }
