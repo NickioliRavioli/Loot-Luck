@@ -168,6 +168,7 @@ public final class LootLuckPanel extends PluginPanel
 			name.setFont(FontManager.getRunescapeSmallFont());name.setForeground(GOLD);header.add(name,BorderLayout.CENTER);
 			header.getAccessibleContext().setAccessibleName(source.name+", "+source.count+" recorded outcomes, "+(collapsed.contains(source.key)?"collapsed":"expanded"));
 			header.addActionListener(e->{if(!collapsed.add(source.key)) { collapsed.remove(source.key); }render();});
+			makeRowClickable(header,header);
 			addWikiMenu(header,source.wikiUrl==null?ViewBuilder.sourceWikiUrl(source.name):source.wikiUrl);
 			JPanel heading=new JPanel(new BorderLayout(2,0));heading.setBackground(new Color(16,16,16));heading.add(header,BorderLayout.CENTER);
 			if(state.showWikiLinks&&source.wikiUrl!=null)

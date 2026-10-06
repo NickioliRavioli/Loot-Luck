@@ -14,6 +14,23 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void sourceHeaderTextForwardsHoverAndLeftClicksButNotRightClicks() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			PanelState state=new PanelState();state.notice="";PanelState.Source source=new PanelState.Source();source.key="cow";source.name="Cow";source.count=12;source.value="1K gp";source.wikiUrl="https://oldschool.runescape.wiki/w/Cow";
+			PanelState.Item item=new PanelState.Item();item.key="coins";item.name="Coins";item.rate="Always";source.items.add(item);state.sources.add(source);
+			java.util.List<String> opened=new java.util.ArrayList<>();LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{},opened::add);panel.update(state);layout(panel,230);
+			for(boolean valueText:new boolean[]{false,true})
+			{
+				JButton header=findButton(panel,"Cow");Component text=findLabel(header,valueText?"1K gp":"▾ Cow");assertNotNull(text);
+				text.dispatchEvent(new java.awt.event.MouseEvent(text,java.awt.event.MouseEvent.MOUSE_ENTERED,0,0,1,1,0,false));assertTrue(header.getModel().isRollover());
+				java.awt.Point outside=SwingUtilities.convertPoint(header,new java.awt.Point(-1,-1),text);text.dispatchEvent(new java.awt.event.MouseEvent(text,java.awt.event.MouseEvent.MOUSE_EXITED,0,0,outside.x,outside.y,0,false));assertFalse(header.getModel().isRollover());
+				text.dispatchEvent(new java.awt.event.MouseEvent(text,java.awt.event.MouseEvent.MOUSE_CLICKED,0,0,1,1,1,false,java.awt.event.MouseEvent.BUTTON3));assertNotNull(findButton(panel,"Coins"));assertTrue(opened.isEmpty());
+				clickLabel(panel,valueText?"1K gp":"▾ Cow");assertNull(findButton(panel,"Coins"));clickLabel(panel,valueText?"1K gp":"▸ Cow");assertNotNull(findButton(panel,"Coins"));layout(panel,230);
+			}
+			openWikiMenu(findLabel(panel,"▾ Cow"));assertEquals(java.util.List.of(source.wikiUrl),opened);assertNotNull(findButton(panel,"Coins"));
+		});
+	}
 	@Test public void wikiContextMenusCoverHeadersItemsAndObservationViews() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
