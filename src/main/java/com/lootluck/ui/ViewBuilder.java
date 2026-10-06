@@ -87,7 +87,7 @@ public final class ViewBuilder
 				if(ambiguousNotes) { row.rateTooltip+="\n\nLegacy aggregate may mix noted and unnoted loot; quantities cannot be split retrospectively."; }
 				if(item.recordedRates!=null&&!item.recordedRates.isEmpty())
 				{
-					row.rateTooltip="Current Wiki data\n"+row.rateTooltip+"\n\nRecorded history\nRates known at collection; not verified game-effective dates.\n\n"+item.recordedRates.values().stream().map(v->v.occurrences+" outcomes · x"+v.quantity+"\n"+historyDate(v.firstReceived)+" — "+historyDate(v.lastReceived)+"\n"+(v.rows.isEmpty()?"Rate unknown at collection":v.rows.stream().map(RateRow::tooltip).collect(java.util.stream.Collectors.joining("\n\n")))).collect(java.util.stream.Collectors.joining("\n\n"));
+					row.rateTooltip="Current Wiki data\n"+row.rateTooltip+"\n\nRecorded history\nRates known at collection; not verified game-effective dates.\n\n"+item.recordedRates.values().stream().map(v->"x"+v.occurrences+" outcomes · "+v.quantity+" units\n"+historyDate(v.firstReceived)+" — "+historyDate(v.lastReceived)+"\n"+(v.rows.isEmpty()?"Rate unknown at collection":v.rows.stream().map(RateRow::tooltip).collect(java.util.stream.Collectors.joining("\n\n")))).collect(java.util.stream.Collectors.joining("\n\n"));
 				}
 				long versioned=item.recordedRates==null?0:item.recordedRates.values().stream().mapToLong(v->v.occurrences).sum();
 				if(versioned<item.occurrences) { row.rateTooltip+="\n\nOlder history: "+(item.occurrences-versioned)+" outcomes\nCollection-time rates unavailable."; }

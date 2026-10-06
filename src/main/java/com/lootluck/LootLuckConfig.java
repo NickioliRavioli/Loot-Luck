@@ -26,10 +26,10 @@ public interface LootLuckConfig extends Config
 	default boolean showAllRates() { return false; }
 	@ConfigItem(keyName="showWikiLinks",name="Show source Wiki links",description="Show a Wiki button in source headers. Clicking opens the source page in your browser.")
 	default boolean showWikiLinks() { return true; }
-	@ConfigItem(keyName="iconQuantities",name="Quantity on icons (trial)",description="Use native game quantity text on icons and show occurrences on the right. Disable to restore right-aligned quantities. Game colors vary by stack size.")
+	@ConfigItem(keyName="iconQuantities",name="Quantity on icons (trial)",description="Show yellow whole-number quantities on icons and occurrences prefixed with x on the right. Abbreviated quantities round down.")
 	default boolean iconQuantities() { return true; }
-	@ConfigItem(keyName="stackCounts",name="Quantity and occurrences on right (trial)",description="Yellow quantity on the right, with occurrences below when quantity exceeds occurrences. Overrides Quantity on icons; disable to restore that setting.")
-	default boolean stackCounts() { return true; }
+	@ConfigItem(keyName="stackCounts",name="Quantity and occurrences on right (trial)",description="Yellow whole-number quantity on the right, with x-prefixed occurrences below when quantity exceeds occurrences. Overrides Quantity on icons; disable to restore that setting.")
+	default boolean stackCounts() { return false; }
 	@net.runelite.client.config.Range(min=0)
 	@ConfigItem(keyName="historyLimit",name="Collection history limit",description="Maximum retained loot notifications per account and session. 0 means unlimited. Lowering this prunes oldest history; lifetime totals stay intact. Unlimited uses increasing disk and memory.")
 	default int historyLimit() { return 10000; }

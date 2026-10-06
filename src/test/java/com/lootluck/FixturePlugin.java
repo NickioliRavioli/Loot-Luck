@@ -56,7 +56,7 @@ public class FixturePlugin extends Plugin
 	}
 	private void attachIcons(PanelState state,Runnable repaint)
 	{
-		for(PanelState.Source source:state.sources) { for(PanelState.Item item:source.items) { if(item.id<=0) { continue; }net.runelite.client.util.AsyncBufferedImage image=items.getImage(item.id,(int)Math.max(1,Math.min(Integer.MAX_VALUE,item.quantity)),state.iconQuantities&&item.quantity>0);if(image!=null) { item.icon=new ImageIcon(image);image.onLoaded(()->SwingUtilities.invokeLater(repaint)); } } }
+		for(PanelState.Source source:state.sources) { for(PanelState.Item item:source.items) { if(item.id<=0) { continue; }net.runelite.client.util.AsyncBufferedImage image=items.getImage(item.id,(int)Math.max(1,Math.min(Integer.MAX_VALUE,item.quantity)),false);if(image!=null) { item.icon=new ImageIcon(image);image.onLoaded(()->SwingUtilities.invokeLater(repaint)); } } }
 	}
 	@Override protected void shutDown() { if(navigation!=null) { toolbar.removeNavigation(navigation); } }
 }

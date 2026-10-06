@@ -46,15 +46,14 @@ final class LootLuckSettingsPanel extends JPanel
 		toggle("Show HA values","showHa",config::showHa,"High Alchemy totals exclude rune costs.",changed);
 		if(PanelState.LUCK_STATISTICS_VISIBLE) { toggle("Luck colors","luckColors",config::luckColors,"Colors actual/expected ratios; colors do not indicate statistical significance.",changed); }
 		section("Item counts");
-		javax.swing.ButtonGroup styleGroup=new javax.swing.ButtonGroup();
 		for(ItemDisplayStyle style:ItemDisplayStyle.values())
 		{
 			JLabel caption=new JLabel(style.title);caption.setForeground(new Color(173,169,160));caption.setAlignmentX(LEFT_ALIGNMENT);add(caption);
-			javax.swing.JButton button=LootLuckPanel.stylePreview(style,previewIcons.apply(style.iconQuantities));styleGroup.add(button);add(button);add(javax.swing.Box.createVerticalStrut(6));
+			javax.swing.JButton button=LootLuckPanel.stylePreview(style,previewIcons.apply(style.iconQuantities));add(button);add(javax.swing.Box.createVerticalStrut(6));
 			button.addActionListener(e->{if(!syncing) { style.select(changed);sync(); }});
 			updates.add(()->{
-				boolean selected=ItemDisplayStyle.selected(config)==style;button.setSelected(selected);
-				button.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(selected?new Color(223,192,113):new Color(65,65,65),2),javax.swing.BorderFactory.createEmptyBorder(4,2,4,2)));
+				boolean selected=ItemDisplayStyle.selected(config)==style;
+				button.setBorder(javax.swing.BorderFactory.createLineBorder(selected?new Color(223,192,113):new Color(65,65,65),2));
 				button.getAccessibleContext().setAccessibleDescription(selected?"Selected item style":"Select this item style");
 			});
 		}

@@ -271,13 +271,13 @@ public class LootLuckPlugin extends Plugin
 	}
 	private javax.swing.Icon previewIcon(boolean quantity)
 	{
-		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(net.runelite.api.gameval.ItemID.COINS,12500,quantity);
+		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(net.runelite.api.gameval.ItemID.COINS,12500,false);
 		if(image==null) { return null; }
 		image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));return new ImageIcon(image);
 	}
 	private javax.swing.Icon observationIcon(int id,long quantity)
 	{
-		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(id,(int)Math.max(1,Math.min(Integer.MAX_VALUE,quantity)),config.iconQuantities()&&!config.stackCounts()&&quantity>0);if(image==null) { return null; }image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));return new ImageIcon(image);
+		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(id,(int)Math.max(1,Math.min(Integer.MAX_VALUE,quantity)),false);if(image==null) { return null; }image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));return new ImageIcon(image);
 	}
 	private void resetSession()
 	{
