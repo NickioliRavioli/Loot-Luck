@@ -14,6 +14,18 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void recentCollectionRowsMatchSourceRowColoursAndHeight() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			PanelState state=new PanelState();state.itemEffect=ItemEffect.NONE;PanelState.Source source=new PanelState.Source();source.key="source";source.name="Cow";
+			PanelState.Item item=new PanelState.Item();item.key="source:coins";item.name="Coins";item.quantity=12500;item.occurrences=1;item.rate="Always";source.items.add(item);state.sources.add(source);
+			PanelState.Source record=new PanelState.Source();record.key="collection:0";record.name="Cow";record.items.add(item);state.collections.add(record);
+			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);layout(panel,230);JButton sourceRow=findButton(panel,"Coins");
+			findViewSelector(panel).setSelectedItem("Recent collections");layout(panel,230);JButton recordRow=findButton(panel,"Coins");
+			assertEquals(sourceRow.getBackground(),recordRow.getBackground());assertEquals(sourceRow.getPreferredSize().height,recordRow.getPreferredSize().height);assertEquals(sourceRow.getHeight(),recordRow.getHeight());assertEquals(sourceRow.getBorder().getBorderInsets(sourceRow),recordRow.getBorder().getBorderInsets(recordRow));
+			assertNull(findLabel(recordRow,"Always"));assertEquals(sourceRow.getParent().getPreferredSize().height,recordRow.getParent().getPreferredSize().height);
+		});
+	}
 	@Test public void recentCollectionCardsSupportHoverGridSecondsAndPaging() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
@@ -26,16 +38,17 @@ public class PanelTest
 			}
 			java.util.List<String> opened=new java.util.ArrayList<>();LootLuckPanel panel=new LootLuckPanel(id->new javax.swing.ImageIcon(new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB)),value->{},value->{},()->{},()->{},opened::add);panel.update(state);findViewSelector(panel).setSelectedItem("Recent collections");
 			javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,700);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);
-			assertEquals(2,countLabels(panel,"Cow"));assertEquals(2,countLabels(panel,"1 item"));assertNotNull(findLabel(panel,"0 items"));assertNotNull(findLabel(panel,"No items reported"));
+			assertEquals(2,countLabels(panel,"▾ Cow"));assertNull(findLabel(panel,"1 item"));assertNull(findLabel(panel,"0 items"));assertNotNull(findLabel(panel,"No items reported"));
 			java.time.format.DateTimeFormatter format=java.time.format.DateTimeFormatter.ofPattern("d MMM yyyy HH:mm:ss").withZone(java.time.ZoneId.systemDefault());assertNotNull(findLabel(panel,format.format(java.time.Instant.ofEpochMilli(time))));assertNotNull(findLabel(panel,format.format(java.time.Instant.ofEpochMilli(time-1000))));
 			JButton row=findButton(panel,"Coins");for(Component text:new Component[]{findLabel(row,"Coins"),findLabel(row,"x1"),findIcon(row)})
 			{
 				assertNotNull(text);text.dispatchEvent(new java.awt.event.MouseEvent(text,java.awt.event.MouseEvent.MOUSE_ENTERED,0,0,1,1,0,0,0,false,java.awt.event.MouseEvent.NOBUTTON));assertTrue(row.getModel().isRollover());java.awt.Point outside=SwingUtilities.convertPoint(row,new java.awt.Point(-1,-1),text);text.dispatchEvent(new java.awt.event.MouseEvent(text,java.awt.event.MouseEvent.MOUSE_EXITED,0,0,outside.x,outside.y,0,0,0,false,java.awt.event.MouseEvent.NOBUTTON));assertFalse(row.getModel().isRollover());
 			}
 			clickLabel(panel,"Coins");assertNotNull(findLabel(panel,"12,500"));assertNull(findLabel(panel,"Rate unknown"));assertWikiMenuTree(findButton(panel,"Coins"));clickLabel(panel,"Coins");assertNull(findLabel(panel,"Quantity"));viewport.doLayout();layoutChildren(panel);saveCollectionPreview(panel,"build/recent-collections-list.png");
-			JButton gridToggle=findButton(panel,"Switch to grid view");assertTrue(gridToggle.isEnabled());gridToggle.doClick();viewport.doLayout();layoutChildren(panel);JButton icon=findButton(panel,"Coins");assertNotNull(icon);assertEquals(icon.getWidth(),icon.getHeight());assertEquals(2,countLabels(panel,"Cow"));assertNotNull(findLabel(panel,"No items reported"));assertWikiMenuTree(icon);openWikiMenu(icon);assertEquals(1,opened.size());saveCollectionPreview(panel,"build/recent-collections-grid.png");
+			JButton gridToggle=findButton(panel,"Switch to grid view");assertTrue(gridToggle.isEnabled());gridToggle.doClick();viewport.doLayout();layoutChildren(panel);JButton icon=findButton(panel,"Coins");assertNotNull(icon);assertEquals(icon.getWidth(),icon.getHeight());assertEquals(2,countLabels(panel,"▾ Cow"));assertNotNull(findLabel(panel,"No items reported"));assertWikiMenuTree(icon);openWikiMenu(icon);assertEquals(1,opened.size());saveCollectionPreview(panel,"build/recent-collections-grid.png");
 			icon.doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"12,500"));assertNull(findLabel(panel,"Rate unknown"));assertNull(findLabel(panel,"Source breakdown"));assertNull(findLabel(panel,"Occurrences"));findButton(panel,"Switch to list view").doClick();assertNotNull(findLabel(panel,"12,500"));
-			for(int n=3;n<51;n++) { PanelState.Source record=new PanelState.Source();record.key="collection:"+n;record.name="Record "+n;record.lastReceived=time-n*1000;state.collections.add(record); }panel.update(state);assertNotNull(findLabel(panel,"Page 1 / 2"));assertNull(findLabel(panel,"Record 50"));findButton(panel,"›").doClick();assertNotNull(findLabel(panel,"Page 2 / 2"));assertNotNull(findLabel(panel,"Record 50"));assertNotNull(findLabel(panel,"No items reported"));assertNull(findLabel(panel,"Cow"));viewport.removeNotify();
+			clickLabel(panel,format.format(java.time.Instant.ofEpochMilli(time)));assertEquals(1,countLabels(panel,"Coins"));assertNotNull(findLabel(panel,"▸ Cow"));clickLabel(panel,format.format(java.time.Instant.ofEpochMilli(time)));assertEquals(2,countLabels(panel,"Coins"));
+			for(int n=3;n<51;n++) { PanelState.Source record=new PanelState.Source();record.key="collection:"+n;record.name="Record "+n;record.lastReceived=time-n*1000;state.collections.add(record); }panel.update(state);assertNotNull(findLabel(panel,"Page 1 / 2"));assertNull(findLabel(panel,"▾ Record 50"));findButton(panel,"›").doClick();assertNotNull(findLabel(panel,"Page 2 / 2"));assertNotNull(findLabel(panel,"▾ Record 50"));assertNotNull(findLabel(panel,"No items reported"));assertNull(findLabel(panel,"Cow"));viewport.removeNotify();
 		});
 	}
 	private static void saveCollectionPreview(LootLuckPanel panel,String path)
@@ -90,7 +103,7 @@ public class PanelTest
 			assertEquals("/w/Special:Lookup",itemUrl.encodedPath());assertEquals("item",itemUrl.queryParameter("type"));assertEquals(Integer.toString(item.id),itemUrl.queryParameter("id"));assertEquals("Coins",itemUrl.queryParameter("name"));assertNull(findLabel(panel,"Quantity"));
 			row.doClick();assertNotNull(findLabel(panel,"Quantity"));header.doClick();assertNull(findButton(panel,"Coins"));findButton(panel,"Cow").doClick();assertNotNull(findButton(panel,"Coins"));
 			javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,700);viewport.setView(panel);viewport.addNotify();state.gridView=true;panel.update(state);viewport.doLayout();layoutChildren(panel);assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findButton(panel,"Coins"));assertEquals(opened.get(1),opened.get(2));
-			JComboBox<?> views=findViewSelector(panel);views.setSelectedItem("Recent collections");viewport.doLayout();layoutChildren(panel);assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findLabel(panel,"Cow"));assertEquals(source.wikiUrl,opened.get(3));
+			JComboBox<?> views=findViewSelector(panel);views.setSelectedItem("Recent collections");viewport.doLayout();layoutChildren(panel);assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findLabel(panel,"▾ Cow"));assertEquals(source.wikiUrl,opened.get(3));
 			views.setSelectedItem("All items");assertWikiMenuTree(findButton(panel,"Coins"));openWikiMenu(findButton(panel,"Coins"));assertEquals(opened.get(1),opened.get(4));
 			item.id=0;item.name="Unknown & unusual item";panel.update(state);openWikiMenu(findButton(panel,item.name));okhttp3.HttpUrl fallback=okhttp3.HttpUrl.get(opened.get(5));assertNull(fallback.queryParameter("id"));assertEquals(item.name,fallback.queryParameter("name"));
 			viewport.removeNotify();
@@ -279,7 +292,7 @@ public class PanelTest
 		SwingUtilities.invokeAndWait(()->{
 			PanelState state=new PanelState();state.notice="";PanelState.Item item=new PanelState.Item();item.id=1;item.key="all:1";item.name="Bones";item.quantity=2;item.occurrences=2;item.lastReceived=10;state.allItems.add(item);
 			for(int n=0;n<2;n++) { PanelState.Source collection=new PanelState.Source();collection.key="collection:"+n;collection.name="Cow";collection.lastReceived=10-n;collection.countTooltip="Raw notification";collection.items.add(item);state.collections.add(collection); }
-			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);JComboBox<?> chooser=findViewSelector(panel);assertNotNull(chooser);chooser.setSelectedItem("Recent collections");assertNotNull(findLabel(panel,"Page 1 / 1"));assertEquals(2,countLabels(panel,"Cow"));assertNull(findLabel(panel,"Rate unknown"));chooser.setSelectedItem("All items");assertNotNull(findLabel(panel,"x2"));layout(panel,230);JButton row=findButton(panel,"Bones");assertEquals(0,row.getX());assertEquals(row.getParent().getWidth(),row.getWidth());assertNull(findLabel(panel,"Rate unknown"));
+			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);JComboBox<?> chooser=findViewSelector(panel);assertNotNull(chooser);chooser.setSelectedItem("Recent collections");assertNotNull(findLabel(panel,"Page 1 / 1"));assertEquals(2,countLabels(panel,"▾ Cow"));assertNull(findLabel(panel,"Rate unknown"));chooser.setSelectedItem("All items");assertNotNull(findLabel(panel,"x2"));layout(panel,230);JButton row=findButton(panel,"Bones");assertEquals(0,row.getX());assertEquals(row.getParent().getWidth(),row.getWidth());assertNull(findLabel(panel,"Rate unknown"));
 		});
 	}
 	private static JComboBox<?> findViewSelector(Container c) { for(Component child:c.getComponents()) { if(child instanceof JComboBox&&((JComboBox<?>)child).getItemCount()==3&&"By source".equals(((JComboBox<?>)child).getItemAt(0))) { return (JComboBox<?>)child; }if(child instanceof Container) { JComboBox<?> found=findViewSelector((Container)child);if(found!=null) { return found; } } }return null; }
