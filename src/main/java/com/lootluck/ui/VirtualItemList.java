@@ -17,6 +17,7 @@ import javax.swing.event.ChangeListener;
 final class VirtualItemList extends JPanel
 {
 	private final int[] offsets;
+	private int squareColumns;
 	private final IntFunction<JComponent> factory;
 	private final IntConsumer released;
 	private final Map<Integer,JComponent> mounted=new HashMap<>();
@@ -26,6 +27,21 @@ final class VirtualItemList extends JPanel
 	{
 		this.factory=factory;this.released=released;setLayout(null);setOpaque(false);setAlignmentX(LEFT_ALIGNMENT);
 		offsets=new int[heights.size()+1];for(int i=0;i<heights.size();i++) { offsets[i+1]=Math.addExact(offsets[i],heights.get(i)); }
+	}
+	VirtualItemList(int rows,int columns,IntFunction<JComponent> factory,IntConsumer released)
+	{
+		this(java.util.Collections.nCopies(rows,42),factory,released);squareColumns=columns;resizeSquares(210);
+	}
+	private boolean resizeSquares(int width)
+	{
+		if(squareColumns==0) { return false; }
+		int pitch=Math.max(1,(width-2*(squareColumns-1))/squareColumns)+2;
+		if(offsets.length>1&&offsets[1]==pitch) { return false; }
+		for(int i=0;i<offsets.length;i++) { offsets[i]=i*pitch; }return true;
+	}
+	@Override public void setBounds(int x,int y,int width,int height)
+	{
+		super.setBounds(x,y,width,height);if(resizeSquares(width)) { revalidate(); }
 	}
 	@Override public Dimension getPreferredSize() { return new Dimension(210,offsets[offsets.length-1]); }
 	@Override public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE,getPreferredSize().height); }

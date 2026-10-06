@@ -22,7 +22,7 @@ public class PanelTest
 			PanelState.Source source=new PanelState.Source();source.key="test";source.name="Test";
 			PanelState.Item item=new PanelState.Item();item.id=1;item.key="unobtained";item.name="Unobtained";item.worldMarker="(m)";item.rate="1/128";item.icon=new javax.swing.ImageIcon(sprite);source.items.add(item);state.sources.add(source);
 			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,400);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);
-			javax.swing.JLabel before=findIcon(findButton(panel,"Unobtained"));assertTrue(before.isEnabled());
+			javax.swing.JLabel before=findIcon(findButton(panel,"Unobtained"));assertTrue(before.isEnabled());JButton square=findButton(panel,"Unobtained");assertEquals(square.getWidth(),square.getHeight());assertEquals(square.getWidth(),before.getX()*2+before.getWidth());assertEquals(square.getHeight(),before.getY()*2+before.getHeight());
 			BufferedImage empty=new BufferedImage(36,32,BufferedImage.TYPE_INT_ARGB);before.getIcon().paintIcon(before,empty.getGraphics(),0,0);assertEquals(0,empty.getRGB(5,5));
 			// Simulate completion of an asynchronous sprite after its first paint.
 			java.awt.Graphics2D graphics=sprite.createGraphics();graphics.setColor(java.awt.Color.ORANGE);graphics.fillRect(0,0,36,32);graphics.dispose();
@@ -48,7 +48,7 @@ public class PanelTest
 			state.sources.add(source);java.util.concurrent.atomic.AtomicInteger icons=new java.util.concurrent.atomic.AtomicInteger();LootLuckPanel panel=new LootLuckPanel(id->{icons.incrementAndGet();return null;},value->{},value->{},()->{},()->{});panel.update(state);
 			javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,400);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);icons.set(0);
 			findButton(panel,"Switch to grid view").doClick();viewport.doLayout();layoutChildren(panel);assertTrue(icons.get()<100);assertNotNull(findButton(panel,"Reward 00000"));assertNull(findButton(panel,"Reward 09999"));assertNull(findLabel(panel,"Expected"));
-			JButton icon=findButton(panel,"Reward 00000");icon.doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Expected"));assertNotNull(findLabel(panel,"Reward 00000"));assertEquals(new java.awt.Color(223,192,113),((javax.swing.border.LineBorder)findButton(panel,"Reward 00000").getBorder()).getLineColor());assertNoTooltips(panel);
+			JButton icon=findButton(panel,"Reward 00000");assertEquals(icon.getWidth(),icon.getHeight());JButton missing=findButton(panel,"Reward 00001");assertEquals(missing.getWidth(),missing.getHeight());assertEquals(icon.getWidth(),missing.getWidth());icon.doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Expected"));assertNotNull(findLabel(panel,"Reward 00000"));assertEquals(new java.awt.Color(223,192,113),((javax.swing.border.LineBorder)findButton(panel,"Reward 00000").getBorder()).getLineColor());assertNoTooltips(panel);
 			findButton(panel,"Reward 00000").doClick();viewport.doLayout();layoutChildren(panel);assertNull(findLabel(panel,"Expected"));findButton(panel,"Switch to list view").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"1/128"));viewport.removeNotify();
 		});
 	}

@@ -132,7 +132,7 @@ public final class LootLuckPanel extends PluginPanel
 		if(view.getSelectedIndex()!=0) { renderObservations();content.revalidate();content.repaint();return; }
 		for(PanelState.Source source:state.sources)
 		{
-			JPanel group=new JPanel(new BorderLayout());group.setOpaque(false);group.setAlignmentX(LEFT_ALIGNMENT);
+			JPanel group=new JPanel(new BorderLayout()) { @Override public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE,getPreferredSize().height); } };group.setOpaque(false);group.setAlignmentX(LEFT_ALIGNMENT);
 			JButton header=new JButton();header.setLayout(new BorderLayout(4,0));header.setBackground(new Color(16,16,16));header.setBorder(BorderFactory.createEmptyBorder(8,4,8,4));
 			header.add(label((collapsed.contains(source.key)?"▸ ":"▾ ")+source.name,GOLD),BorderLayout.WEST);
 			header.add(label("x"+NUMBER.format(source.count),MUTED),BorderLayout.CENTER);
@@ -154,7 +154,7 @@ public final class LootLuckPanel extends PluginPanel
 				else if(ordered.size()>100) { group.add(virtualSourceItems(ordered),BorderLayout.CENTER); }
 				else { for(PanelState.Item item:ordered) { rows.add(itemRow(item));if(item.key.equals(expanded)) { rows.add(details(item)); } }group.add(rows,BorderLayout.CENTER); }
 			}
-			group.setMaximumSize(new Dimension(Integer.MAX_VALUE,group.getPreferredSize().height));content.add(group);content.add(javax.swing.Box.createVerticalStrut(5));
+			content.add(group);content.add(javax.swing.Box.createVerticalStrut(5));
 		}
 		if(state.sources.isEmpty()) { JLabel empty=label("No loot recorded in this view.",MUTED);empty.setBorder(BorderFactory.createEmptyBorder(12,0,12,0));content.add(empty); }
 		JLabel status=label(state.dataStatus,MUTED);content.add(status);content.revalidate();content.repaint();
@@ -177,8 +177,10 @@ public final class LootLuckPanel extends PluginPanel
 	{
 		final int columns=5;int rowCount=(items.size()+columns-1)/columns;
 		JPanel group=new JPanel(new BorderLayout(0,4));group.setOpaque(false);
-		VirtualItemList grid=new VirtualItemList(java.util.Collections.nCopies(rowCount,54),index->{
-			JPanel row=new JPanel(new GridLayout(1,columns,2,0));row.setOpaque(false);
+		VirtualItemList grid=new VirtualItemList(rowCount,columns,index->{
+			JPanel row=new JPanel(null) {
+				@Override public void doLayout() { int side=Math.max(1,(getWidth()-2*(columns-1))/columns);int left=(getWidth()-(side*columns+2*(columns-1)))/2;for(int i=0;i<getComponentCount();i++) { getComponent(i).setBounds(left+i*(side+2),0,side,side); } }
+			};row.setOpaque(false);
 			for(int column=0;column<columns;column++) { int position=index*columns+column;if(position<items.size()) { row.add(gridItem(items.get(position))); }else { JPanel space=new JPanel();space.setOpaque(false);row.add(space); } }return row;
 		},index->{for(int column=0;column<columns&&index*columns+column<items.size();column++) { itemButtons.remove(items.get(index*columns+column).key); }});
 		group.add(grid,BorderLayout.CENTER);
@@ -207,10 +209,12 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private JButton gridItem(PanelState.Item item)
 	{
-		JButton button=new EffectButton(state.itemEffect,item.rarity);button.setLayout(new BorderLayout());button.setBackground(ROW);button.setMargin(new java.awt.Insets(0,0,0,0));
+		JButton button=new EffectButton(state.itemEffect,item.rarity) {
+			@Override public void doLayout() { for(java.awt.Component child:getComponents()) { if("count".equals(child.getName())) { child.setBounds(2,getHeight()-14,getWidth()-4,12); }else { child.setBounds(2,2,getWidth()-4,getHeight()-4); } } }
+		};button.setLayout(null);button.setBackground(ROW);button.setMargin(new java.awt.Insets(0,0,0,0));
 		button.setBorder(BorderFactory.createLineBorder(item.key.equals(expanded)?GOLD:BG,2));
 		JLabel icon=new JLabel(itemIcon(item));icon.setHorizontalAlignment(JLabel.CENTER);if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.CENTER);
-		JLabel quantity=label(net.runelite.client.util.QuantityFormatter.quantityToStackSize(item.quantity),item.quantity==0?MUTED:Color.YELLOW);quantity.setHorizontalAlignment(JLabel.CENTER);if(!state.iconQuantities&&item.quantity>0) { button.add(quantity,BorderLayout.SOUTH); }
+		JLabel quantity=label(net.runelite.client.util.QuantityFormatter.quantityToStackSize(item.quantity),item.quantity==0?MUTED:Color.YELLOW);quantity.setName("count");quantity.setHorizontalAlignment(JLabel.RIGHT);if(!state.iconQuantities&&item.quantity>0) { button.add(quantity,BorderLayout.SOUTH); }
 		button.getAccessibleContext().setAccessibleName(item.name+", quantity "+item.quantity);button.getAccessibleContext().setAccessibleDescription(item.rate+(item.key.equals(expanded)?", expanded":", collapsed"));
 		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;gridReveal=expanded;render();});makeRowClickable(button,button);return button;
 	}

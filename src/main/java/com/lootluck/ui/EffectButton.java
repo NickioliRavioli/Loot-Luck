@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.Timer;
 
 /** One shared repaint clock; effects only paint inside visible item buttons. */
-final class EffectButton extends JButton
+class EffectButton extends JButton
 {
 	private static final Set<EffectButton> BUTTONS=Collections.newSetFromMap(new WeakHashMap<>());
 	private static final Timer CLOCK=new Timer(50,event->{
