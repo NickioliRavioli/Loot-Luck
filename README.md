@@ -117,6 +117,8 @@ same fallback. Summary values remain compact.
 Compact quantities and money support K, M, B and T, always rounded down without
 decimals. Source headers reserve space for their compact count and GE value;
 source names wrap across up to two lines, then end with an ellipsis.
+The expanded-item information button opens a scrollable HTML popover, with gold
+headings, bold field labels and published-rate colors instead of a text editor.
 New notifications can be assigned by a unique quantity-range match when the
 reported amount and published roll count are both one. Overlapping matches,
 batches, missing roll/quantity metadata and multiple rolls remain under Unknown

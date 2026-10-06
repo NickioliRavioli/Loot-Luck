@@ -438,10 +438,7 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private void showInformation(JButton anchor,PanelState.Item item)
 	{
-		javax.swing.JTextArea text=new javax.swing.JTextArea(item.name+"\n\n"+item.rateTooltip+(PanelState.LUCK_STATISTICS_VISIBLE?"\n\nStatistics\n"+item.reason:""));
-		text.setEditable(false);text.setLineWrap(true);text.setWrapStyleWord(true);text.setFont(new java.awt.Font("SansSerif",java.awt.Font.PLAIN,12));text.setForeground(Color.LIGHT_GRAY);text.setBackground(ROW);text.setBorder(BorderFactory.createEmptyBorder(8,8,8,8));text.setCaretPosition(0);
-		javax.swing.JScrollPane scroll=new javax.swing.JScrollPane(text);scroll.setPreferredSize(new Dimension(300,300));scroll.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		javax.swing.JPopupMenu popup=new javax.swing.JPopupMenu();popup.setLayout(new BorderLayout());popup.add(scroll);popup.show(anchor,anchor.getWidth()-300,anchor.getHeight());text.requestFocusInWindow();
+		javax.swing.JPopupMenu popup=new ItemInformationPopup(item);popup.show(anchor,anchor.getWidth()-popup.getPreferredSize().width,anchor.getHeight());
 	}
 	private void stat(JPanel grid,String name,String value,String tip,Color color)
 	{
