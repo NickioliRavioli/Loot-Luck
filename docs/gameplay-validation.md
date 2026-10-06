@@ -69,6 +69,9 @@ Until these checks pass, keep the source observable with its probability statist
 
 ## Data settings controls
 
+- Open settings and check the section titles, wrapped hints and preview controls at the normal sidebar width. Obvious action buttons should have no extra hint paragraphs.
+- With Allow Wiki refresh off, check its explanation and disabled Refresh button. With it on, check the explanation, existing third-party confirmation and enabled Refresh button. Switching it off must retain saved rates and recorded loot. Reset session and Data settings belong under History and data.
+
 - Export the current account, collect more loot, then import the export. Confirm
   lifetime totals return to the export and the session is empty.
 - Cancel each chooser and confirmation: observations must remain unchanged.

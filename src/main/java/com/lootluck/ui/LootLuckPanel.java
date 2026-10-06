@@ -43,6 +43,7 @@ public final class LootLuckPanel extends PluginPanel
 	private final JComboBox<String> itemSort=new JComboBox<>(new String[]{"Most recent","Most occurrences","Most quantity"});
 	private final JPanel controls=new JPanel(new GridLayout(1,2,4,0));
 	private final JButton dataSettings=new JButton("Data settings");
+	private final JButton refreshButton=new JButton("Refresh"),resetButton=new JButton("Reset session");
 	private Consumer<String> dataAction=action->{};
 	private Consumer<String> validationAction=source->{};
 	private int historyPage;
@@ -89,10 +90,8 @@ public final class LootLuckPanel extends PluginPanel
 		settingsButton.addActionListener(e->showSettings(true));back.addActionListener(e->showSettings(false));
 		top.add(view);
 		controls.setOpaque(false);controls.add(scope);controls.add(sort);top.add(controls);
-		JPanel actions=new JPanel(new GridLayout(1,2,4,0));actions.setOpaque(false);
-		JButton refreshButton=new JButton("Refresh"),resetButton=new JButton("Reset session");resetButton.setText("Reset");
-		actions.add(refreshButton);actions.add(resetButton);settings.add(actions);add(top,BorderLayout.NORTH);
-		settings.add(dataSettings);dataSettings.addActionListener(e->{
+		add(top,BorderLayout.NORTH);
+		dataSettings.addActionListener(e->{
 			javax.swing.JPopupMenu menu=new javax.swing.JPopupMenu();
 			for(String action:new String[]{"Export data","Import data","Delete data"}) { javax.swing.JMenuItem entry=new javax.swing.JMenuItem(action);entry.addActionListener(event->dataAction.accept(action));menu.add(entry); }
 			menu.show(dataSettings,0,dataSettings.getHeight());
@@ -117,7 +116,8 @@ public final class LootLuckPanel extends PluginPanel
 	public void setSettings(com.lootluck.LootLuckConfig config,java.util.function.BiConsumer<String,Object> changed,java.util.function.Function<Boolean,Icon> previewIcons)
 	{
 		state.includeUnobtained=config.includeUnobtained();state.itemEffect=config.itemEffect();state.gridView=config.gridView();gridChanged=value->changed.accept("gridView",value);
-		configSettings=new LootLuckSettingsPanel(config,changed,previewIcons);settings.add(configSettings);settings.setLayout(new javax.swing.BoxLayout(settings,javax.swing.BoxLayout.Y_AXIS));
+		JPanel dataActions=new JPanel(new GridLayout(0,1,0,4));dataActions.setOpaque(false);dataActions.add(resetButton);dataActions.add(dataSettings);
+		configSettings=new LootLuckSettingsPanel(config,changed,previewIcons,refreshButton,dataActions);settings.add(configSettings);settings.setLayout(new javax.swing.BoxLayout(settings,javax.swing.BoxLayout.Y_AXIS));
 		for(java.awt.Component child:settings.getComponents()) { if(child instanceof javax.swing.JComponent) { ((javax.swing.JComponent)child).setAlignmentX(LEFT_ALIGNMENT);((javax.swing.JComponent)child).setMaximumSize(new Dimension(Integer.MAX_VALUE,child.getPreferredSize().height)); } }
 	}
 	static JButton stylePreview(ItemDisplayStyle style,Icon icon)
