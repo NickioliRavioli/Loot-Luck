@@ -95,6 +95,7 @@ Confirm the gameplay results to the developer before considering this validation
 ## Condition variants and corrected rates
 
 - While luck UI is temporarily hidden, confirm list and grid details show quantities, occurrences, values and Wiki rate breakdowns without attempts, per-attempt chance, expected drops, A/E, dry streaks or probability tails. Check the information popup also omits statistics, validation buttons are absent, and the sort menu omits Driest first. Luck-model validation checks elsewhere in this document resume after the UI is re-enabled.
+- In grid view, select items in different rows, including a partial final row. Details should open directly under the selected row and move when selection changes; later rows should move down. Confirm the complete selected border remains visible with a gap before details, clicking the selected item closes them, and large source grids still scroll normally.
 
 - Restart into the development build; an already running JVM cannot load the new code.
 - During Rag and Bone Man II, collect an unpolished Zombie bone and check its published rate is 1/4. Rat bone should remain 1/4. Historical unknown-at-collection entries should remain unchanged.

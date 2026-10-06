@@ -204,19 +204,31 @@ public final class LootLuckPanel extends PluginPanel
 	private JPanel sourceGrid(java.util.List<PanelState.Item> items)
 	{
 		final int columns=5;int rowCount=(items.size()+columns-1)/columns;
-		JPanel group=new JPanel(new BorderLayout(0,4));group.setOpaque(false);
-		VirtualItemList grid=new VirtualItemList(rowCount,columns,index->{
-			JPanel row=new JPanel(null) {
+		int selected=-1;for(int i=0;i<items.size();i++) { if(items.get(i).key.equals(expanded)) { selected=i;break; } }
+		final int selectedRow=selected<0?-1:selected/columns;
+		final PanelState.Item selectedItem=selected<0?null:items.get(selected);
+		final JPanel disclosure;
+		if(selectedItem==null) { disclosure=null; }
+		else
+		{
+			disclosure=new JPanel(new BorderLayout(0,3));disclosure.setOpaque(false);JPanel title=new JPanel(new GridLayout(0,1));title.setOpaque(false);
+			title.add(label(selectedItem.name+(!state.hideUnobtainedOtherWorld&&!selectedItem.worldMarker.isEmpty()?" "+selectedItem.worldMarker:""),GOLD));title.add(rateLabel(selectedItem.rate,selectedItem.rarity));disclosure.add(title,BorderLayout.NORTH);disclosure.add(details(selectedItem),BorderLayout.CENTER);
+		}
+		return new VirtualItemList(rowCount,columns,selectedRow,disclosure==null?0:disclosure.getPreferredSize().height+6,index->{
+			JPanel iconsRow=new JPanel(null) {
 				@Override public void doLayout() { int side=Math.max(1,(getWidth()-2*(columns-1))/columns);int left=(getWidth()-(side*columns+2*(columns-1)))/2;for(int i=0;i<getComponentCount();i++) { getComponent(i).setBounds(left+i*(side+2),0,side,side); } }
-			};row.setOpaque(false);
-			for(int column=0;column<columns;column++) { int position=index*columns+column;if(position<items.size()) { row.add(gridItem(items.get(position))); }else { JPanel space=new JPanel();space.setOpaque(false);row.add(space); } }return row;
+			};iconsRow.setOpaque(false);
+			for(int column=0;column<columns;column++) { int position=index*columns+column;if(position<items.size()) { iconsRow.add(gridItem(items.get(position))); }else { JPanel space=new JPanel();space.setOpaque(false);iconsRow.add(space); } }
+			JPanel row=new JPanel(null) {
+				@Override public void doLayout() { int side=Math.max(1,(getWidth()-2*(columns-1))/columns);iconsRow.setBounds(0,0,getWidth(),side);if(index==selectedRow&&disclosure!=null) { disclosure.setBounds(0,side+6,getWidth(),Math.max(0,getHeight()-side-8)); } }
+			};row.setOpaque(false);row.add(iconsRow);
+			if(index==selectedRow&&disclosure!=null)
+			{
+				row.add(disclosure);
+				if(selectedItem.key.equals(gridReveal)) { gridReveal=null;SwingUtilities.invokeLater(()->{if(row.isShowing()) { row.scrollRectToVisible(new java.awt.Rectangle(0,0,row.getWidth(),row.getHeight())); }}); }
+			}
+			return row;
 		},index->{for(int column=0;column<columns&&index*columns+column<items.size();column++) { itemButtons.remove(items.get(index*columns+column).key); }});
-		group.add(grid,BorderLayout.CENTER);
-		items.stream().filter(item->item.key.equals(expanded)).findFirst().ifPresent(item->{
-			JPanel disclosure=new JPanel(new BorderLayout(0,3));disclosure.setOpaque(false);JPanel title=new JPanel(new GridLayout(0,1));title.setOpaque(false);title.add(label(item.name+(!state.hideUnobtainedOtherWorld&&!item.worldMarker.isEmpty()?" "+item.worldMarker:""),GOLD));title.add(rateLabel(item.rate,item.rarity));disclosure.add(title,BorderLayout.NORTH);disclosure.add(details(item),BorderLayout.CENTER);group.add(disclosure,BorderLayout.SOUTH);
-			if(item.key.equals(gridReveal)) { gridReveal=null;SwingUtilities.invokeLater(()->{if(disclosure.isShowing()) { disclosure.scrollRectToVisible(new java.awt.Rectangle(0,0,disclosure.getWidth(),disclosure.getHeight())); }}); }
-		});
-		return group;
 	}
 	static Color effectColor(PanelState.Item item)
 	{

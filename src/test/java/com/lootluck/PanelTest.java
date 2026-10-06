@@ -78,6 +78,14 @@ public class PanelTest
 			javax.swing.JViewport viewport=new javax.swing.JViewport();viewport.setSize(230,400);viewport.setView(panel);viewport.addNotify();viewport.doLayout();layoutChildren(panel);icons.set(0);
 			findButton(panel,"Switch to grid view").doClick();viewport.doLayout();layoutChildren(panel);assertTrue(icons.get()<100);assertNotNull(findButton(panel,"Reward 00000"));assertNull(findButton(panel,"Reward 09999"));assertNull(findLabel(panel,"Quantity"));
 			JButton icon=findButton(panel,"Reward 00000");assertEquals(icon.getWidth(),icon.getHeight());JButton missing=findButton(panel,"Reward 00001");assertEquals(missing.getWidth(),missing.getHeight());assertEquals(icon.getWidth(),missing.getWidth());icon.doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Quantity"));assertNotNull(findLabel(panel,"Reward 00000"));assertEquals(new java.awt.Color(223,192,113),((javax.swing.border.LineBorder)findButton(panel,"Reward 00000").getBorder()).getLineColor());assertNoTooltips(panel);
+			JButton selected=findButton(panel,"Reward 00000"),nextRow=findButton(panel,"Reward 00005");assertNotNull(nextRow);
+			int iconBottom=SwingUtilities.convertPoint(selected,0,selected.getHeight(),panel).y;
+			Component quantity=findLabel(panel,"Quantity");int detailTop=SwingUtilities.convertPoint(quantity,0,0,panel).y;
+			assertTrue(detailTop>iconBottom);assertTrue(detailTop<SwingUtilities.convertPoint(nextRow,0,0,panel).y);
+			assertEquals(selected.getHeight(),selected.getParent().getHeight());
+			findButton(panel,"Reward 00005").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"Reward 00005"));assertNull(findLabel(panel,"Reward 00000"));
+			selected=findButton(panel,"Reward 00005");quantity=findLabel(panel,"Quantity");assertTrue(SwingUtilities.convertPoint(quantity,0,0,panel).y>SwingUtilities.convertPoint(selected,0,selected.getHeight(),panel).y);
+			findButton(panel,"Reward 00000").doClick();viewport.doLayout();layoutChildren(panel);
 			findButton(panel,"Reward 00000").doClick();viewport.doLayout();layoutChildren(panel);assertNull(findLabel(panel,"Quantity"));findButton(panel,"Switch to list view").doClick();viewport.doLayout();layoutChildren(panel);assertNotNull(findLabel(panel,"1/128"));viewport.removeNotify();
 		});
 	}

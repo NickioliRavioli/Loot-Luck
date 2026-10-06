@@ -18,6 +18,7 @@ final class VirtualItemList extends JPanel
 {
 	private final int[] offsets;
 	private int squareColumns;
+	private int expandedSquareRow=-1,expandedSquareHeight,squarePitch;
 	private final IntFunction<JComponent> factory;
 	private final IntConsumer released;
 	private final Map<Integer,JComponent> mounted=new HashMap<>();
@@ -30,14 +31,18 @@ final class VirtualItemList extends JPanel
 	}
 	VirtualItemList(int rows,int columns,IntFunction<JComponent> factory,IntConsumer released)
 	{
-		this(java.util.Collections.nCopies(rows,42),factory,released);squareColumns=columns;resizeSquares(210);
+		this(rows,columns,-1,0,factory,released);
+	}
+	VirtualItemList(int rows,int columns,int expandedRow,int expandedHeight,IntFunction<JComponent> factory,IntConsumer released)
+	{
+		this(java.util.Collections.nCopies(rows,42),factory,released);squareColumns=columns;expandedSquareRow=expandedRow;expandedSquareHeight=expandedHeight;resizeSquares(210);
 	}
 	private boolean resizeSquares(int width)
 	{
 		if(squareColumns==0) { return false; }
 		int pitch=Math.max(1,(width-2*(squareColumns-1))/squareColumns)+2;
-		if(offsets.length>1&&offsets[1]==pitch) { return false; }
-		for(int i=0;i<offsets.length;i++) { offsets[i]=i*pitch; }return true;
+		if(squarePitch==pitch) { return false; }squarePitch=pitch;
+		for(int i=0;i<offsets.length-1;i++) { offsets[i+1]=Math.addExact(offsets[i],pitch+(i==expandedSquareRow?expandedSquareHeight:0)); }return true;
 	}
 	@Override public void setBounds(int x,int y,int width,int height)
 	{
