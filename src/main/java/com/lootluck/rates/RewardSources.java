@@ -29,6 +29,7 @@ public final class RewardSources
 	}
 	public static String displayName(SourceIdentity source)
 	{
+		if("EVENT".equals(source.type)&&"Maze reward".equals(source.name)&&"Strange shrine".equals(source.wikiOwner)) { return source.name; }
 		String owner=wikiOwner(source);
 		return owner.equals(source.name)?source.name:owner;
 	}

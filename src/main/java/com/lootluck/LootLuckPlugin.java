@@ -79,6 +79,8 @@ public class LootLuckPlugin extends Plugin
 	private int scanCursor;
 	private boolean scanning;
 	private final com.lootluck.tracking.MysteryBoxTracker mysteryBoxes=new com.lootluck.tracking.MysteryBoxTracker();
+	private final com.lootluck.tracking.MazeRewardTracker mazeRewards=new com.lootluck.tracking.MazeRewardTracker();
+	private net.runelite.api.coords.WorldPoint mazeTarget;
 	private final com.lootluck.tracking.NpcDeathContexts npcDeaths=new com.lootluck.tracking.NpcDeathContexts();
 	private java.util.Collection<ItemStack> pendingNpcItems;
 	private String pendingNpcContext="";
@@ -112,6 +114,7 @@ public class LootLuckPlugin extends Plugin
 	private void activate(String key)
 	{
 		mysteryBoxes.clear();
+		mazeRewards.clear();mazeTarget=null;
 		npcDeaths.clear();pendingNpcItems=null;pendingNpcContext="";
 		activeProfile=key;long token=generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.cancelRequests(); }
 		submit(r->{
@@ -125,6 +128,8 @@ public class LootLuckPlugin extends Plugin
 	@Subscribe public void onGameStateChanged(GameStateChanged event)
 	{
 		updateWorldType();
+		if(event.getGameState()==GameState.LOADING) { mazeRewards.loading(client.getTickCount()); }
+		else if(event.getGameState()!=GameState.LOGGED_IN) { mazeRewards.clear();mazeTarget=null; }
 		if(event.getGameState()!=GameState.LOGGED_IN) { mysteryBoxes.clear();npcDeaths.clear();pendingNpcItems=null;pendingNpcContext=""; }
 		if(event.getGameState()==GameState.LOGIN_SCREEN||event.getGameState()==GameState.HOPPING||event.getGameState()==GameState.CONNECTION_LOST)
 		{ submit(r->{if(r.engine!=null) { r.engine.interruptCoverage(); }}); }
@@ -224,6 +229,19 @@ public class LootLuckPlugin extends Plugin
 	@Subscribe public void onMenuOptionClicked(net.runelite.api.events.MenuOptionClicked event)
 	{
 		if(!running||activeProfile==null||client.getGameState()!=GameState.LOGGED_IN) { return; }
+		collectMazeReward();
+		// Chest reward dialogues can require a Continue action before inventory delivery.
+		if(event.getMenuAction()==net.runelite.api.MenuAction.WIDGET_CONTINUE||"Continue".equals(event.getMenuOption())) { return; }
+		com.lootluck.tracking.MazeRewardTracker.Reward mazeReward=
+			event.getMenuAction()==net.runelite.api.MenuAction.GAME_OBJECT_FIRST_OPTION?
+			com.lootluck.tracking.MazeRewardTracker.interaction(event.getId(),event.getMenuOption()):null;
+		// A new player action cancels an unfulfilled selection, including a distant/cancelled click.
+		mazeRewards.clear();mazeTarget=null;
+		if(mazeReward!=null&&client.getLocalPlayer()!=null)
+		{
+			mazeTarget=net.runelite.api.coords.WorldPoint.fromScene(client.getLocalPlayer().getWorldView(),event.getParam0(),event.getParam1(),client.getLocalPlayer().getWorldLocation().getPlane());
+			mazeRewards.arm(mazeReward,inventorySnapshot(),client.getTickCount(),nearMazeTarget());
+		}
 		if(event.getItemId()==net.runelite.api.gameval.ItemID.MACRO_QUIZ_MYSTERY_BOX&&"Open".equals(event.getMenuOption()))
 		{
 			collectMysteryBox();mysteryBoxes.arm(inventorySnapshot(),client.getTickCount());
@@ -236,7 +254,25 @@ public class LootLuckPlugin extends Plugin
 			mysteryBoxes.message(net.runelite.client.util.Text.removeTags(event.getMessage()));
 		}
 	}
-	@Subscribe public void onGameTick(net.runelite.api.events.GameTick event) { collectMysteryBox(); }
+	@Subscribe public void onGameTick(net.runelite.api.events.GameTick event) { collectMysteryBox();collectMazeReward(); }
+	private boolean nearMazeTarget()
+	{
+		return mazeTarget!=null&&client.getLocalPlayer()!=null&&mazeTarget.distanceTo(client.getLocalPlayer().getWorldLocation())<=2;
+	}
+	private void collectMazeReward()
+	{
+		if(!running||activeProfile==null||client.getGameState()!=GameState.LOGGED_IN||!mazeRewards.pending()) { return; }
+		com.lootluck.tracking.MazeRewardTracker.Reward reward=mazeRewards.reward();
+		Map<Integer,Long> gained=mazeRewards.poll(inventorySnapshot(),client.getTickCount(),nearMazeTarget(),id->{
+			ItemComposition item=itemManager.getItemComposition(id);return item.getNote()==-1?id:item.getLinkedNoteId();
+		});
+		if(!mazeRewards.pending()) { mazeTarget=null; }
+		if(!gained.isEmpty())
+		{
+			java.util.List<ItemStack> items=new java.util.ArrayList<>();gained.forEach((id,quantity)->items.add(new ItemStack(id,Math.toIntExact(quantity))));
+			recordLoot(new SourceIdentity("EVENT",reward.name,"manual-interaction;inventory-confirmed",client.getWorldType().toString(),reward.wikiOwner),items,1);
+		}
+	}
 	private Map<Integer,Long> inventorySnapshot()
 	{
 		Map<Integer,Long> items=new LinkedHashMap<>();net.runelite.api.ItemContainer inventory=client.getItemContainer(net.runelite.api.gameval.InventoryID.INV);
@@ -405,6 +441,7 @@ public class LootLuckPlugin extends Plugin
 	@Override protected void shutDown()
 	{
 		mysteryBoxes.clear();
+		mazeRewards.clear();mazeTarget=null;
 		npcDeaths.clear();pendingNpcItems=null;pendingNpcContext="";
 		running=false;generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.close(); }
 		// Already captured immutable observations finish on the storage worker; never block the client thread.

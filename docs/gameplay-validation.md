@@ -10,6 +10,15 @@ Automated tests validate bookkeeping and presentation. Only user-driven gameplay
 4. Switch Session/Lifetime, reset Session and restart. Lifetime counts must persist. Switching accounts must show isolated data; resetting core Loot Tracker must not reset Loot Luck.
 5. Keep Wiki refresh off and verify observation tracking continues offline. Enable it after reading the disclosure, then request Refresh. Failure must preserve previously available rates and observations.
 
+## Maze random event inventory rewards
+
+The passive Maze adapter records inventory gains after opening the Maze's closed chest or touching its Strange shrine. The panel keeps **Chest (Maze)** and **Maze reward** separate, with Wiki owners Chest (Maze) and Strange shrine respectively. These are recorded collections, not certified attempts; luck/expected/dry statistics stay unavailable. Rewards sent directly to the bank or dropped on the floor are not captured by this adapter; a partially delivered shrine reward records only its inventory portion.
+
+- Leave inventory space, open several chests, and continue any reward dialogue. Compare each item and quantity with Chest (Maze); existing stacks and consecutive identical rewards must increment once per collection.
+- Touch the shrine and confirm the teleport preserves one Maze reward collection containing all inventory-delivered items, including noted ore and repeated rolls combined into one stack. Compare the Wiki links with the two respective reward tables.
+- Search an empty chest, cancel a distant object click by walking elsewhere, or leave without finishing: no invented reward should appear. Let a selection expire or log out while it is pending; unrelated later inventory gains must not be recorded as Maze loot.
+- Restart the plugin and compare Session/Lifetime and recent collections. The recorded loot must persist under the correct account and source.
+
 ## Salvage denominator and mechanics
 
 Record the number of deliberate input sorts and compare source notification count, reported amount and individual item-present outcomes. Exercise consecutive openings, existing inventory stacks, full inventory, ground/cargo overflow and more than one reward in an opening. Record differences; notification count is not assumed to equal openings.
