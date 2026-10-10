@@ -4,19 +4,24 @@ import java.awt.*;
 import java.awt.event.HierarchyEvent;
 import java.awt.geom.*;
 import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-/** One shared repaint clock; effects only paint inside visible item buttons. */
+/** One shared repaint clock, with clipped animation damage batched per viewport. */
 class EffectButton extends JButton
 {
 	// Installed only by the development profiling launcher; normal clients leave this null.
 	interface PaintObserver
 	{
 		Runnable paint(Graphics2D graphics,String stage,String effect,int width,int height,boolean foregroundPresent);
-		void clock(int registered,int visible,long requestedPixels);
+		void clock(int registered,int visible,long requestedPixels,int regions,long repaintPixels);
 	}
 	static PaintObserver observer;
 	private static final Set<EffectButton> BUTTONS=Collections.newSetFromMap(new WeakHashMap<>());
@@ -28,8 +33,28 @@ class EffectButton extends JButton
 	{
 		frameTick=System.nanoTime()/50_000_000L;
 		int visible=0;long pixels=0;
-		for(EffectButton button:BUTTONS) { if(button.isShowing()&&!button.getVisibleRect().isEmpty()) { button.repaintAnimation();if(observer!=null) { visible++;pixels+=(long)button.getWidth()*button.getHeight(); } }else { button.clearForeground(); } }
-		if(observer!=null) { observer.clock(BUTTONS.size(),visible,pixels); }
+		Map<JComponent,Rectangle> damage=new IdentityHashMap<>();
+		for(EffectButton button:BUTTONS)
+		{
+			Rectangle clip=button.isShowing()?button.getVisibleRect():new Rectangle();
+			if(clip.isEmpty()) { button.clearForeground();continue; }
+			JViewport viewport=(JViewport)SwingUtilities.getAncestorOfClass(JViewport.class,button);
+			JComponent target=viewport==null?button:viewport;
+			Rectangle region=viewport==null?clip:SwingUtilities.convertRectangle(button,clip,viewport);
+			damage.merge(target,region,(first,next)->first.union(next));
+			if(observer!=null) { visible++;pixels+=(long)button.getWidth()*button.getHeight(); }
+		}
+		long repaintPixels=0;
+		for(Map.Entry<JComponent,Rectangle> entry:damage.entrySet())
+		{
+			Rectangle region=entry.getValue();
+			// One repaint per viewport avoids a software-buffer upload and
+			// Direct3D synchronization for every individual animated button.
+			if(entry.getKey() instanceof EffectButton) { ((EffectButton)entry.getKey()).repaintAnimation(region); }
+			else { entry.getKey().repaint(0,region.x,region.y,region.width,region.height); }
+			if(observer!=null) { repaintPixels+=(long)region.width*region.height; }
+		}
+		if(observer!=null) { observer.clock(BUTTONS.size(),visible,pixels,damage.size(),repaintPixels); }
 	}
 	private final ItemEffect effect;
 	private final Color rarity;
@@ -42,7 +67,7 @@ class EffectButton extends JButton
 	}
 	@Override public void addNotify() { super.addNotify();if(effect!=ItemEffect.NONE&&effect!=ItemEffect.RARITY_FADE) { BUTTONS.add(this); }updateClock(); }
 	@Override public void removeNotify() { BUTTONS.remove(this);clearForeground();updateClock();super.removeNotify(); }
-	private void repaintAnimation() { super.repaint(0,0,0,getWidth(),getHeight()); }
+	private void repaintAnimation(Rectangle region) { super.repaint(0,region.x,region.y,region.width,region.height); }
 	@Override public void repaint(long delay,int x,int y,int width,int height) { clearForeground();super.repaint(delay,x,y,width,height); }
 	private void clearForeground() { if(foreground!=null) { foreground.flush();foreground=null; } }
 	@Override protected void addImpl(Component child,Object constraints,int index)

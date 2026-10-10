@@ -5,7 +5,7 @@ param(
 $ErrorActionPreference='Stop'
 $jfr=Join-Path $JdkBin 'jfr.exe'
 $recordingPath=(Resolve-Path -LiteralPath $Recording).Path
-$json=& $jfr print --json --events 'lootluck.Paint,lootluck.AnimationClock,lootluck.SwingPaintPass,jdk.ExecutionSample,jdk.NativeMethodSample' $recordingPath
+$json=& $jfr print --json --events 'lootluck.Paint,lootluck.AnimationClock,lootluck.SwingPaintPass,lootluck.SwingBuffer,jdk.ExecutionSample,jdk.NativeMethodSample' $recordingPath
 if ($LASTEXITCODE -ne 0) { throw 'Could not read the flight recording.' }
 $events=($json -join "`n" | ConvertFrom-Json -Depth 100).recording.events
 function Percentile($values,[double]$fraction) {
@@ -33,6 +33,9 @@ $summary=[ordered]@{
     MeanRegisteredButtons=($clockValues | Measure-Object registered -Average).Average
     MeanVisibleButtons=($clockValues | Measure-Object visible -Average).Average
     MeanAnimationRequestedPixels=($clockValues | Measure-Object requestedPixels -Average).Average
+    MeanAnimationDamageRegions=($clockValues | Where-Object { $_.PSObject.Properties.Name -contains 'regions' } | Measure-Object regions -Average).Average
+    MeanAnimationRepaintPixels=($clockValues | Where-Object { $_.PSObject.Properties.Name -contains 'repaintPixels' } | Measure-Object repaintPixels -Average).Average
+    SwingBuffers=@($events | Where-Object type -eq 'lootluck.SwingBuffer' | Group-Object { "$($_.values.width)x$($_.values.height) accelerated=$($_.values.accelerated)" } | Sort-Object Count -Descending | Select-Object Count,Name)
     SwingPassCount=$passes.Count;SwingPassP95Ms=(Percentile $passes .95);SwingPassP99Ms=(Percentile $passes .99)
     RunnableSwingD3DSamples=$samples.Count;SwingD3DStackFrames=$javaStacks
 }

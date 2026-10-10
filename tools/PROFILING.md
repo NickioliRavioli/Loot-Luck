@@ -34,6 +34,10 @@ Summarize a recording using a PowerShell 7 terminal with the JDK on PATH:
 
 This writes `render-summary.json` alongside the recording, including stage timing percentiles, geometry/DPI, foreground cache presence, visible/registered animation counts and sampled Java2D stack frames. Stack-frame sample counts overlap; they are not independent CPU percentages. `-JdkBin` can select the JDK's `bin` directory explicitly.
 
+Animation clock events also report the number and summed area of batched viewport damage regions. The original requested-pixels field remains the sum of visible button sizes, for comparison with older recordings. Repaint-request events and Swing pass `effectRequests` count direct button requests; batched viewport requests are represented by the clock's damage-region fields instead.
+
+Swing-buffer events record the shared volatile buffer's dimensions and public acceleration capability before validation. Paint geometry records the actual surface used during drawing. Together they help identify oversized or unaccelerated buffering without accessing JDK internals.
+
 For native GPU tracing, run the same command in an **Administrator PowerShell** with `-NativeGpu`. It uses a separate WPR instance, a lighter GPU profile, and file mode. Only that instance is stopped; the script does not cancel somebody else's trace. If starting native tracing fails, capture again without `-NativeGpu`.
 
 Windows Performance Analyzer or GPUView from the Windows Performance Toolkit can inspect `gpu.etl` for GPU queue execution, resource uploads and presentation work. Built-in `wpr.exe` can record traces even when those viewers are absent. Native tracing requires Windows administrator privileges; a sandbox-approved command does not supply those privileges.

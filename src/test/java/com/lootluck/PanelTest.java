@@ -184,6 +184,7 @@ public class PanelTest
 					BufferedImage image=new BufferedImage(230,panel.getHeight(),BufferedImage.TYPE_INT_ARGB);panel.paint(image.getGraphics());
 					try { ImageIO.write(image,"png",new java.io.File("build/large-detail-values.png")); } catch(Exception e) { throw new IllegalStateException(e); }
 				}
+				viewport.removeNotify();
 			}
 		});
 	}

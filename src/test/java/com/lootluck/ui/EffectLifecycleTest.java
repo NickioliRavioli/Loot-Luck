@@ -27,7 +27,7 @@ public class EffectLifecycleTest
 			RepaintManager previous=RepaintManager.currentManager(panel);
 			Set<JComponent> repainted=Collections.newSetFromMap(new IdentityHashMap<>());
 			RepaintManager.setCurrentManager(new RepaintManager() {
-				@Override public void addDirtyRegion(JComponent component,int x,int y,int width,int height) { if(component instanceof EffectButton) { repainted.add(component); } }
+				@Override public void addDirtyRegion(JComponent component,int x,int y,int width,int height) { if(component instanceof EffectButton||component instanceof JViewport) { repainted.add(component); } }
 			});
 			try
 			{
@@ -35,17 +35,34 @@ public class EffectLifecycleTest
 				for(int pass=0;pass<4;pass++)
 				{
 					viewport.doLayout();layout(panel);repainted.clear();EffectButton.animate();
-					assertFalse(repainted.isEmpty());assertTrue(repainted.size()<60);
-					for(JComponent button:repainted) { assertTrue(button.isShowing());assertFalse(button.getVisibleRect().isEmpty());assertFalse("Detached buttons must stop animating",retired.contains(button));assertTrue(SwingUtilities.isDescendingFrom(button,panel)); }
-					retired.addAll(repainted);
+					assertEquals(Collections.singleton(viewport),repainted);
+					Set<JComponent> current=Collections.newSetFromMap(new IdentityHashMap<>());visibleButtons(panel,current);
+					assertFalse(current.isEmpty());assertTrue(current.size()<60);
+					for(JComponent button:current) { assertFalse("Detached buttons must stop animating",retired.contains(button)); }
+					for(JComponent button:retired) { assertFalse(button.isShowing()); }
+					retired.addAll(current);
 					findButton(panel,state.gridView?"Switch to list view":"Switch to grid view").doClick();
 				}
 				viewport.setViewPosition(new Point(0,1500));viewport.doLayout();layout(panel);repainted.clear();EffectButton.animate();
-				assertFalse(repainted.isEmpty());for(JComponent button:repainted) { assertFalse(button.getVisibleRect().isEmpty()); }
+				assertEquals(Collections.singleton(viewport),repainted);
+				viewport.setViewPosition(new Point(0,0));
+				for(int pass=0;pass<3;pass++)
+				{
+					findButton(panel,"Collapse all sources").doClick();viewport.doLayout();layout(panel);repainted.clear();EffectButton.animate();assertTrue(repainted.isEmpty());
+					findButton(panel,"Expand all sources").doClick();viewport.doLayout();layout(panel);repainted.clear();EffectButton.animate();assertEquals(Collections.singleton(viewport),repainted);
+				}
 				viewport.removeNotify();repainted.clear();EffectButton.animate();assertTrue(repainted.isEmpty());
 			}
 			finally { if(viewport.isDisplayable()) { viewport.removeNotify(); }RepaintManager.setCurrentManager(previous); }
 		});
+	}
+	private static void visibleButtons(Container parent,Set<JComponent> result)
+	{
+		for(Component child:parent.getComponents())
+		{
+			if(child instanceof EffectButton&&child.isShowing()&&!((JComponent)child).getVisibleRect().isEmpty()) { result.add((JComponent)child); }
+			if(child instanceof Container) { visibleButtons((Container)child,result); }
+		}
 	}
 	private static JButton findButton(Container parent,String name)
 	{
