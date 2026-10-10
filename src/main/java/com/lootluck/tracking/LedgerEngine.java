@@ -41,9 +41,10 @@ public final class LedgerEngine
 	}
 	public void observe(Observation o, AttemptAdapter.Assessment a, java.util.List<com.lootluck.rates.RateRow> knownRates)
 	{
-		apply(lifetime,o,a,knownRates);apply(session,o,a,knownRates);
+		com.lootluck.rates.ItemRateMatcher.Index rateIndex=new com.lootluck.rates.ItemRateMatcher.Index(knownRates);
+		apply(lifetime,o,a,rateIndex);apply(session,o,a,rateIndex);
 	}
-	private void apply(Ledger ledger, Observation o, AttemptAdapter.Assessment a, java.util.List<com.lootluck.rates.RateRow> knownRates)
+	private void apply(Ledger ledger, Observation o, AttemptAdapter.Assessment a, com.lootluck.rates.ItemRateMatcher.Index rateIndex)
 	{
 		Ledger.CollectionRecord record=new Ledger.CollectionRecord();record.source=o.source;record.timestamp=o.timestamp;record.reportedAmount=o.reportedAmount;record.quantities.putAll(o.quantities);record.names.putAll(o.names);ledger.history.add(record);if(ledger.historyStarted==0) { ledger.historyStarted=o.timestamp; }trimHistory(ledger);
 		Ledger.Source family=ledger.sources.computeIfAbsent(o.source.family().key(),key->{Ledger.Source parent=new Ledger.Source();parent.identity=o.source.family();return parent;});
@@ -56,7 +57,7 @@ public final class LedgerEngine
 			item.quantity = Math.addExact(item.quantity, qty); item.occurrences = Math.addExact(item.occurrences, 1);
 			item.lastReceived = Math.max(item.lastReceived, o.timestamp);
 			String observedName=o.names.getOrDefault(id,item.name);
-			java.util.List<com.lootluck.rates.RateRow> candidates=com.lootluck.rates.ItemRateMatcher.item(id,o.originalIds.getOrDefault(id,id),observedName,o.source,knownRates);
+			java.util.List<com.lootluck.rates.RateRow> candidates=rateIndex.item(id,o.originalIds.getOrDefault(id,id),observedName,o.source);
 			boolean hasCoinPouch=o.names.values().stream().anyMatch(com.lootluck.rates.RogueOutfit::coinPouch);
 			java.util.List<com.lootluck.rates.RateRow> matching=com.lootluck.rates.ItemRateMatcher.matchCollection(observedName,candidates,qty,o.reportedAmount,o.source,hasCoinPouch);
 			String modifier=com.lootluck.rates.RogueOutfit.description(o.source,observedName,hasCoinPouch);

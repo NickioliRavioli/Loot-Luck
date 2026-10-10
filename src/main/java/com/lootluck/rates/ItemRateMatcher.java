@@ -8,19 +8,58 @@ import java.util.stream.Collectors;
 public final class ItemRateMatcher
 {
 	private ItemRateMatcher() { }
+	private static final java.util.regex.Pattern SPACES=java.util.regex.Pattern.compile("\\s+"),SCROLL_BOX=java.util.regex.Pattern.compile("scroll box \\((beginner|easy|medium|hard|elite|master)\\)");
+	private static final java.util.Map<String,String> NORMALIZED=new java.util.LinkedHashMap<String,String>(256,.75f,true) {
+		@Override protected boolean removeEldestEntry(java.util.Map.Entry<String,String> entry) { return size()>4096; }
+	};
 	/** Lookup aliases only: never rewrite stored identities or reward-casket names. */
 	public static String lookupName(String name)
 	{
 		String normalized=normalize(name);
-		if(normalized.matches("scroll box \\((beginner|easy|medium|hard|elite|master)\\)")) { return "clue scroll"+normalized.substring("scroll box".length()); }
+		if(SCROLL_BOX.matcher(normalized).matches()) { return "clue scroll"+normalized.substring("scroll box".length()); }
 		return normalized;
 	}
 	public static String normalize(String name)
 	{
 		if (name == null) { return ""; }
-		return java.text.Normalizer.normalize(net.runelite.client.util.Text.removeTags(name), java.text.Normalizer.Form.NFC)
+		if(name.length()<=512) { synchronized(NORMALIZED) { String cached=NORMALIZED.get(name);if(cached!=null) { return cached; } } }
+		String normalized=java.text.Normalizer.normalize(net.runelite.client.util.Text.removeTags(name), java.text.Normalizer.Form.NFC)
 			.replace("&nbsp;", " ").replace("&#39;", "'").replace("&apos;", "'").replace("&amp;", "&")
-			.replace('\u00a0', ' ').replace('\u2019', '\'').trim().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
+			.replace('\u00a0', ' ').replace('\u2019', '\'').trim();
+		normalized=SPACES.matcher(normalized).replaceAll(" ").toLowerCase(Locale.ROOT);
+		if(name.length()<=512) { synchronized(NORMALIZED) { NORMALIZED.put(name,normalized); } }return normalized;
+	}
+	/** Built once for a resolved table; preserves row order and ID-first matching. */
+	public static final class Index
+	{
+		private final List<RateRow> rows;
+		private final java.util.Map<Integer,List<Integer>> ids=new java.util.HashMap<>();
+		private final java.util.Map<String,List<Integer>> names=new java.util.HashMap<>();
+		public Index(List<RateRow> rows)
+		{
+			this.rows=rows;
+			for(int i=0;i<rows.size();i++)
+			{
+				RateRow row=rows.get(i);for(Integer id:new java.util.HashSet<>(row.itemIds)) { ids.computeIfAbsent(id,ignored->new java.util.ArrayList<>()).add(i); }
+				if(!row.itemName.contains("#")||row.itemIds.isEmpty())
+				{
+					String name=lookupName(row.itemName);names.computeIfAbsent(name,ignored->new java.util.ArrayList<>()).add(i);
+					if(row.gameName!=null) { String game=lookupName(row.gameName);if(!game.equals(name)) { names.computeIfAbsent(game,ignored->new java.util.ArrayList<>()).add(i); } }
+				}
+			}
+		}
+		public List<RateRow> item(int id,int canonicalId,String name,com.lootluck.model.SourceIdentity source)
+		{
+			List<Integer> positions=ids.get(id),canonical=ids.get(canonicalId);
+			if(canonicalId!=id&&canonical!=null)
+			{
+				java.util.Set<Integer> combined=new java.util.TreeSet<>(canonical);if(positions!=null) { combined.addAll(positions); }positions=new java.util.ArrayList<>(combined);
+			}
+			if(positions==null||positions.isEmpty()) { positions=names.get(lookupName(baseName(name),source)); }
+			if(positions==null) { return List.of(); }
+			boolean noted=notedName(name);List<RateRow> result=new java.util.ArrayList<>();
+			for(Integer position:positions) { RateRow row=rows.get(position);if(notedRow(row)==noted) { result.add(row); } }return result;
+		}
 	}
 	/** ID evidence takes precedence; name fallback uses Wiki infobox game names. */
 	public static List<RateRow> item(int id, int canonicalId, String name, com.lootluck.model.SourceIdentity source, List<RateRow> rows)

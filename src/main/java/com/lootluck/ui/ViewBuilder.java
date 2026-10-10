@@ -95,6 +95,7 @@ public final class ViewBuilder
 			PanelState.Source source=new PanelState.Source();source.key=sourceKey;source.familyKey=s.identity.family().key();source.name=com.lootluck.rates.RewardSources.displayName(s.identity);
 			com.lootluck.rates.TableResolver.Resolution resolution=com.lootluck.rates.TableResolver.resolve(s.identity,rates.rows(s.identity));
 			List<RateRow> sourceRates=resolution.rows;
+			com.lootluck.rates.ItemRateMatcher.Index rateIndex=new com.lootluck.rates.ItemRateMatcher.Index(sourceRates);
 			String wikiOwner=sourceRates.isEmpty()?com.lootluck.rates.RewardSources.wikiOwner(s.identity):sourceRates.get(0).owner;
 			source.wikiUrl=sourceWikiUrl(wikiOwner==null?com.lootluck.rates.RewardSources.wikiOwner(s.identity):wikiOwner);
 			source.count=includeFailedPickpockets?Math.addExact(s.notifications,s.pickpocketFailures):s.notifications;source.lastReceived=s.lastReceived;
@@ -107,7 +108,7 @@ public final class ViewBuilder
 			{
 				PanelState.Item row=new PanelState.Item();row.id=item.id;row.key=source.key+":"+item.id;row.name=item.name;row.quantity=item.quantity;row.occurrences=item.occurrences;row.lastReceived=item.lastReceived;
 				boolean ambiguousNotes=item.originalIds.stream().anyMatch(original->original!=item.id)&&!com.lootluck.rates.ItemRateMatcher.notedName(item.name);
-				List<RateRow> matching=com.lootluck.rates.ItemRateMatcher.item(item.id,item.id,item.name,s.identity,sourceRates);
+				List<RateRow> matching=rateIndex.item(item.id,item.id,item.name,s.identity);
 				if(ambiguousNotes) { matching=sourceRates.stream().filter(rate->normalize(rate.itemName).equals(normalize(item.name))).collect(java.util.stream.Collectors.toList()); }
 				applyRate(row,matching);row.rateTooltip+="\n\n"+resolution.reason;applySegment(row,s);display.put("id:"+item.id,row);
 				if(ambiguousNotes) { row.rateTooltip+="\n\nLegacy aggregate may mix noted and unnoted loot; quantities cannot be split retrospectively."; }
@@ -129,7 +130,8 @@ public final class ViewBuilder
 					Integer id=identities.getOrDefault(gameKey,identities.get(group.getKey()));
 					if(id==null&&!com.lootluck.rates.ItemRateMatcher.notedRow(identityRow)&&!identityRow.itemIds.isEmpty()) { id=identityRow.itemIds.get(0); }
 					final Integer resolvedId=id;
-					boolean obtained=display.values().stream().anyMatch(i->(resolvedId!=null&&i.id==resolvedId)||!com.lootluck.rates.ItemRateMatcher.item(i.id,i.id,i.name,s.identity,group.getValue()).isEmpty());
+					com.lootluck.rates.ItemRateMatcher.Index groupIndex=new com.lootluck.rates.ItemRateMatcher.Index(group.getValue());
+					boolean obtained=display.values().stream().anyMatch(i->(resolvedId!=null&&i.id==resolvedId)||!groupIndex.item(i.id,i.id,i.name,s.identity).isEmpty());
 					if(obtained) { continue; }
 					PanelState.Item row=new PanelState.Item();row.id=id==null?0:id;RateRow first=group.getValue().get(0);row.name=(first.gameName==null?first.itemName:first.gameName)+(com.lootluck.rates.ItemRateMatcher.notedRow(first)?" (noted)":"");row.key=source.key+":rate:"+group.getKey();
 					applyRate(row,group.getValue());
