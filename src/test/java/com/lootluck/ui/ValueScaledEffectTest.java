@@ -26,13 +26,14 @@ public class ValueScaledEffectTest
 	}
 	private static int[] pixels(BufferedImage image) { return image.getRGB(0,0,image.getWidth(),image.getHeight(),null,0,image.getWidth()); }
 	private static long opacity(BufferedImage image) { long sum=0;for(int pixel:pixels(image)) { sum+=pixel>>>24; }return sum; }
-	@Test public void strengthIncreasesAcrossTiersInBothLayoutsAndLowestTierHasNoParticles()
+	@Test public void strengthIncreasesAcrossTiersInBothLayoutsAndLowestTierHasNoEffect()
 	{
 		for(int width:new int[]{42,210})
 		{
 			for(ItemEffect effect:EFFECTS)
 			{
-				long previous=0;for(int tier=0;tier<5;tier++) { BufferedImage image=frame(effect,tier,2,width);long alpha=opacity(image);assertTrue(effect+" tier "+tier,alpha>previous);previous=alpha;assertEquals(0,image.getRGB(0,0)); }
+				assertEquals(0,opacity(frame(effect,0,2,width)));
+				long previous=0;for(int tier=1;tier<5;tier++) { BufferedImage image=frame(effect,tier,2,width);long alpha=opacity(image);assertTrue(effect+" tier "+tier,alpha>previous);previous=alpha;assertEquals(0,image.getRGB(0,0)); }
 				assertTrue(opacity(frame(effect,0,2,width))*20<opacity(frame(effect,4,2,width)));
 				assertArrayEquals(pixels(frame(effect,0,2,width)),pixels(frame(ItemEffect.VALUE_FADE,0,2,width)));
 				assertArrayEquals(pixels(frame(effect,0,2,width)),pixels(frame(effect,0,7,width)));
@@ -57,12 +58,23 @@ public class ValueScaledEffectTest
 	{
 		SwingUtilities.invokeAndWait(()->{
 			JPanel view=new JPanel(null);view.setPreferredSize(new java.awt.Dimension(220,180));view.setSize(220,180);
-			for(int index=0;index<EFFECTS.length;index++) { EffectButton button=new EffectButton(EFFECTS[index],Color.RED,0);button.setBounds(0,index*50,210,44);view.add(button); }
+			java.util.concurrent.atomic.AtomicInteger foregrounds=new java.util.concurrent.atomic.AtomicInteger();
+			for(int index=0;index<EFFECTS.length;index++) { EffectButton button=new EffectButton(EFFECTS[index],Color.RED,0) { @Override protected void paintForeground(Graphics2D graphics) { foregrounds.incrementAndGet(); } };button.setBounds(0,index*50,210,44);view.add(button); }
 			JViewport viewport=new JViewport();viewport.setSize(220,180);viewport.setView(view);RepaintManager previous=RepaintManager.currentManager(viewport);java.util.List<JComponent> targets=new java.util.ArrayList<>();
 			RepaintManager.setCurrentManager(new RepaintManager() { @Override public void addDirtyRegion(JComponent component,int x,int y,int width,int height) { targets.add(component); } });
 			try
 			{
 				viewport.addNotify();viewport.doLayout();targets.clear();EffectButton.animate();assertTrue(targets.isEmpty());
+				for(java.awt.Component child:view.getComponents())
+				{
+					EffectButton button=(EffectButton)child,plain=new EffectButton(ItemEffect.NONE,Color.RED);plain.setSize(button.getSize());
+					for(int pass=0;pass<2;pass++)
+					{
+						BufferedImage image=new BufferedImage(210,44,BufferedImage.TYPE_INT_ARGB),reference=new BufferedImage(210,44,BufferedImage.TYPE_INT_ARGB);Graphics2D first=image.createGraphics(),second=reference.createGraphics();
+						try { button.paint(first);plain.paint(second); }finally { first.dispose();second.dispose(); }assertArrayEquals(pixels(reference),pixels(image));
+					}
+				}
+				assertEquals("Lowest tiers must use the ordinary foreground path without allocating a cache",EFFECTS.length*2,foregrounds.get());
 				EffectButton high=new EffectButton(ItemEffect.VALUE_DUST,Color.RED,4);high.setBounds(0,0,210,44);view.add(high);targets.clear();EffectButton.animate();assertEquals(java.util.Collections.singletonList(viewport),targets);
 			}
 			finally { viewport.removeNotify();RepaintManager.setCurrentManager(previous); }
@@ -90,7 +102,7 @@ public class ValueScaledEffectTest
 	@Test public void renderTierComparison() throws Exception
 	{
 		BufferedImage sheet=new BufferedImage(890,345,BufferedImage.TYPE_INT_RGB);Graphics2D graphics=sheet.createGraphics();graphics.setColor(new Color(30,30,30));graphics.fillRect(0,0,890,345);
-		String[] tiers={"Default: barely visible","Low","Medium","High","Insane: strongest"};
+		String[] tiers={"Default: no effect","Low","Medium","High","Insane: strongest"};
 		for(int column=0;column<EFFECTS.length;column++)
 		{
 			int left=column*295+10;graphics.setColor(Color.LIGHT_GRAY);graphics.drawString(EFFECTS[column].title,left,18);

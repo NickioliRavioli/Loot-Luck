@@ -26,7 +26,7 @@ class EffectButton extends JButton
 	static PaintObserver observer;
 	private static final Set<EffectButton> BUTTONS=Collections.newSetFromMap(new WeakHashMap<>());
 	private static final EffectFrames FRAMES=new EffectFrames(2*1024*1024,128);
-	private static final int[] VALUE_FADE_OPACITY={5,28,65,120,190},VALUE_DUST_COUNTS={0,3,7,12,20},VALUE_DUST_OPACITY={0,70,110,165,220};
+	private static final int[] VALUE_FADE_OPACITY={0,28,65,120,190},VALUE_DUST_COUNTS={0,3,7,12,20},VALUE_DUST_OPACITY={0,70,110,165,220};
 	private static final double[] VALUE_AURORA_STRENGTH={0,.22,.55,1,1.6};
 	private static long frameTick=System.nanoTime()/50_000_000L;
 	private static final Timer CLOCK=new Timer(50,event->animate());
@@ -68,8 +68,10 @@ class EffectButton extends JButton
 	}
 	EffectButton(ItemEffect effect,Color rarity,int valueTier)
 	{
-		this.effect=effect==null?ItemEffect.NONE:effect;this.rarity=rarity==null?new Color(160,160,160):rarity;
 		this.valueTier=Math.max(0,Math.min(4,valueTier));
+		// Below the first enabled value threshold, use the ordinary button path:
+		// no background buffer, foreground buffer or animation registration.
+		this.effect=effect==null||(effect.valueScaled()&&this.valueTier==0)?ItemEffect.NONE:effect;this.rarity=rarity==null?new Color(160,160,160):rarity;
 		addHierarchyListener(event->{if((event.getChangeFlags()&HierarchyEvent.SHOWING_CHANGED)!=0) { updateClock(); }});
 	}
 	@Override public void addNotify() { super.addNotify();if(effect.animated(valueTier)) { BUTTONS.add(this); }updateClock(); }
@@ -148,6 +150,7 @@ class EffectButton extends JButton
 	{
 		if(width<=0||height<=0||effect==ItemEffect.NONE) { return; }
 		tier=Math.max(0,Math.min(4,tier));
+		if(effect.valueScaled()&&tier==0) { return; }
 		g.clipRect(2,2,Math.max(0,width-4),Math.max(0,height-4));
 		// Rectangle gradients do not need antialiasing. On Windows, combining it
 		// with complex paints can force software tiles followed by D3D transfers.
@@ -161,8 +164,7 @@ class EffectButton extends JButton
 				iconFade(g,width,height,rarity,valueFadeOpacity(tier));
 				dust(g,width,height,rarity,seconds,VALUE_DUST_COUNTS[tier],VALUE_DUST_OPACITY[tier]);break;
 			case VALUE_AURORA:
-				if(tier==0) { iconFade(g,width,height,rarity,valueFadeOpacity(tier)); }
-				else { aurora(g,width,height,rarity,seconds,VALUE_AURORA_STRENGTH[tier]); }break;
+				aurora(g,width,height,rarity,seconds,VALUE_AURORA_STRENGTH[tier]);break;
 			case SHIMMER:
 				wash(g,width,height,gold,35);float sweep=(float)(phase*(width+height*2)-height);
 				g.setPaint(new LinearGradientPaint(sweep-height,0,sweep+height,height,new float[]{0,.5f,1},new Color[]{alpha(gold,0),alpha(gold,100),alpha(gold,0)}));g.fillRect(0,0,width,height);break;

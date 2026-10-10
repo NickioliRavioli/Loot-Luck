@@ -64,7 +64,7 @@ final class LootLuckSettingsPanel extends JPanel
 		colorMode.addActionListener(event->{if(!syncing) { changed.accept("effectColorMode",colorMode.getSelectedItem());sync(); }});updates.add(()->{boolean valueScaled=config.itemEffect().valueScaled();colorMode.setEnabled(!valueScaled);colorMode.setSelectedItem(valueScaled?EffectColorMode.ITEM_VALUE:config.effectColorMode());});
 		hint("Value colours use Ground Items' price tiers, colours and GE/High Alchemy choice. Value per item uses one unit; Total collected value uses the quantity in the current view. Edit tiers in Ground Items settings. Applies to the colour-based effects; previews use a sample colour.");
 		hint("Applies to obtained items only. Select a preview to choose the effect.");
-		hint("Value fade, Value fade particles and Value aurora always use value per item. Low-value items stay faint; higher tiers get stronger effects and more particles. Their previews show the highest tier.");
+		hint("Value fade, Value fade particles and Value aurora always use value per item. Items below the first value tier have no background effect; higher tiers get stronger effects and more particles. Their previews show the highest tier.");
 		javax.swing.ButtonGroup effectsGroup=new javax.swing.ButtonGroup();
 		for(ItemEffect effect:ItemEffect.values())
 		{
