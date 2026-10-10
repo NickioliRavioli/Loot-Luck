@@ -17,7 +17,7 @@ public final class PanelState
 	public boolean hideUnobtainedOtherWorld;
 	public boolean gridView;
 	public ItemEffect itemEffect=ItemEffect.SHIMMER;
-	public EffectColorMode effectColorMode=EffectColorMode.RARITY;
+	public EffectColorMode effectColorMode=EffectColorMode.ITEM_VALUE;
 	public EffectValuePalette effectValuePalette;
 	public boolean canManageData;
 	public boolean iconQuantities=true;

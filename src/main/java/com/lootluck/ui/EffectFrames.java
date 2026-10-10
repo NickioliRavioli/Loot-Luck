@@ -18,14 +18,19 @@ final class EffectFrames
 	EffectFrames(int pixelLimit,int entryLimit) { this.pixelLimit=pixelLimit;this.entryLimit=entryLimit; }
 	BufferedImage get(ItemEffect effect,Color color,int width,int height,int pixelWidth,int pixelHeight,long tick)
 	{
-		Key key=new Key(effect,color.getRGB(),width,height,pixelWidth,pixelHeight);
-		long frameTick=effect==ItemEffect.RARITY_FADE?0:tick;
+		return get(effect,color,width,height,pixelWidth,pixelHeight,tick,4);
+	}
+	BufferedImage get(ItemEffect effect,Color color,int width,int height,int pixelWidth,int pixelHeight,long tick,int tier)
+	{
+		tier=effect.valueScaled()?Math.max(0,Math.min(4,tier)):4;
+		Key key=new Key(effect,color.getRGB(),width,height,pixelWidth,pixelHeight,tier);
+		long frameTick=effect.animated(tier)?tick:0;
 		Frame previous=frames.get(key);if(previous!=null&&previous.tick==frameTick) { return previous.image; }
 		// Keep the same image across ticks so Java2D can reuse its managed surface.
 		// Flushing/replacing it every tick also repeatedly allocates GPU textures.
 		BufferedImage image=previous==null?new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_ARGB_PRE):previous.image;
 		Graphics2D graphics=image.createGraphics();
-		try { graphics.setComposite(AlphaComposite.Clear);graphics.fillRect(0,0,pixelWidth,pixelHeight);graphics.setComposite(AlphaComposite.SrcOver);graphics.scale((double)pixelWidth/width,(double)pixelHeight/height);EffectButton.paintEffect(graphics,width,height,effect,color,tick*.05); }
+		try { graphics.setComposite(AlphaComposite.Clear);graphics.fillRect(0,0,pixelWidth,pixelHeight);graphics.setComposite(AlphaComposite.SrcOver);graphics.scale((double)pixelWidth/width,(double)pixelHeight/height);EffectButton.paintEffect(graphics,width,height,effect,color,frameTick*.05,tier); }
 		finally { graphics.dispose(); }
 		long size=(long)pixelWidth*pixelHeight;
 		if(size<=pixelLimit)
@@ -48,13 +53,13 @@ final class EffectFrames
 	}
 	private static final class Key
 	{
-		final ItemEffect effect;final int color,width,height,pixelWidth,pixelHeight;
-		Key(ItemEffect effect,int color,int width,int height,int pixelWidth,int pixelHeight) { this.effect=effect;this.color=color;this.width=width;this.height=height;this.pixelWidth=pixelWidth;this.pixelHeight=pixelHeight; }
+		final ItemEffect effect;final int color,width,height,pixelWidth,pixelHeight,tier;
+		Key(ItemEffect effect,int color,int width,int height,int pixelWidth,int pixelHeight,int tier) { this.effect=effect;this.color=color;this.width=width;this.height=height;this.pixelWidth=pixelWidth;this.pixelHeight=pixelHeight;this.tier=tier; }
 		@Override public boolean equals(Object other)
 		{
 			if(!(other instanceof Key)) { return false; }Key key=(Key)other;
-			return effect==key.effect&&color==key.color&&width==key.width&&height==key.height&&pixelWidth==key.pixelWidth&&pixelHeight==key.pixelHeight;
+			return effect==key.effect&&color==key.color&&width==key.width&&height==key.height&&pixelWidth==key.pixelWidth&&pixelHeight==key.pixelHeight&&tier==key.tier;
 		}
-		@Override public int hashCode() { return Objects.hash(effect,color,width,height,pixelWidth,pixelHeight); }
+		@Override public int hashCode() { return Objects.hash(effect,color,width,height,pixelWidth,pixelHeight,tier); }
 	}
 }

@@ -36,32 +36,38 @@ public class EffectValuePaletteTest
 		assertEquals(config.mediumValueColor(),palette.color(item(100001,0,1),EffectColorMode.ITEM_VALUE));
 		assertEquals(config.highValueColor(),palette.color(item(1000001,0,1),EffectColorMode.ITEM_VALUE));
 		assertEquals(config.insaneValueColor(),palette.color(item(10000001,0,1),EffectColorMode.ITEM_VALUE));
+		long[] boundaries={20000,100000,1000000,10000000};
+		for(int tier=0;tier<boundaries.length;tier++) { assertEquals(tier,palette.tier(item(boundaries[tier],0,100),EffectColorMode.ITEM_VALUE));assertEquals(tier+1,palette.tier(item(boundaries[tier]+1,0,100),EffectColorMode.ITEM_VALUE)); }
 		config.low=0;assertEquals(config.defaultColor(),EffectValuePalette.from(config).color(item(50000,0,1),EffectColorMode.ITEM_VALUE));
+		assertEquals(0,EffectValuePalette.from(config).tier(item(50000,0,1),EffectColorMode.ITEM_VALUE));
 		assertEquals(config.lowValueColor(),palette.color(item(50000,0,1),EffectColorMode.ITEM_VALUE)); // detached snapshot
 	}
 	@Test public void unitAndTotalValuesHonorGeHaAndHighestWithoutChangingRarity()
 	{
 		GroundConfig config=new GroundConfig();PanelState.Item item=item(5000,25000,100);
 		assertEquals(config.defaultColor(),EffectValuePalette.from(config).color(item,EffectColorMode.ITEM_VALUE));
+		assertEquals(0,EffectValuePalette.from(config).tier(item,EffectColorMode.ITEM_VALUE));
 		assertEquals(config.mediumValueColor(),EffectValuePalette.from(config).color(item,EffectColorMode.TOTAL_VALUE));
 		config.mode=ValueCalculationMode.HA;
 		assertEquals(config.lowValueColor(),EffectValuePalette.from(config).color(item,EffectColorMode.ITEM_VALUE));
+		assertEquals(1,EffectValuePalette.from(config).tier(item,EffectColorMode.ITEM_VALUE));
 		assertEquals(config.highValueColor(),EffectValuePalette.from(config).color(item,EffectColorMode.TOTAL_VALUE));
 		config.mode=ValueCalculationMode.HIGHEST;
 		assertEquals(config.highValueColor(),EffectValuePalette.from(config).color(item,EffectColorMode.TOTAL_VALUE));
 		assertEquals(Color.RED,item.rarity);
 		item.valueAvailable=false;assertEquals(new Color(160,160,160),EffectValuePalette.from(config).color(item,EffectColorMode.ITEM_VALUE));
 		item.valueAvailable=true;item.occurrenceOnly=true;assertEquals(new Color(160,160,160),EffectValuePalette.from(config).color(item,EffectColorMode.TOTAL_VALUE));
+		assertEquals(0,EffectValuePalette.from(config).tier(item,EffectColorMode.ITEM_VALUE));
 	}
 	@Test public void settingPersistsAndSyncs() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
 			Map<String,Object> saved=new HashMap<>();com.lootluck.LootLuckConfig config=new com.lootluck.LootLuckConfig() {
-				@Override public EffectColorMode effectColorMode() { return (EffectColorMode)saved.getOrDefault("effectColorMode",EffectColorMode.RARITY); }
+				@Override public EffectColorMode effectColorMode() { return (EffectColorMode)saved.getOrDefault("effectColorMode",EffectColorMode.ITEM_VALUE); }
 			};
 			LootLuckSettingsPanel panel=new LootLuckSettingsPanel(config,saved::put,flag->null);
 			JComboBox<?> control=null;for(java.awt.Component child:panel.getComponents()) { if(child instanceof JComboBox) { control=(JComboBox<?>)child; } }
-			assertNotNull(control);assertEquals(EffectColorMode.RARITY,control.getSelectedItem());
+			assertNotNull(control);assertEquals(EffectColorMode.ITEM_VALUE,control.getSelectedItem());
 			control.setSelectedItem(EffectColorMode.TOTAL_VALUE);assertEquals(EffectColorMode.TOTAL_VALUE,saved.get("effectColorMode"));
 			saved.put("effectColorMode",EffectColorMode.ITEM_VALUE);panel.sync();assertEquals(EffectColorMode.ITEM_VALUE,control.getSelectedItem());
 		});

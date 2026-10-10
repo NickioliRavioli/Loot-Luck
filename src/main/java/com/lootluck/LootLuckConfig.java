@@ -8,10 +8,10 @@ import net.runelite.client.config.ConfigItem;
 public interface LootLuckConfig extends Config
 {
 	String GROUP="loot-luck";
-	@ConfigItem(keyName="itemEffect",name="Item background effect (preview)",description="Preview the selected animated background on every item, regardless of rarity. Celebration repeats for preview.")
+	@ConfigItem(keyName="itemEffect",name="Item background effect (preview)",description="Background effect for obtained items. Value fade, Value fade particles and Value aurora scale strength using Ground Items' value per item tiers.")
 	default com.lootluck.ui.ItemEffect itemEffect() { return com.lootluck.ui.ItemEffect.SHIMMER; }
-	@ConfigItem(keyName="effectColorMode",name="Background effect colour",description="Choose rarity, value per item, or total collected value. Value colours use Ground Items' configured price tiers and GE/High Alchemy calculation.")
-	default com.lootluck.ui.EffectColorMode effectColorMode() { return com.lootluck.ui.EffectColorMode.RARITY; }
+	@ConfigItem(keyName="effectColorMode",name="Background effect colour",description="Choose rarity, value per item, or total collected value. Value colours use Ground Items' configured tiers and GE/High Alchemy choice. Value-scaled effects always use value per item.")
+	default com.lootluck.ui.EffectColorMode effectColorMode() { return com.lootluck.ui.EffectColorMode.ITEM_VALUE; }
 	@ConfigItem(keyName="gridView",name="Grid view",description="Display source items as a compact icon grid with selected-item details directly below its row.")
 	default boolean gridView() { return false; }
 	@ConfigItem(keyName="groupByDropTable",name="Group by drop table",description="Keep items from the same published table together without table headers. Sorting applies within each table.")

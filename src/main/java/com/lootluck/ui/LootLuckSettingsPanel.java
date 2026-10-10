@@ -61,15 +61,17 @@ final class LootLuckSettingsPanel extends JPanel
 		section("Background effects");
 		JLabel colorLabel=new JLabel("Colour based on");colorLabel.setForeground(Color.LIGHT_GRAY);colorLabel.setAlignmentX(LEFT_ALIGNMENT);add(colorLabel);
 		javax.swing.JComboBox<EffectColorMode> colorMode=new javax.swing.JComboBox<>(EffectColorMode.values());colorMode.setAlignmentX(LEFT_ALIGNMENT);colorMode.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));colorMode.getAccessibleContext().setAccessibleName("Background effect colour");add(colorMode);
-		colorMode.addActionListener(event->{if(!syncing) { changed.accept("effectColorMode",colorMode.getSelectedItem());sync(); }});updates.add(()->colorMode.setSelectedItem(config.effectColorMode()));
+		colorMode.addActionListener(event->{if(!syncing) { changed.accept("effectColorMode",colorMode.getSelectedItem());sync(); }});updates.add(()->{boolean valueScaled=config.itemEffect().valueScaled();colorMode.setEnabled(!valueScaled);colorMode.setSelectedItem(valueScaled?EffectColorMode.ITEM_VALUE:config.effectColorMode());});
 		hint("Value colours use Ground Items' price tiers, colours and GE/High Alchemy choice. Value per item uses one unit; Total collected value uses the quantity in the current view. Edit tiers in Ground Items settings. Applies to the colour-based effects; previews use a sample colour.");
 		hint("Applies to obtained items only. Select a preview to choose the effect.");
+		hint("Value fade, Value fade particles and Value aurora always use value per item. Low-value items stay faint; higher tiers get stronger effects and more particles. Their previews show the highest tier.");
 		javax.swing.ButtonGroup effectsGroup=new javax.swing.ButtonGroup();
 		for(ItemEffect effect:ItemEffect.values())
 		{
 			javax.swing.JButton button=new EffectButton(effect,new Color(227,104,98));button.setLayout(new java.awt.BorderLayout(6,0));button.setBackground(new Color(30,30,30));
 			JLabel icon=new JLabel(previewIcons.apply(false));button.add(icon,java.awt.BorderLayout.WEST);
 			JLabel name=new JLabel(effect.title);name.setForeground(Color.LIGHT_GRAY);button.add(name,java.awt.BorderLayout.CENTER);
+			if(effect.valueScaled()) { button.setToolTipText("Uses Ground Items value per item tiers. Strength increases with tier; preview shows the highest tier."); }
 			button.setAlignmentX(LEFT_ALIGNMENT);button.setPreferredSize(new Dimension(210,44));button.setMaximumSize(new Dimension(Integer.MAX_VALUE,44));button.getAccessibleContext().setAccessibleName("Preview effect: "+effect.title);LootLuckPanel.makeRowClickable(button,button);effectsGroup.add(button);add(button);add(javax.swing.Box.createVerticalStrut(4));
 			button.addActionListener(event->{if(!syncing) { changed.accept("itemEffect",effect);sync(); }});
 			updates.add(()->{boolean selected=config.itemEffect()==effect;button.setSelected(selected);button.setBorder(javax.swing.BorderFactory.createLineBorder(selected?new Color(223,192,113):new Color(65,65,65),2));});

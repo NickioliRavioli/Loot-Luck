@@ -26,6 +26,8 @@ class EffectButton extends JButton
 	static PaintObserver observer;
 	private static final Set<EffectButton> BUTTONS=Collections.newSetFromMap(new WeakHashMap<>());
 	private static final EffectFrames FRAMES=new EffectFrames(2*1024*1024,128);
+	private static final int[] VALUE_FADE_OPACITY={5,28,65,120,190},VALUE_DUST_COUNTS={0,3,7,12,20},VALUE_DUST_OPACITY={0,70,110,165,220};
+	private static final double[] VALUE_AURORA_STRENGTH={0,.22,.55,1,1.6};
 	private static long frameTick=System.nanoTime()/50_000_000L;
 	private static final Timer CLOCK=new Timer(50,event->animate());
 	static void animate()
@@ -57,14 +59,20 @@ class EffectButton extends JButton
 	}
 	private final ItemEffect effect;
 	private final Color rarity;
+	private final int valueTier;
 	private java.awt.image.BufferedImage foreground;
 	private int foregroundWidth,foregroundHeight;
 	EffectButton(ItemEffect effect,Color rarity)
 	{
+		this(effect,rarity,4);
+	}
+	EffectButton(ItemEffect effect,Color rarity,int valueTier)
+	{
 		this.effect=effect==null?ItemEffect.NONE:effect;this.rarity=rarity==null?new Color(160,160,160):rarity;
+		this.valueTier=Math.max(0,Math.min(4,valueTier));
 		addHierarchyListener(event->{if((event.getChangeFlags()&HierarchyEvent.SHOWING_CHANGED)!=0) { updateClock(); }});
 	}
-	@Override public void addNotify() { super.addNotify();if(effect!=ItemEffect.NONE&&effect!=ItemEffect.RARITY_FADE) { BUTTONS.add(this); }updateClock(); }
+	@Override public void addNotify() { super.addNotify();if(effect.animated(valueTier)) { BUTTONS.add(this); }updateClock(); }
 	@Override public void removeNotify() { BUTTONS.remove(this);clearForeground();updateClock();super.removeNotify(); }
 	private void repaintAnimation(Rectangle region) { super.repaint(0,region.x,region.y,region.width,region.height); }
 	@Override public void repaint(long delay,int x,int y,int width,int height) { clearForeground();super.repaint(delay,x,y,width,height); }
@@ -92,7 +100,7 @@ class EffectButton extends JButton
 	}
 	private void paintCachedChildren(Graphics graphics)
 	{
-		if(effect==ItemEffect.NONE||effect==ItemEffect.RARITY_FADE||getWidth()<=0||getHeight()<=0) { paintForeground((Graphics2D)graphics);return; }
+		if(effect==ItemEffect.NONE||effect==ItemEffect.RARITY_FADE||effect==ItemEffect.VALUE_FADE||getWidth()<=0||getHeight()<=0) { paintForeground((Graphics2D)graphics);return; }
 		Graphics2D g=(Graphics2D)graphics;
 		AffineTransform transform=g.getTransform();
 		int width=Math.max(1,(int)Math.ceil(getWidth()*Math.hypot(transform.getScaleX(),transform.getShearY())));
@@ -128,13 +136,18 @@ class EffectButton extends JButton
 			AffineTransform transform=g.getTransform();
 			int pixelWidth=Math.max(1,(int)Math.ceil(getWidth()*Math.hypot(transform.getScaleX(),transform.getShearY())));
 			int pixelHeight=Math.max(1,(int)Math.ceil(getHeight()*Math.hypot(transform.getScaleY(),transform.getShearX())));
-			g.drawImage(FRAMES.get(effect,rarity,getWidth(),getHeight(),pixelWidth,pixelHeight,frameTick),0,0,getWidth(),getHeight(),null);
+			g.drawImage(FRAMES.get(effect,rarity,getWidth(),getHeight(),pixelWidth,pixelHeight,frameTick,valueTier),0,0,getWidth(),getHeight(),null);
 		}
 		finally { g.dispose(); }
 	}
 	static void paintEffect(Graphics2D g,int width,int height,ItemEffect effect,Color rarity,double seconds)
 	{
+		paintEffect(g,width,height,effect,rarity,seconds,4);
+	}
+	static void paintEffect(Graphics2D g,int width,int height,ItemEffect effect,Color rarity,double seconds,int tier)
+	{
 		if(width<=0||height<=0||effect==ItemEffect.NONE) { return; }
+		tier=Math.max(0,Math.min(4,tier));
 		g.clipRect(2,2,Math.max(0,width-4),Math.max(0,height-4));
 		// Rectangle gradients do not need antialiasing. On Windows, combining it
 		// with complex paints can force software tiles followed by D3D transfers.
@@ -142,6 +155,14 @@ class EffectButton extends JButton
 		Color gold=new Color(255,203,85);double phase=seconds%6/6;
 		switch(effect)
 		{
+			case VALUE_FADE:
+				iconFade(g,width,height,rarity,valueFadeOpacity(tier));break;
+			case VALUE_DUST:
+				iconFade(g,width,height,rarity,valueFadeOpacity(tier));
+				dust(g,width,height,rarity,seconds,VALUE_DUST_COUNTS[tier],VALUE_DUST_OPACITY[tier]);break;
+			case VALUE_AURORA:
+				if(tier==0) { iconFade(g,width,height,rarity,valueFadeOpacity(tier)); }
+				else { aurora(g,width,height,rarity,seconds,VALUE_AURORA_STRENGTH[tier]); }break;
 			case SHIMMER:
 				wash(g,width,height,gold,35);float sweep=(float)(phase*(width+height*2)-height);
 				g.setPaint(new LinearGradientPaint(sweep-height,0,sweep+height,height,new float[]{0,.5f,1},new Color[]{alpha(gold,0),alpha(gold,100),alpha(gold,0)}));g.fillRect(0,0,width,height);break;
@@ -174,8 +195,7 @@ class EffectButton extends JButton
 				wash(g,width,height,rarity,60);Color prism=neighbor(rarity,.06f);float center=(float)(width*(.5+.4*Math.sin(seconds*.7)));
 				g.setPaint(new LinearGradientPaint(center-width,0,center+width,height,new float[]{0,.4f,.55f,.7f,1},new Color[]{alpha(rarity,25),alpha(rarity,80),alpha(prism,100),alpha(rarity,75),alpha(rarity,20)}));g.fillRect(0,0,width,height);edge(g,width,height,rarity,100);break;
 			case RARITY_AURORA:
-				wash(g,width,height,rarity,60);
-				for(int i=0;i<3;i++) { float x=(float)(width*(.5+.45*Math.sin(seconds*.35+i*1.7))),y=(float)(height*(.5+.4*Math.cos(seconds*.45+i)));g.setPaint(new RadialGradientPaint(new Point2D.Float(x,y),Math.max(width,height)*.6f,new float[]{0,1},new Color[]{alpha(i==1?neighbor(rarity,-.05f):rarity,65),alpha(rarity,0)}));g.fillRect(0,0,width,height); }edge(g,width,height,rarity,85);break;
+				aurora(g,width,height,rarity,seconds,1);break;
 			case RARITY_OPAL:
 				wash(g,width,height,rarity,65);smooth(g);double motion=seconds*.3;
 				for(int i=0;i<6;i++) { double x=width*((i*.213+motion*.08)%1),y=height*(.5+.5*Math.sin(motion+i));g.setColor(alpha(i%3==0?neighbor(rarity,.04f):rarity,30+i%3*15));Path2D facet=new Path2D.Double();facet.moveTo(x-width*.3,y);facet.lineTo(x,y-height);facet.lineTo(x+width*.3,y);facet.lineTo(x,y+height);facet.closePath();g.fill(facet); }edge(g,width,height,rarity,95);break;
@@ -184,17 +204,28 @@ class EffectButton extends JButton
 			case RARITY_PULSE:
 				iconFade(g,width,height,rarity,(int)(75+30*Math.sin(seconds*1.6)));break;
 			case RARITY_DUST:
-				iconFade(g,width,height,rarity,85);smooth(g);
-				for(int i=0;i<8;i++)
-				{
-					double age=(seconds*.16+i*.137)%1,x=iconCenter(width)+age*width*.65,y=height*(.2+(i*.213)% .65)+Math.sin(seconds+i)*2;
-					g.setColor(alpha(rarity,(int)(140*(1-age)*(1-age))));g.fill(new Ellipse2D.Double(x,y,i%3==0?3:2,i%3==0?3:2));
-				}break;
+				iconFade(g,width,height,rarity,85);dust(g,width,height,rarity,seconds,8,140);break;
 			case RARITY_SHEEN:
 				iconFade(g,width,height,rarity,85);float light=(float)(phase*width*1.4-width*.2);
 				int intensity=(int)(55*Math.pow(Math.max(0,1-Math.max(0,light)/width),2));
 				g.setPaint(new LinearGradientPaint(light-width*.15f,0,light+width*.15f,height,new float[]{0,.5f,1},new Color[]{alpha(rarity,0),alpha(neighbor(rarity,0),intensity),alpha(rarity,0)}));g.fillRect(0,0,width,height);break;
 			default:break;
+		}
+	}
+	private static int valueFadeOpacity(int tier) { return VALUE_FADE_OPACITY[tier]; }
+	private static void aurora(Graphics2D g,int width,int height,Color color,double seconds,double strength)
+	{
+		wash(g,width,height,color,(int)(60*strength));
+		for(int i=0;i<3;i++) { float x=(float)(width*(.5+.45*Math.sin(seconds*.35+i*1.7))),y=(float)(height*(.5+.4*Math.cos(seconds*.45+i)));g.setPaint(new RadialGradientPaint(new Point2D.Float(x,y),Math.max(width,height)*.6f,new float[]{0,1},new Color[]{alpha(i==1?neighbor(color,-.05f):color,(int)(65*strength)),alpha(color,0)}));g.fillRect(0,0,width,height); }
+		edge(g,width,height,color,(int)(85*strength));
+	}
+	private static void dust(Graphics2D g,int width,int height,Color color,double seconds,int count,int opacity)
+	{
+		if(count==0) { return; }smooth(g);
+		for(int i=0;i<count;i++)
+		{
+			double age=(seconds*.16+i*.137)%1,x=iconCenter(width)+age*width*.65,y=height*(.2+(i*.213)% .65)+Math.sin(seconds+i)*2;
+			g.setColor(alpha(color,(int)(opacity*(1-age)*(1-age))));g.fill(new Ellipse2D.Double(x,y,i%3==0?3:2,i%3==0?3:2));
 		}
 	}
 	private static float iconCenter(int width) { return width<80?width*.5f:22f; }
