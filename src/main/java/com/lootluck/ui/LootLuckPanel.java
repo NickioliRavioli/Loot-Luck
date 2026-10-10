@@ -273,6 +273,7 @@ public final class LootLuckPanel extends PluginPanel
 		}; }
 		javax.swing.Icon sprite=item.icon!=null?item.icon:item.id>0?icons.apply(item.id,item.quantity):null;
 		if(sprite==null) { return null; }
+		final String quantityText=CountFormat.compact(item.quantity);
 		// Paint the live icon rather than caching a disabled copy of an asynchronous image.
 		return new javax.swing.Icon()
 		{
@@ -287,7 +288,7 @@ public final class LootLuckPanel extends PluginPanel
 					sprite.paintIcon(component,faded,x,y);
 					if(quantityOverlay&&item.quantity>0&&state.iconQuantities&&!state.stackCounts)
 					{
-						faded.setFont(FontManager.getRunescapeSmallFont());String count=CountFormat.compact(item.quantity);int baseline=y+faded.getFontMetrics().getAscent();
+						faded.setFont(FontManager.getRunescapeSmallFont());String count=quantityText;int baseline=y+faded.getFontMetrics().getAscent();
 						faded.setColor(Color.BLACK);faded.drawString(count,x+3,baseline+1);faded.setColor(Color.YELLOW);faded.drawString(count,x+2,baseline);
 					}
 				}
@@ -297,17 +298,18 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private JButton gridItem(PanelState.Item item)
 	{
+		final String quantityText=item.occurrenceOnly?"x"+CountFormat.compact(item.occurrences):CountFormat.compact(item.quantity);
 		JButton button=new EffectButton(item.quantity>0?state.itemEffect:ItemEffect.NONE,backgroundColor(item)) {
 			@Override public void doLayout() { for(java.awt.Component child:getComponents()) { child.setBounds(2,2,getWidth()-4,getHeight()-4); } }
-			@Override protected void paintChildren(java.awt.Graphics graphics)
+			@Override protected void paintForeground(java.awt.Graphics2D graphics)
 			{
-				super.paintChildren(graphics);
+				super.paintForeground(graphics);
 				if(item.quantity>0||item.occurrenceOnly)
 				{
 					java.awt.Graphics2D count=(java.awt.Graphics2D)graphics.create();
 					try
 					{
-						count.setFont(FontManager.getRunescapeSmallFont());String text=item.occurrenceOnly?"x"+CountFormat.compact(item.occurrences):CountFormat.compact(item.quantity);int baseline=4+count.getFontMetrics().getAscent();
+						count.setFont(FontManager.getRunescapeSmallFont());String text=quantityText;int baseline=4+count.getFontMetrics().getAscent();
 						count.setColor(Color.BLACK);count.drawString(text,5,baseline+1);count.setColor(Color.YELLOW);count.drawString(text,4,baseline);
 					}
 					finally { count.dispose(); }

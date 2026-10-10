@@ -18,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.inject.Inject;
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -77,6 +76,10 @@ public class LootLuckPlugin extends Plugin
 	private volatile boolean running,session,all,lootTrackerEnabled;
 	private final AtomicLong generation=new AtomicLong();
 	private final Map<String,Integer> identities=new ConcurrentHashMap<>();
+	// Accessed only by Swing; ItemManager already owns and caches the sprite pixels.
+	private final Map<String,javax.swing.Icon> icons=new LinkedHashMap<String,javax.swing.Icon>(128,.75f,true) {
+		@Override protected boolean removeEldestEntry(Map.Entry<String,javax.swing.Icon> entry) { return size()>512; }
+	};
 	private int scanCursor;
 	private boolean scanning;
 	private final com.lootluck.tracking.MysteryBoxTracker mysteryBoxes=new com.lootluck.tracking.MysteryBoxTracker();
@@ -359,13 +362,12 @@ public class LootLuckPlugin extends Plugin
 	}
 	private javax.swing.Icon previewIcon(boolean quantity)
 	{
-		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(net.runelite.api.gameval.ItemID.COINS,12500,false);
-		if(image==null) { return null; }
-		image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));return new ImageIcon(image);
+		return observationIcon(net.runelite.api.gameval.ItemID.COINS,12500);
 	}
 	private javax.swing.Icon observationIcon(int id,long quantity)
 	{
-		net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(id,(int)Math.max(1,Math.min(Integer.MAX_VALUE,quantity)),false);if(image==null) { return null; }image.onLoaded(()->SwingUtilities.invokeLater(()->{if(panel!=null) { panel.repaint(); }}));return new ImageIcon(image);
+		int stack=(int)Math.max(1,Math.min(Integer.MAX_VALUE,quantity));String key=id+":"+stack;
+		return icons.computeIfAbsent(key,ignored->{net.runelite.client.util.AsyncBufferedImage image=itemManager.getImage(id,stack,false);return image==null?null:new com.lootluck.ui.AsyncItemIcon(image);});
 	}
 	private void resetSession()
 	{
@@ -516,7 +518,7 @@ public class LootLuckPlugin extends Plugin
 		running=false;generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.close(); }
 		// Already captured immutable observations finish on the storage worker; never block the client thread.
 		// Shared executor is not shut down; only previously accepted immutable observations drain.
-		NavigationButton oldNavigation=navigation;LootLuckPanel oldPanel=panel;SwingUtilities.invokeLater(()->{if(oldNavigation!=null) { toolbar.removeNavigation(oldNavigation); }if(panel==oldPanel) { panel=null; }});
+		NavigationButton oldNavigation=navigation;LootLuckPanel oldPanel=panel;SwingUtilities.invokeLater(()->{if(oldNavigation!=null) { toolbar.removeNavigation(oldNavigation); }if(panel==oldPanel) { panel=null;icons.clear(); }});
 	}
 	@Provides LootLuckConfig provideConfig(ConfigManager manager) { return manager.getConfig(LootLuckConfig.class); }
 }

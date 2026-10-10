@@ -17,21 +17,60 @@ class EffectButton extends JButton
 	private static long frameTick=System.nanoTime()/50_000_000L;
 	private static final Timer CLOCK=new Timer(50,event->{
 		frameTick=System.nanoTime()/50_000_000L;
-		for(EffectButton button:BUTTONS) { if(button.isShowing()&&!button.getVisibleRect().isEmpty()) { button.repaint(); } }
+		for(EffectButton button:BUTTONS) { if(button.isShowing()&&!button.getVisibleRect().isEmpty()) { button.repaintAnimation(); }else { button.clearForeground(); } }
 	});
 	private final ItemEffect effect;
 	private final Color rarity;
+	private java.awt.image.BufferedImage foreground;
+	private int foregroundWidth,foregroundHeight;
 	EffectButton(ItemEffect effect,Color rarity)
 	{
 		this.effect=effect==null?ItemEffect.NONE:effect;this.rarity=rarity==null?new Color(160,160,160):rarity;
 		addHierarchyListener(event->{if((event.getChangeFlags()&HierarchyEvent.SHOWING_CHANGED)!=0) { updateClock(); }});
 	}
 	@Override public void addNotify() { super.addNotify();if(effect!=ItemEffect.NONE&&effect!=ItemEffect.RARITY_FADE) { BUTTONS.add(this); }updateClock(); }
-	@Override public void removeNotify() { BUTTONS.remove(this);updateClock();super.removeNotify(); }
+	@Override public void removeNotify() { BUTTONS.remove(this);clearForeground();updateClock();super.removeNotify(); }
+	private void repaintAnimation() { super.repaint(0,0,0,getWidth(),getHeight()); }
+	@Override public void repaint(long delay,int x,int y,int width,int height) { clearForeground();super.repaint(delay,x,y,width,height); }
+	private void clearForeground() { if(foreground!=null) { foreground.flush();foreground=null; } }
+	@Override protected void addImpl(Component child,Object constraints,int index)
+	{
+		super.addImpl(child,constraints,index);watch(child);clearForeground();
+	}
+	private void watch(Component component)
+	{
+		component.addPropertyChangeListener(event->clearForeground());
+		if(component instanceof Container)
+		{
+			Container container=(Container)component;for(Component child:container.getComponents()) { watch(child); }
+			container.addContainerListener(new java.awt.event.ContainerAdapter() {
+				@Override public void componentAdded(java.awt.event.ContainerEvent event) { watch(event.getChild());clearForeground(); }
+				@Override public void componentRemoved(java.awt.event.ContainerEvent event) { clearForeground(); }
+			});
+		}
+	}
+	@Override protected void paintChildren(Graphics graphics)
+	{
+		if(effect==ItemEffect.NONE||effect==ItemEffect.RARITY_FADE||getWidth()<=0||getHeight()<=0) { paintForeground((Graphics2D)graphics);return; }
+		Graphics2D g=(Graphics2D)graphics;
+		AffineTransform transform=g.getTransform();
+		int width=Math.max(1,(int)Math.ceil(getWidth()*Math.hypot(transform.getScaleX(),transform.getShearY())));
+		int height=Math.max(1,(int)Math.ceil(getHeight()*Math.hypot(transform.getScaleY(),transform.getShearX())));
+		if(foreground==null||foreground.getWidth()!=width||foreground.getHeight()!=height||foregroundWidth!=getWidth()||foregroundHeight!=getHeight())
+		{
+			clearForeground();java.awt.image.BufferedImage image=new java.awt.image.BufferedImage(width,height,java.awt.image.BufferedImage.TYPE_INT_ARGB_PRE);
+			Graphics2D paint=image.createGraphics();
+			try { paint.setRenderingHints(g.getRenderingHints());paint.scale((double)width/getWidth(),(double)height/getHeight());paintForeground(paint); }
+			finally { paint.dispose(); }
+			foreground=image;foregroundWidth=getWidth();foregroundHeight=getHeight();
+		}
+		g.drawImage(foreground,0,0,getWidth(),getHeight(),null);
+	}
+	protected void paintForeground(Graphics2D graphics) { super.paintChildren(graphics); }
 	private static void updateClock()
 	{
 		if(BUTTONS.stream().anyMatch(Component::isShowing)) { if(!CLOCK.isRunning()) { frameTick=System.nanoTime()/50_000_000L;CLOCK.start(); } }
-		else { CLOCK.stop();FRAMES.clear(); }
+		else { CLOCK.stop();FRAMES.clear();BUTTONS.forEach(EffectButton::clearForeground); }
 	}
 	@Override protected void paintComponent(Graphics graphics)
 	{
