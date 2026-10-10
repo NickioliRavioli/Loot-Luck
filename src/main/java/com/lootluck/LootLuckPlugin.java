@@ -53,6 +53,7 @@ public class LootLuckPlugin extends Plugin
 	@Inject private ItemManager itemManager;
 	@Inject private ConfigManager configManager;
 	@Inject private LootLuckConfig config;
+	private net.runelite.client.plugins.grounditems.GroundItemsConfig groundItemsConfig;
 	@Inject private Gson gson;
 	@Inject private OkHttpClient http;
 	@Inject private ClientToolbar toolbar;
@@ -96,6 +97,7 @@ public class LootLuckPlugin extends Plugin
 
 	@Override protected void startUp()
 	{
+		groundItemsConfig=configManager.getConfig(net.runelite.client.plugins.grounditems.GroundItemsConfig.class);
 		running=true;generation.incrementAndGet();RuntimeData run=new RuntimeData();runtime=run;
 		// The injected executor belongs to RuneLite. A serial future chain preserves old-profile writes across restarts.
 		SwingUtilities.invokeLater(()->{
@@ -157,6 +159,7 @@ public class LootLuckPlugin extends Plugin
 	{
 		if(LootLuckConfig.GROUP.equals(event.getGroup())&&"historyLimit".equals(event.getKey())) { submit(r->{if(r.engine!=null&&r.store!=null&&r.profile!=null) { r.engine.setHistoryLimit(config.historyLimit());try { r.store.save(r.profile,r.engine.lifetime()); }catch(Exception ex) { r.error="History setting save failed.";log.warn(r.error,ex); } }publishOnWorker(r,generation.get());}); }
 		if(LootLuckConfig.GROUP.equals(event.getGroup())) { RuntimeData run=runtime;if(run!=null&&run.rates!=null) { if(!config.wikiRefresh()) { run.rates.cancelRequests(); }else { run.rates.refreshCatalogue(false); } }publish(); }
+		if(net.runelite.client.plugins.grounditems.GroundItemsConfig.GROUP.equals(event.getGroup())) { publish(); }
 	}
 	@Subscribe public void onLootReceived(LootReceived event)
 	{
@@ -453,6 +456,7 @@ public class LootLuckPlugin extends Plugin
 		view.hideUnobtainedOtherWorld=config.hideUnobtainedOtherWorld();
 		view.gridView=config.gridView();
 		view.itemEffect=config.itemEffect();
+		view.effectColorMode=config.effectColorMode();view.effectValuePalette=com.lootluck.ui.EffectValuePalette.from(groundItemsConfig);
 		view.canManageData=r.store!=null&&activeProfile!=null&&activeProfile.equals(r.profile);
 		view.stackCounts=config.stackCounts();view.iconQuantities=config.iconQuantities()&&!config.stackCounts()&&!view.stackCounts;
 		view.notice=!r.error.isEmpty()?r.error:!lootTrackerEnabled?"Enable RuneLite Loot Tracker to receive loot.":activeProfile==null?"Log in to select an account profile.":view.sources.isEmpty()?"No loot recorded yet.":"";
@@ -467,19 +471,35 @@ public class LootLuckPlugin extends Plugin
 		} }
 		clientThread.invoke(()->{
 			if(!running||token!=generation.get()) { return; }
-			for(PanelState.Source source:view.sourceRows())
+			java.util.List<PanelState.Source> pricedSources=view.sourceRows();pricedSources.addAll(view.collections);
+			Map<Integer,long[]> unitPrices=new java.util.HashMap<>();
+			for(PanelState.Source source:pricedSources)
 			{
 				long total=0;
 				for(PanelState.Item item:source.items)
 				{
-					if(item.id<=0) { continue; }if(item.quantity==0) { item.valueAvailable=true;continue; }ItemComposition comp=itemManager.getItemComposition(item.id);if(comp.getNote()!=-1) { comp=itemManager.getItemComposition(comp.getLinkedNoteId()); }
-					try { item.geEach=itemManager.getItemPrice(item.id);item.haEach=comp.getHaPrice();item.ge=Math.multiplyExact(item.geEach,item.quantity);item.ha=Math.multiplyExact(item.haEach,item.quantity);total=Math.addExact(total,item.ge);item.valueAvailable=true; }
-					catch(ArithmeticException ex) { item.valueAvailable=false; }
+					priceItem(item,unitPrices);if(item.valueAvailable) { try { total=Math.addExact(total,item.ge); }catch(ArithmeticException ex) { item.valueAvailable=false; } }
 				}
 				source.value=LootLuckPanel.money(total);
 			}
+			for(PanelState.Item item:view.allItems) { priceItem(item,unitPrices); }
 			SwingUtilities.invokeLater(()->{if(running&&token==generation.get()&&panel!=null) { panel.update(view); }});
 		});
+	}
+	private void priceItem(PanelState.Item item,Map<Integer,long[]> unitPrices)
+	{
+		if(item.id<=0) { return; }if(item.quantity==0) { item.valueAvailable=true;return; }
+		long[] prices=unitPrices.computeIfAbsent(item.id,id->{
+			ItemComposition comp=itemManager.getItemComposition(id);if(comp.getNote()!=-1) { comp=itemManager.getItemComposition(comp.getLinkedNoteId()); }
+			boolean coins=comp.getId()==net.runelite.api.gameval.ItemID.COINS;
+			return new long[]{coins?1:itemManager.getItemPrice(comp.getId()),coins?1:comp.getHaPrice()};
+		});
+		try
+		{
+			item.geEach=prices[0];item.haEach=prices[1];
+			item.ge=Math.multiplyExact(item.geEach,item.quantity);item.ha=Math.multiplyExact(item.haEach,item.quantity);item.valueAvailable=true;
+		}
+		catch(ArithmeticException ex) { item.valueAvailable=false; }
 	}
 	private synchronized void submit(java.util.function.Consumer<RuntimeData> task)
 	{

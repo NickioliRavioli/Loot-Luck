@@ -59,6 +59,10 @@ final class LootLuckSettingsPanel extends JPanel
 			});
 		}
 		section("Background effects");
+		JLabel colorLabel=new JLabel("Colour based on");colorLabel.setForeground(Color.LIGHT_GRAY);colorLabel.setAlignmentX(LEFT_ALIGNMENT);add(colorLabel);
+		javax.swing.JComboBox<EffectColorMode> colorMode=new javax.swing.JComboBox<>(EffectColorMode.values());colorMode.setAlignmentX(LEFT_ALIGNMENT);colorMode.setMaximumSize(new Dimension(Integer.MAX_VALUE,28));colorMode.getAccessibleContext().setAccessibleName("Background effect colour");add(colorMode);
+		colorMode.addActionListener(event->{if(!syncing) { changed.accept("effectColorMode",colorMode.getSelectedItem());sync(); }});updates.add(()->colorMode.setSelectedItem(config.effectColorMode()));
+		hint("Value colours use Ground Items' price tiers, colours and GE/High Alchemy choice. Value per item uses one unit; Total collected value uses the quantity in the current view. Edit tiers in Ground Items settings. Applies to the colour-based effects; previews use a sample colour.");
 		hint("Applies to obtained items only. Select a preview to choose the effect.");
 		javax.swing.ButtonGroup effectsGroup=new javax.swing.ButtonGroup();
 		for(ItemEffect effect:ItemEffect.values())

@@ -10,6 +10,12 @@ Automated tests validate bookkeeping and presentation. Only user-driven gameplay
 4. Switch Session/Lifetime, reset Session and restart. Lifetime counts must persist. Switching accounts must show isolated data; resetting core Loot Tracker must not reset Loot Luck.
 5. Keep Wiki refresh off and verify observation tracking continues offline. Enable it after reading the disclosure, then request Refresh. Failure must preserve previously available rates and observations.
 
+## Value-based background effects
+
+- Under Settings → Background effects, select a colour-based effect such as Rarity fade. Compare Rarity, Value per item and Total collected value in list/grid views, All items and Recent collections. Total value uses the quantity in that view, so a collection and a lifetime aggregate can have different colours. Drop-rate text must retain its rarity colour.
+- Change Ground Items' price thresholds, tier colours and value calculation (GE, HA or Highest); Loot Luck value effects must update without restarting. Nonpositive thresholds are disabled and a value must exceed the threshold, matching Ground Items. Check a coin stack and noted loot. Hide GE/HA values; background colours must still work.
+- Unobtained items and Failed pickpocket rows must have no loot background effect. Restart and confirm the selected colour mode persists. Existing configurations must default to Rarity.
+
 ## Pickpocket messages, Rogue rewards and failures
 
 RuneLite 1.13.1 core Loot Tracker identifies pickpocket success through its chat message and emits `PICKPOCKET` loot separately from `NPC` kill loot. Loot Luck retains that event classification and labels pickpocket source cards accordingly. The ordinary attempt/success/failure wording is recognised by [Pickpocket Helper](https://github.com/pajlads/runelite-pickpocket-helper/blob/15840d787ca06b705677465b01f19a8d4b11a8b7/src/main/java/com/pickpockethelper/utility/MessagePattern.java); this does not certify every NPC or special/blocked attempt path. Failure tracking counts each explicit failure message, without requiring a preceding attempt message and without counting the subsequent stun again.
