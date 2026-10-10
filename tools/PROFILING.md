@@ -44,7 +44,7 @@ Windows Performance Analyzer or GPUView from the Windows Performance Toolkit can
 
 ## Interpretation
 
-- High background duration with low foreground duration: investigate effect drawing and atlas scaling.
+- High background duration with low foreground duration: investigate effect drawing and background-buffer scaling.
 - High foreground duration or frequent missing foregrounds: investigate text/icon repainting, cache invalidation and DPI scaling.
 - Many repaint requests/visible buttons or unexpectedly large requested regions: investigate animation registration, clipping and repaint coalescing. Request area is a sum of requests, not the actual GPU paint area.
 - Long Swing passes but short measured button paints: investigate ancestors, other Swing components and presentation.
