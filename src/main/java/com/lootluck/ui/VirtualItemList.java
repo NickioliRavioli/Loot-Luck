@@ -46,7 +46,13 @@ final class VirtualItemList extends JPanel
 	}
 	@Override public void setBounds(int x,int y,int width,int height)
 	{
-		super.setBounds(x,y,width,height);if(resizeSquares(width)) { revalidate(); }
+		super.setBounds(x,y,width,height);if(resizeSquares(width))
+		{
+			// BoxLayout can cache the old height while its containers are already invalid.
+			// Clear each enclosing layout cache so the next pass reserves the new row extent.
+			for(java.awt.Container parent=getParent();parent!=null;parent=parent.getParent()) { parent.invalidate();if(parent instanceof JViewport) { break; } }
+			revalidate();
+		}
 	}
 	@Override public Dimension getPreferredSize() { return new Dimension(210,offsets[offsets.length-1]); }
 	@Override public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE,getPreferredSize().height); }
