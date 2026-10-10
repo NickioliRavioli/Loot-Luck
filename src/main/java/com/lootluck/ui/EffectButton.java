@@ -13,7 +13,10 @@ import javax.swing.Timer;
 class EffectButton extends JButton
 {
 	private static final Set<EffectButton> BUTTONS=Collections.newSetFromMap(new WeakHashMap<>());
+	private static final EffectFrames FRAMES=new EffectFrames(2*1024*1024,128);
+	private static long frameTick=System.nanoTime()/50_000_000L;
 	private static final Timer CLOCK=new Timer(50,event->{
+		frameTick=System.nanoTime()/50_000_000L;
 		for(EffectButton button:BUTTONS) { if(button.isShowing()&&!button.getVisibleRect().isEmpty()) { button.repaint(); } }
 	});
 	private final ItemEffect effect;
@@ -27,14 +30,21 @@ class EffectButton extends JButton
 	@Override public void removeNotify() { BUTTONS.remove(this);updateClock();super.removeNotify(); }
 	private static void updateClock()
 	{
-		if(BUTTONS.stream().anyMatch(Component::isShowing)) { if(!CLOCK.isRunning()) { CLOCK.start(); } }
-		else { CLOCK.stop(); }
+		if(BUTTONS.stream().anyMatch(Component::isShowing)) { if(!CLOCK.isRunning()) { frameTick=System.nanoTime()/50_000_000L;CLOCK.start(); } }
+		else { CLOCK.stop();FRAMES.clear(); }
 	}
 	@Override protected void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
+		if(effect==ItemEffect.NONE||getWidth()<=4||getHeight()<=4) { return; }
 		Graphics2D g=(Graphics2D)graphics.create();
-		try { paintEffect(g,getWidth(),getHeight(),effect,rarity,System.nanoTime()/1_000_000_000.0); }
+		try
+		{
+			AffineTransform transform=g.getTransform();
+			int pixelWidth=Math.max(1,(int)Math.ceil(getWidth()*Math.hypot(transform.getScaleX(),transform.getShearY())));
+			int pixelHeight=Math.max(1,(int)Math.ceil(getHeight()*Math.hypot(transform.getScaleY(),transform.getShearX())));
+			g.drawImage(FRAMES.get(effect,rarity,getWidth(),getHeight(),pixelWidth,pixelHeight,frameTick),0,0,getWidth(),getHeight(),null);
+		}
 		finally { g.dispose(); }
 	}
 	static void paintEffect(Graphics2D g,int width,int height,ItemEffect effect,Color rarity,double seconds)
