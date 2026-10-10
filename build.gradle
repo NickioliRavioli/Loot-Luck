@@ -44,6 +44,15 @@ tasks.register('run', JavaExec) {
 	args "--developer-mode", "--debug"
 }
 
+tasks.register('runProfile', JavaExec) {
+	classpath = sourceSets.test.runtimeClasspath
+	mainClass = 'com.lootluck.ui.LootLuckProfileLauncher'
+	jvmArgs '-ea', '--add-opens=java.base/java.lang.reflect=ALL-UNNAMED',
+		'-XX:+UnlockDiagnosticVMOptions', '-XX:+DebugNonSafepoints', '-XX:+PreserveFramePointer',
+		'-XX:FlightRecorderOptions=stackdepth=128'
+	args '--developer-mode', '--debug'
+}
+
 tasks.register('fixture', JavaExec) {
 	classpath = sourceSets.test.runtimeClasspath
 	mainClass = 'com.lootluck.FixtureLauncher'

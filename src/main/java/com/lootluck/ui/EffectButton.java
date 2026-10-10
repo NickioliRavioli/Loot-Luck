@@ -12,6 +12,13 @@ import javax.swing.Timer;
 /** One shared repaint clock; effects only paint inside visible item buttons. */
 class EffectButton extends JButton
 {
+	// Installed only by the development profiling launcher; normal clients leave this null.
+	interface PaintObserver
+	{
+		Runnable paint(Graphics2D graphics,String stage,String effect,int width,int height,boolean foregroundPresent);
+		void clock(int registered,int visible,long requestedPixels);
+	}
+	static PaintObserver observer;
 	private static final Set<EffectButton> BUTTONS=Collections.newSetFromMap(new WeakHashMap<>());
 	private static final EffectFrames FRAMES=new EffectFrames(2*1024*1024,128);
 	private static final AuroraSprites AURORA=new AuroraSprites(8*1024*1024);
@@ -20,7 +27,9 @@ class EffectButton extends JButton
 	static void animate()
 	{
 		frameTick=System.nanoTime()/50_000_000L;
-		for(EffectButton button:BUTTONS) { if(button.isShowing()&&!button.getVisibleRect().isEmpty()) { button.repaintAnimation(); }else { button.clearForeground(); } }
+		int visible=0;long pixels=0;
+		for(EffectButton button:BUTTONS) { if(button.isShowing()&&!button.getVisibleRect().isEmpty()) { button.repaintAnimation();if(observer!=null) { visible++;pixels+=(long)button.getWidth()*button.getHeight(); } }else { button.clearForeground(); } }
+		if(observer!=null) { observer.clock(BUTTONS.size(),visible,pixels); }
 	}
 	private final ItemEffect effect;
 	private final Color rarity;
@@ -54,6 +63,11 @@ class EffectButton extends JButton
 	}
 	@Override protected void paintChildren(Graphics graphics)
 	{
+		Runnable complete=observer==null?null:observer.paint((Graphics2D)graphics,"foreground",effect.name(),getWidth(),getHeight(),foreground!=null);
+		try { paintCachedChildren(graphics); }finally { if(complete!=null) { complete.run(); } }
+	}
+	private void paintCachedChildren(Graphics graphics)
+	{
 		if(effect==ItemEffect.NONE||effect==ItemEffect.RARITY_FADE||getWidth()<=0||getHeight()<=0) { paintForeground((Graphics2D)graphics);return; }
 		Graphics2D g=(Graphics2D)graphics;
 		AffineTransform transform=g.getTransform();
@@ -76,6 +90,11 @@ class EffectButton extends JButton
 		else { CLOCK.stop();FRAMES.clear();AURORA.clear();BUTTONS.forEach(EffectButton::clearForeground); }
 	}
 	@Override protected void paintComponent(Graphics graphics)
+	{
+		Runnable complete=observer==null?null:observer.paint((Graphics2D)graphics,"background",effect.name(),getWidth(),getHeight(),false);
+		try { paintBackground(graphics); }finally { if(complete!=null) { complete.run(); } }
+	}
+	private void paintBackground(Graphics graphics)
 	{
 		super.paintComponent(graphics);
 		if(effect==ItemEffect.NONE||getWidth()<=4||getHeight()<=4) { return; }
