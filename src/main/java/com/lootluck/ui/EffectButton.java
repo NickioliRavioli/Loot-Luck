@@ -14,11 +14,14 @@ class EffectButton extends JButton
 {
 	private static final Set<EffectButton> BUTTONS=Collections.newSetFromMap(new WeakHashMap<>());
 	private static final EffectFrames FRAMES=new EffectFrames(2*1024*1024,128);
+	private static final AuroraSprites AURORA=new AuroraSprites(8*1024*1024);
 	private static long frameTick=System.nanoTime()/50_000_000L;
-	private static final Timer CLOCK=new Timer(50,event->{
+	private static final Timer CLOCK=new Timer(50,event->animate());
+	static void animate()
+	{
 		frameTick=System.nanoTime()/50_000_000L;
 		for(EffectButton button:BUTTONS) { if(button.isShowing()&&!button.getVisibleRect().isEmpty()) { button.repaintAnimation(); }else { button.clearForeground(); } }
-	});
+	}
 	private final ItemEffect effect;
 	private final Color rarity;
 	private java.awt.image.BufferedImage foreground;
@@ -70,7 +73,7 @@ class EffectButton extends JButton
 	private static void updateClock()
 	{
 		if(BUTTONS.stream().anyMatch(Component::isShowing)) { if(!CLOCK.isRunning()) { frameTick=System.nanoTime()/50_000_000L;CLOCK.start(); } }
-		else { CLOCK.stop();FRAMES.clear();BUTTONS.forEach(EffectButton::clearForeground); }
+		else { CLOCK.stop();FRAMES.clear();AURORA.clear();BUTTONS.forEach(EffectButton::clearForeground); }
 	}
 	@Override protected void paintComponent(Graphics graphics)
 	{
@@ -79,6 +82,7 @@ class EffectButton extends JButton
 		Graphics2D g=(Graphics2D)graphics.create();
 		try
 		{
+			if(effect==ItemEffect.RARITY_AURORA) { paintEffect(g,getWidth(),getHeight(),effect,rarity,frameTick*.05);return; }
 			AffineTransform transform=g.getTransform();
 			int pixelWidth=Math.max(1,(int)Math.ceil(getWidth()*Math.hypot(transform.getScaleX(),transform.getShearY())));
 			int pixelHeight=Math.max(1,(int)Math.ceil(getHeight()*Math.hypot(transform.getScaleY(),transform.getShearX())));
@@ -128,8 +132,7 @@ class EffectButton extends JButton
 				wash(g,width,height,rarity,60);Color prism=neighbor(rarity,.06f);float center=(float)(width*(.5+.4*Math.sin(seconds*.7)));
 				g.setPaint(new LinearGradientPaint(center-width,0,center+width,height,new float[]{0,.4f,.55f,.7f,1},new Color[]{alpha(rarity,25),alpha(rarity,80),alpha(prism,100),alpha(rarity,75),alpha(rarity,20)}));g.fillRect(0,0,width,height);edge(g,width,height,rarity,100);break;
 			case RARITY_AURORA:
-				wash(g,width,height,rarity,60);
-				for(int i=0;i<3;i++) { float x=(float)(width*(.5+.45*Math.sin(seconds*.35+i*1.7))),y=(float)(height*(.5+.4*Math.cos(seconds*.45+i)));g.setPaint(new RadialGradientPaint(new Point2D.Float(x,y),Math.max(width,height)*.6f,new float[]{0,1},new Color[]{alpha(i==1?neighbor(rarity,-.05f):rarity,65),alpha(rarity,0)}));g.fillRect(0,0,width,height); }edge(g,width,height,rarity,85);break;
+				AURORA.paint(g,width,height,rarity,Math.round(seconds*20));edge(g,width,height,rarity,85);break;
 			case RARITY_OPAL:
 				wash(g,width,height,rarity,65);smooth(g);double motion=seconds*.3;
 				for(int i=0;i<6;i++) { double x=width*((i*.213+motion*.08)%1),y=height*(.5+.5*Math.sin(motion+i));g.setColor(alpha(i%3==0?neighbor(rarity,.04f):rarity,30+i%3*15));Path2D facet=new Path2D.Double();facet.moveTo(x-width*.3,y);facet.lineTo(x,y-height);facet.lineTo(x+width*.3,y);facet.lineTo(x,y+height);facet.closePath();g.fill(facet); }edge(g,width,height,rarity,95);break;
