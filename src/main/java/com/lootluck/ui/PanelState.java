@@ -36,6 +36,7 @@ public final class PanelState
 	}
 	public static final class Item
 	{
+		public boolean occurrenceOnly;
 		public String key,name,rate,rateTooltip,reason;
 		public String worldMarker="";
 		public String dropTable="";

@@ -13,6 +13,17 @@ public final class LedgerEngine
 	public LedgerEngine(Ledger lifetime) { this.lifetime = Objects.requireNonNull(lifetime); }
 	public Ledger lifetime() { return lifetime; }
 	public Ledger session() { return session; }
+	public void failPickpocket(com.lootluck.model.SourceIdentity identity,long timestamp)
+	{
+		if(!"PICKPOCKET".equals(identity.type)||timestamp<0) { throw new IllegalArgumentException("Not a pickpocket failure"); }
+		for(Ledger ledger:java.util.List.of(lifetime,session))
+		{
+			Ledger.Source family=ledger.sources.computeIfAbsent(identity.family().key(),key->{Ledger.Source parent=new Ledger.Source();parent.identity=identity.family();return parent;});
+			Ledger.Source source=family.variants.computeIfAbsent(identity.key(),key->{Ledger.Source row=new Ledger.Source();row.identity=identity;return row;});
+			source.pickpocketFailures=Math.addExact(source.pickpocketFailures,1);source.lastReceived=timestamp;source.lastPickpocketFailure=timestamp;
+			Ledger.CollectionRecord record=new Ledger.CollectionRecord();record.source=identity;record.timestamp=timestamp;record.pickpocketFailure=true;ledger.history.add(record);if(ledger.historyStarted==0) { ledger.historyStarted=timestamp; }trimHistory(ledger);
+		}
+	}
 	/** A logout, plugin stop, queue failure or confirmation change ends known coverage. */
 	public void interruptCoverage()
 	{
@@ -46,9 +57,11 @@ public final class LedgerEngine
 			item.lastReceived = Math.max(item.lastReceived, o.timestamp);
 			String observedName=o.names.getOrDefault(id,item.name);
 			java.util.List<com.lootluck.rates.RateRow> candidates=com.lootluck.rates.ItemRateMatcher.item(id,o.originalIds.getOrDefault(id,id),observedName,o.source,knownRates);
-			java.util.List<com.lootluck.rates.RateRow> matching=com.lootluck.rates.ItemRateMatcher.matchCollection(o.names.getOrDefault(id,item.name),candidates,qty,o.reportedAmount);
-			String version=matching.isEmpty()?"unknown":com.lootluck.rates.WikiParser.hash(matching.stream().map(rate->rate.hash+"@"+rate.fetchedAt).sorted().collect(java.util.stream.Collectors.joining("|")));
-			Ledger.RecordedRate recorded=item.recordedRates.computeIfAbsent(version,key->{Ledger.RecordedRate v=new Ledger.RecordedRate();v.hash=key;matching.forEach(rate->v.rows.add(rate.snapshot()));v.firstReceived=o.timestamp;return v;});
+			boolean hasCoinPouch=o.names.values().stream().anyMatch(com.lootluck.rates.RogueOutfit::coinPouch);
+			java.util.List<com.lootluck.rates.RateRow> matching=com.lootluck.rates.ItemRateMatcher.matchCollection(observedName,candidates,qty,o.reportedAmount,o.source,hasCoinPouch);
+			String modifier=com.lootluck.rates.RogueOutfit.description(o.source,observedName,hasCoinPouch);
+			String version=matching.isEmpty()?"unknown":com.lootluck.rates.WikiParser.hash(matching.stream().map(rate->rate.hash+"@"+rate.fetchedAt).sorted().collect(java.util.stream.Collectors.joining("|"))+(modifier.isEmpty()?"":"|"+modifier));
+			Ledger.RecordedRate recorded=item.recordedRates.computeIfAbsent(version,key->{Ledger.RecordedRate v=new Ledger.RecordedRate();v.hash=key;matching.forEach(rate->{com.lootluck.rates.RateRow snapshot=rate.snapshot();if(!modifier.isEmpty()) { snapshot.mechanics.put("Recorded loot modifier",modifier); }v.rows.add(snapshot);});v.firstReceived=o.timestamp;return v;});
 			recorded.quantity=Math.addExact(recorded.quantity,qty);recorded.occurrences=Math.addExact(recorded.occurrences,1);recorded.lastReceived=o.timestamp;
 			item.originalIds.add(id);
 			o.originalIds.forEach((original, canonical) -> { if (canonical.equals(id)) { item.originalIds.add(original); } });

@@ -72,12 +72,15 @@ public final class LedgerStore
 	{
 		if (ledger == null || ledger.schema != 3 || ledger.sources == null) { throw new IllegalArgumentException("Unsupported snapshot format. Delete test data to start fresh."); }
 		if(ledger.history==null) { ledger.history=new java.util.ArrayList<>(); }
+		for(Ledger.CollectionRecord record:ledger.history) { if(record!=null&&record.pickpocketFailure&&(record.source==null||!"PICKPOCKET".equals(record.source.type)||record.reportedAmount!=0||record.quantities==null||!record.quantities.isEmpty())) { throw new IllegalArgumentException("Invalid pickpocket failure history"); } }
 		for(Ledger.CollectionRecord record:ledger.history) { if(record==null||record.source==null||record.timestamp<0||record.reportedAmount<0||record.quantities==null||record.names==null) { throw new IllegalArgumentException("Invalid collection history"); }record.quantities.forEach((id,quantity)->{if(id<=0||quantity<=0) { throw new IllegalArgumentException("Invalid collection quantity"); }}); }
 		ledger.sources.forEach((key,family)->{
+			if(family!=null&&(family.pickpocketFailures!=0||family.lastPickpocketFailure!=0)) { throw new IllegalArgumentException("Invalid family failure count"); }
 			if(family==null||family.identity==null||!key.equals(family.identity.family().key())||!key.equals(family.identity.key())||family.variants==null||family.items==null||!family.items.isEmpty()||family.segments==null||!family.segments.isEmpty()||family.activeSegment!=null||family.notifications!=0||family.reportedAmount!=0||family.excluded!=0||family.lastReceived!=0) { throw new IllegalArgumentException("Invalid source family"); }
 			family.variants.forEach((variantKey,variant)->{ if(variant==null||variant.identity==null||!variantKey.equals(variant.identity.key())||!key.equals(variant.identity.family().key())||variant.variants==null||!variant.variants.isEmpty()) { throw new IllegalArgumentException("Invalid nested variant identity"); } });
 		});
 		for(Ledger.Source s:ledger.sourceVariants()) {
+			if(s.pickpocketFailures<0||s.lastPickpocketFailure<0||s.pickpocketFailures>0&&!"PICKPOCKET".equals(s.identity.type)||s.pickpocketFailures==0&&s.lastPickpocketFailure!=0) { throw new IllegalArgumentException("Invalid pickpocket failure count"); }
 			String key=s.identity.key();
 			if (s == null || s.identity == null || !key.equals(s.identity.key()) || s.notifications < 0 || s.reportedAmount < 0 || s.excluded < 0 || s.items == null || s.segments == null) { throw new IllegalArgumentException("Invalid source aggregate"); }
 			s.items.forEach((id,i) -> {

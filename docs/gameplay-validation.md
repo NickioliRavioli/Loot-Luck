@@ -10,6 +10,18 @@ Automated tests validate bookkeeping and presentation. Only user-driven gameplay
 4. Switch Session/Lifetime, reset Session and restart. Lifetime counts must persist. Switching accounts must show isolated data; resetting core Loot Tracker must not reset Loot Luck.
 5. Keep Wiki refresh off and verify observation tracking continues offline. Enable it after reading the disclosure, then request Refresh. Failure must preserve previously available rates and observations.
 
+## Pickpocket messages, Rogue rewards and failures
+
+RuneLite 1.13.1 core Loot Tracker identifies pickpocket success through its chat message and emits `PICKPOCKET` loot separately from `NPC` kill loot. Loot Luck retains that event classification and labels pickpocket source cards accordingly. The ordinary attempt/success/failure wording is recognised by [Pickpocket Helper](https://github.com/pajlads/runelite-pickpocket-helper/blob/15840d787ca06b705677465b01f19a8d4b11a8b7/src/main/java/com/pickpockethelper/utility/MessagePattern.java); this does not certify every NPC or special/blocked attempt path. Failure tracking counts each explicit failure message, without requiring a preceding attempt message and without counting the subsequent stun again.
+
+Rogue activation messages are attached to matching successful pickpocket loot, with reward processing deferred until the tick's messages have arrived. Outfit pieces are captured at the success message. Ordinary doubled loot matches the published base quantity while retaining actual received units and one occurrence. Scroll/clue boxes and one coin pouch plus its bonus coins are treated separately. Missing context, interrupted sequences and multiple successes in one tick preserve uncertainty. Historical rate snapshots are not rewritten; published rarity is unchanged. Gloves of silence and a buff banner are outside this change.
+
+- At a Master Farmer, compare several normal and Rogue-doubled seed rewards with actual inventory gains and the published table. Use a partial outfit so both outcomes occur. Check repeated identical rewards, full/no outfit and equipment changes between attempts.
+- Compare explicit failure messages with the **Failed pickpocket** row. One failure followed by a stun must add exactly one occurrence. Reach, full-inventory and full-pouch warnings must not add failures. The row should show no quantity, price or rate in list/grid views, expanded details, recent collections and All items, under every count style.
+- Pickpocket and kill the same NPC type where practical. The sources should remain separate and only pickpocket rewards should receive Rogue quantity treatment. Check H.A.M. Man/Woman message aliases against the H.A.M. Member source.
+- Exercise a pouch reward, its extra coins and a clue/scroll box if available. They must not be blindly halved. Compare any rapid/blackjack sequence; ambiguous event batches must not acquire a guessed doubling result.
+- Restart, export/import and switch accounts; verify failures and real loot stay separate and persist. Reset Session; Lifetime failures must remain. Try filtered game chat and confirm the failure and doubling messages still reach tracking.
+
 ## Maze random event inventory rewards
 
 The passive Maze adapter records inventory gains after opening the Maze's closed chest or touching its Strange shrine. The panel keeps **Chest (Maze)** and **Maze reward** separate, with Wiki owners Chest (Maze) and Strange shrine respectively. These are recorded collections, not certified attempts; luck/expected/dry statistics stay unavailable. Rewards sent directly to the bank or dropped on the floor are not captured by this adapter; a partially delivered shrine reward records only its inventory portion.

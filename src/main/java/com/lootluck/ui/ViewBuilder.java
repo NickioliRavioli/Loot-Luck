@@ -57,10 +57,13 @@ public final class ViewBuilder
 		Map<Integer,PanelState.Item> totals=new LinkedHashMap<>();
 		for(Ledger.Source source:ledger.sourceVariants()) { for(Ledger.Item item:source.items.values()) { PanelState.Item total=totals.computeIfAbsent(item.id,id->{PanelState.Item i=new PanelState.Item();i.id=id;i.key="all:"+id;i.name=item.name;return i;});total.quantity=Math.addExact(total.quantity,item.quantity);total.occurrences=Math.addExact(total.occurrences,item.occurrences);total.lastReceived=Math.max(total.lastReceived,item.lastReceived); } }
 		state.allItems.addAll(totals.values());state.allItems.sort(Comparator.comparingLong((PanelState.Item i)->i.lastReceived).reversed());
+		long failures=0,lastFailure=0;for(Ledger.Source source:ledger.sourceVariants()) { failures=Math.addExact(failures,source.pickpocketFailures);lastFailure=Math.max(lastFailure,source.lastPickpocketFailure); }
+		if(failures>0) { state.allItems.add(failureItem("all:pickpocket-failure",failures,lastFailure)); }
 		for(int index=ledger.history.size()-1;index>=0;index--)
 		{
 			Ledger.CollectionRecord record=ledger.history.get(index);PanelState.Source collection=new PanelState.Source();collection.key="collection:"+index;collection.name=com.lootluck.rates.RewardSources.displayName(record.source);collection.count=record.reportedAmount;collection.lastReceived=record.timestamp;collection.countTooltip="One recorded notification; reported amount "+record.reportedAmount+". Not automatically individual attempts.";
 			for(Map.Entry<Integer,Long> item:record.quantities.entrySet()) { PanelState.Item row=new PanelState.Item();row.id=item.getKey();row.key=collection.key+":"+row.id;row.name=record.names.getOrDefault(row.id,"Item "+row.id);row.quantity=item.getValue();row.occurrences=1;row.lastReceived=record.timestamp;collection.items.add(row); }
+			if(record.pickpocketFailure) { collection.items.add(failureItem(collection.key+":pickpocket-failure",1,record.timestamp));collection.count=1;collection.countTooltip="One explicit failed pickpocket message; no loot received."; }
 			state.collections.add(collection);
 		}
 		state.collections.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());return state;
@@ -72,8 +75,9 @@ public final class ViewBuilder
 			List<RateRow> sourceRates=resolution.rows;
 			String wikiOwner=sourceRates.isEmpty()?com.lootluck.rates.RewardSources.wikiOwner(s.identity):sourceRates.get(0).owner;
 			source.wikiUrl=sourceWikiUrl(wikiOwner==null?com.lootluck.rates.RewardSources.wikiOwner(s.identity):wikiOwner);
-			source.count=s.notifications;source.lastReceived=s.lastReceived;
+			source.count=Math.addExact(s.notifications,s.pickpocketFailures);source.lastReceived=s.lastReceived;
 			source.countTooltip="Recorded loot notifications: "+s.notifications+"; client-reported amount: "+s.reportedAmount+"; excluded notifications: "+s.excluded+". Not automatically verified kills/openings. Context: "+s.identity.context+"; variant: "+s.identity.variant;
+			if(s.pickpocketFailures>0) { source.countTooltip+="; failed pickpockets: "+s.pickpocketFailures; }
 			Map<String,List<RateRow>> byName=new LinkedHashMap<>();
 			for(RateRow r:sourceRates) { byName.computeIfAbsent(normalize(r.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(r)?" (noted)":"")),key->new ArrayList<>()).add(r); }
 			Map<String,PanelState.Item> display=new LinkedHashMap<>();
@@ -114,7 +118,12 @@ public final class ViewBuilder
 			Map<String,Integer> tables=new LinkedHashMap<>(),positions=new LinkedHashMap<>();
 			for(int index=0;index<sourceRates.size();index++) { RateRow rate=sourceRates.get(index);tables.computeIfAbsent(com.lootluck.rates.DropTableGroups.table(rate),key->tables.size());positions.putIfAbsent(com.lootluck.rates.ItemRateMatcher.lookupName(rate.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(rate)?" (noted)":"")),index); }
 			for(PanelState.Item item:display.values()) { item.tableOrder=tables.getOrDefault(item.dropTable,Integer.MAX_VALUE);item.wikiOrder=positions.getOrDefault(com.lootluck.rates.ItemRateMatcher.lookupName(item.name,s.identity),Integer.MAX_VALUE); }
-			source.items.addAll(display.values());return source;
+			source.items.addAll(display.values());if(s.pickpocketFailures>0) { source.items.add(failureItem(sourceKey+":pickpocket-failure",s.pickpocketFailures,s.lastPickpocketFailure)); }return source;
+	}
+	private static PanelState.Item failureItem(String key,long occurrences,long timestamp)
+	{
+		PanelState.Item item=new PanelState.Item();item.id=-1;item.key=key;item.name="Failed pickpocket";item.occurrenceOnly=true;item.occurrences=occurrences;item.lastReceived=timestamp;
+		item.rate="";item.rateTooltip="One occurrence per explicit failed pickpocket message. No loot, quantity, value or published drop rate.";item.rarity=new Color(205,130,130);return item;
 	}
 	public static String normalize(String name) { return com.lootluck.rates.ItemRateMatcher.normalize(name); }
 	private static String historyDate(long time) { return java.time.format.DateTimeFormatter.ofPattern("d MMM yyyy HH:mm").withZone(java.time.ZoneId.systemDefault()).format(java.time.Instant.ofEpochMilli(time)); }

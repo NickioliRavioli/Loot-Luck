@@ -47,6 +47,12 @@ public final class ItemRateMatcher
 		boolean noted=notedName(name);return rows.stream().filter(row->notedRow(row)==noted).collect(Collectors.toList());
 	}
 	/** Match a notification quantity only when it can represent one row/roll. */
+	public static List<RateRow> matchCollection(String name,List<RateRow> rows,long quantity,long amount,com.lootluck.model.SourceIdentity source,boolean hasCoinPouch)
+	{
+		java.util.Set<RateRow> matches=new java.util.LinkedHashSet<>();
+		for(long base:RogueOutfit.baseQuantities(source,name,quantity,hasCoinPouch)) { matches.addAll(matchCollection(name,rows,base,amount)); }
+		return List.copyOf(matches);
+	}
 	public static List<RateRow> matchCollection(String name,List<RateRow> rows,long quantity,long amount)
 	{
 		List<RateRow> candidates=match(name,rows,false);

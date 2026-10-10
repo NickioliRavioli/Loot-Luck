@@ -25,6 +25,7 @@ public final class Ledger
 	}
 	public static final class CollectionRecord
 	{
+		public boolean pickpocketFailure;
 		public SourceIdentity source;
 		public long timestamp,reportedAmount;
 		public Map<Integer,Long> quantities=new LinkedHashMap<>();
@@ -32,6 +33,7 @@ public final class Ledger
 	}
 	public static final class Source
 	{
+		public long pickpocketFailures,lastPickpocketFailure;
 		public SourceIdentity identity;
 		public long notifications, reportedAmount, excluded, lastReceived;
 		public Map<Integer, Item> items = new LinkedHashMap<>();

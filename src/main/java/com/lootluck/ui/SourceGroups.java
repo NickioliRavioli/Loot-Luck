@@ -54,6 +54,8 @@ final class SourceGroups
 		combined.identity=new SourceIdentity(first.type,first.name,"conditions=combined",members.stream().map(s->s.identity.context).distinct().collect(java.util.stream.Collectors.joining("; ")),first.wikiOwner==null?"":first.wikiOwner);
 		for(Ledger.Source source:members)
 		{
+			combined.pickpocketFailures=Math.addExact(combined.pickpocketFailures,source.pickpocketFailures);
+			combined.lastPickpocketFailure=Math.max(combined.lastPickpocketFailure,source.lastPickpocketFailure);
 			for(Map.Entry<String,Ledger.Segment> segment:source.segments.entrySet()) { combined.segments.put(source.identity.key()+"/"+segment.getKey(),segment.getValue()); }
 			combined.notifications=Math.addExact(combined.notifications,source.notifications);
 			combined.reportedAmount=Math.addExact(combined.reportedAmount,source.reportedAmount);

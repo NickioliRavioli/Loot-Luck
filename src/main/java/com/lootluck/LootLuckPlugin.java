@@ -81,6 +81,15 @@ public class LootLuckPlugin extends Plugin
 	private final com.lootluck.tracking.MysteryBoxTracker mysteryBoxes=new com.lootluck.tracking.MysteryBoxTracker();
 	private final com.lootluck.tracking.MazeRewardTracker mazeRewards=new com.lootluck.tracking.MazeRewardTracker();
 	private net.runelite.api.coords.WorldPoint mazeTarget;
+	private final com.lootluck.tracking.PickpocketTracker pickpockets=new com.lootluck.tracking.PickpocketTracker();
+	private final java.util.List<PendingPickpocket> pendingPickpockets=new java.util.ArrayList<>();
+	private static final class PendingPickpocket
+	{
+		SourceIdentity source;
+		java.util.List<ItemStack> items;
+		long amount;
+		com.lootluck.tracking.PickpocketTracker.Success success;
+	}
 	private final com.lootluck.tracking.NpcDeathContexts npcDeaths=new com.lootluck.tracking.NpcDeathContexts();
 	private java.util.Collection<ItemStack> pendingNpcItems;
 	private String pendingNpcContext="";
@@ -115,6 +124,7 @@ public class LootLuckPlugin extends Plugin
 	{
 		mysteryBoxes.clear();
 		mazeRewards.clear();mazeTarget=null;
+		pickpockets.clear();pendingPickpockets.clear();
 		npcDeaths.clear();pendingNpcItems=null;pendingNpcContext="";
 		activeProfile=key;long token=generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.cancelRequests(); }
 		submit(r->{
@@ -128,6 +138,7 @@ public class LootLuckPlugin extends Plugin
 	@Subscribe public void onGameStateChanged(GameStateChanged event)
 	{
 		updateWorldType();
+		if(event.getGameState()!=GameState.LOGGED_IN) { flushPickpockets(false);pickpockets.clear(); }
 		if(event.getGameState()==GameState.LOADING) { mazeRewards.loading(client.getTickCount()); }
 		else if(event.getGameState()!=GameState.LOGGED_IN) { mazeRewards.clear();mazeTarget=null; }
 		if(event.getGameState()!=GameState.LOGGED_IN) { mysteryBoxes.clear();npcDeaths.clear();pendingNpcItems=null;pendingNpcContext=""; }
@@ -158,7 +169,41 @@ public class LootLuckPlugin extends Plugin
 		SourceIdentity source=new SourceIdentity(event.getType().name(),event.getName(),"combat="+event.getCombatLevel()+";metadata="+metadata+deathContext.replaceAll(";deathLocation=[^;]+",""),client.getWorldType().toString(),"",deathLocation);
 		RuntimeData current=runtime;if(current!=null&&current.rates!=null) { source=current.rates.resolveSource(source); }
 		if("Mystery box".equals(event.getName())) { mysteryBoxes.clear(); }
+		if("PICKPOCKET".equals(source.type))
+		{
+			PendingPickpocket pending=new PendingPickpocket();pending.source=source;pending.amount=Math.max(0,event.getAmount());pending.items=new java.util.ArrayList<>();
+			if(event.getItems()!=null) { for(ItemStack item:event.getItems()) { pending.items.add(new ItemStack(item.getId(),item.getQuantity())); } }
+			pending.success=pickpockets.claim(event.getName(),client.getTickCount());pendingPickpockets.add(pending);return;
+		}
 		recordLoot(source,event.getItems(),Math.max(0,event.getAmount()));
+	}
+	private void flushPickpockets(boolean complete)
+	{
+		for(PendingPickpocket pending:pendingPickpockets)
+		{
+			SourceIdentity source=pending.source;
+			String modifier=pending.success==null?";rogueDoubled=unknown":pending.success.metadata(complete);
+			recordLoot(new SourceIdentity(source.type,source.name,source.variant+modifier,source.context,source.wikiOwner),pending.items,pending.amount);
+		}
+		pendingPickpockets.clear();
+	}
+	private Integer roguePieces()
+	{
+		net.runelite.api.ItemContainer equipment=client.getItemContainer(net.runelite.api.gameval.InventoryID.WORN);
+		return equipment==null?null:com.lootluck.rates.RogueOutfit.countPieces(java.util.Arrays.stream(equipment.getItems()).mapToInt(net.runelite.api.Item::getId).toArray());
+	}
+	private void recordPickpocketFailure(String name)
+	{
+		String profile=activeProfile;long token=generation.get(),timestamp=System.currentTimeMillis();
+		SourceIdentity identity=new SourceIdentity("PICKPOCKET",name,"outcome=failed",client.getWorldType().toString());
+		RuntimeData current=runtime;if(current!=null&&current.rates!=null) { identity=current.rates.resolveSource(identity); }
+		SourceIdentity captured=identity;
+		submit(r->{
+			if(r.engine==null||!profile.equals(r.profile)) { return; }
+			try { r.engine.failPickpocket(captured,timestamp);r.store.save(profile,r.engine.lifetime()); }
+			catch(Exception ex) { r.error="Pickpocket failure save failed; tracking paused. Check RuneLite logs.";log.warn(r.error,ex);r.engine=null; }
+			publishOnWorker(r,token);
+		});
 	}
 	@Subscribe public void onActorDeath(net.runelite.api.events.ActorDeath event)
 	{
@@ -229,6 +274,7 @@ public class LootLuckPlugin extends Plugin
 	@Subscribe public void onMenuOptionClicked(net.runelite.api.events.MenuOptionClicked event)
 	{
 		if(!running||activeProfile==null||client.getGameState()!=GameState.LOGGED_IN) { return; }
+		if("Pickpocket".equals(event.getMenuOption())&&event.getMenuAction().name().startsWith("NPC_")) { pickpockets.selected(net.runelite.client.util.Text.removeTags(event.getMenuTarget())); }
 		collectMazeReward();
 		// Chest reward dialogues can require a Continue action before inventory delivery.
 		if(event.getMenuAction()==net.runelite.api.MenuAction.WIDGET_CONTINUE||"Continue".equals(event.getMenuOption())) { return; }
@@ -247,14 +293,17 @@ public class LootLuckPlugin extends Plugin
 			collectMysteryBox();mysteryBoxes.arm(inventorySnapshot(),client.getTickCount());
 		}
 	}
-	@Subscribe public void onChatMessage(net.runelite.api.events.ChatMessage event)
+	@Subscribe(priority=1) public void onChatMessage(net.runelite.api.events.ChatMessage event)
 	{
+		if(!running||activeProfile==null) { return; }
 		if(event.getType()==net.runelite.api.ChatMessageType.GAMEMESSAGE||event.getType()==net.runelite.api.ChatMessageType.SPAM)
 		{
-			mysteryBoxes.message(net.runelite.client.util.Text.removeTags(event.getMessage()));
+			String message=net.runelite.client.util.Text.removeTags(event.getMessage());mysteryBoxes.message(message);
+			String failed=pickpockets.message(message,client.getTickCount(),roguePieces());
+			if(failed!=null) { recordPickpocketFailure(failed); }
 		}
 	}
-	@Subscribe public void onGameTick(net.runelite.api.events.GameTick event) { collectMysteryBox();collectMazeReward(); }
+	@Subscribe public void onGameTick(net.runelite.api.events.GameTick event) { flushPickpockets(true);collectMysteryBox();collectMazeReward(); }
 	private boolean nearMazeTarget()
 	{
 		return mazeTarget!=null&&client.getLocalPlayer()!=null&&mazeTarget.distanceTo(client.getLocalPlayer().getWorldLocation())<=2;
@@ -440,6 +489,7 @@ public class LootLuckPlugin extends Plugin
 	}
 	@Override protected void shutDown()
 	{
+		flushPickpockets(false);pickpockets.clear();
 		mysteryBoxes.clear();
 		mazeRewards.clear();mazeTarget=null;
 		npcDeaths.clear();pendingNpcItems=null;pendingNpcContext="";

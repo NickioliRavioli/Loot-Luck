@@ -68,6 +68,7 @@ public final class RateRow
 			(mechanics.containsKey("Structured export rate")?"\nSource-page correction; structured export reported "+mechanics.get("Structured export rate"):"")+
 			(mechanics.containsKey("Wiki page revision")?"\nSource page revision: "+mechanics.get("Wiki page revision"):"")+
 			(mechanics.containsKey("Source page conditions")?"\nSource page notes: "+mechanics.get("Source page conditions"):"")+
+			(mechanics.containsKey("Recorded loot modifier")?"\nAt collection: "+mechanics.get("Recorded loot modifier"):"")+
 			(variant==null||variant.isBlank()?"":"\nTable: "+variant)+(conditions==null||conditions.isBlank()?"":"\nConditions: "+readableConditions())+
 			"\nFetched: " + fetchedAt + "\nSource: " + url;
 	}
