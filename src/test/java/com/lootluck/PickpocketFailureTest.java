@@ -42,4 +42,26 @@ public class PickpocketFailureTest
 		LedgerEngine engine=new LedgerEngine(ledger);engine.failPickpocket(new SourceIdentity("PICKPOCKET","Man","outcome=failed","[]"),1);LedgerStore.validate(ledger);
 		try { engine.failPickpocket(new SourceIdentity("NPC","Man","","[]"),2);fail("Kill failure accepted"); }catch(IllegalArgumentException expected) { }
 	}
+	@Test public void excludingFailuresOnlyChangesOverallSourceOccurrences()
+	{
+		assertTrue(new LootLuckConfig() {}.includeFailedPickpockets());
+		LedgerEngine engine=new LedgerEngine(new Ledger());
+		SourceIdentity failure=new SourceIdentity("PICKPOCKET","Guard","outcome=failed","[MEMBERS]");
+		SourceIdentity success=new SourceIdentity("PICKPOCKET","Guard","rogueDoubled=false","[MEMBERS]");
+		engine.failPickpocket(failure,1);engine.failPickpocket(failure,2);
+		engine.observe(new Observation(success,3,1,Map.of(1,50L),Map.of(1,"Coins"),Map.of()),AttemptAdapter.Assessment.unsupported("pending"));
+		for(Ledger ledger:List.of(engine.lifetime(),engine.session()))
+		{
+			PanelState included=ViewBuilder.build(ledger,rates,false,Map.of(),false,null,false,true);
+			PanelState excluded=ViewBuilder.build(ledger,rates,false,Map.of(),false,null,false,false);
+			assertEquals(3,included.sources.get(0).count);assertEquals(1,excluded.sources.get(0).count);
+			assertTrue(excluded.sources.get(0).countTooltip.contains("excluded from overall occurrences"));
+			assertEquals(2,excluded.sources.get(0).items.stream().filter(i->i.occurrenceOnly).findFirst().get().occurrences);
+			PanelState.Item coins=excluded.sources.get(0).items.stream().filter(i->!i.occurrenceOnly).findFirst().get();
+			assertEquals(50,coins.quantity);assertEquals(1,coins.occurrences);
+			assertEquals(2,excluded.allItems.stream().filter(i->i.occurrenceOnly).findFirst().get().occurrences);
+			assertEquals(3,excluded.collections.size());
+		}
+		assertEquals(2,engine.lifetime().source(failure).pickpocketFailures);
+	}
 }

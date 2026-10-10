@@ -46,6 +46,7 @@ final class LootLuckSettingsPanel extends JPanel
 		toggle("Show HA values","showHa",config::showHa,"High Alchemy totals exclude rune costs.",changed);
 		if(PanelState.LUCK_STATISTICS_VISIBLE) { toggle("Luck colors","luckColors",config::luckColors,"Colors actual/expected ratios; colors do not indicate statistical significance.",changed); }
 		section("Item counts");
+		toggle("Include failed pickpockets in occurrences","includeFailedPickpockets",config::includeFailedPickpockets,"Includes failures in the pickpocket source's overall total. The Failed pickpocket row keeps its count either way; loot quantities and item occurrences stay the same.",changed);
 		for(ItemDisplayStyle style:ItemDisplayStyle.values())
 		{
 			JLabel caption=new JLabel(style.title);caption.setForeground(new Color(173,169,160));caption.setAlignmentX(LEFT_ALIGNMENT);add(caption);

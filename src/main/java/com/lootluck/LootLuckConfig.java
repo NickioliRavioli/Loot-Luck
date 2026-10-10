@@ -16,6 +16,8 @@ public interface LootLuckConfig extends Config
 	default boolean groupByDropTable() { return false; }
 	@ConfigItem(keyName="separateConditionVariants",name="Show variants separately",description="Display verified drop-condition variants as separate source headers instead of grouping items under the main source. Does not change tracking or eligibility.")
 	default boolean separateConditionVariants() { return false; }
+	@ConfigItem(keyName="includeFailedPickpockets",name="Include failed pickpockets in occurrences",description="Include recorded failures in pickpocket source totals. The Failed pickpocket row always retains its count; loot quantities and item occurrences are unaffected.")
+	default boolean includeFailedPickpockets() { return true; }
 	@ConfigItem(keyName="wikiRefresh",name="Allow Wiki refresh",description="Refresh the full public drop catalogue and source tables from the OSRS Wiki. Sends IP and game-content queries; never account names or loot history.",warning="This feature submits your IP address to a 3rd-party server not controlled or verified by RuneLite developers")
 	default boolean wikiRefresh() { return false; }
 	@ConfigItem(keyName="includeUnobtained",name="Include unobtained",description="Include known source-table items with no observations. Always enabled for driest sorting.")

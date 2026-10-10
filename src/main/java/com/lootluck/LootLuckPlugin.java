@@ -445,7 +445,7 @@ public class LootLuckPlugin extends Plugin
 	private void publishOnWorker(RuntimeData r,long token)
 	{
 		if(r!=runtime || token!=generation.get()) { return; }
-		PanelState view=r.engine==null||r.rates==null?new PanelState():ViewBuilder.build(session?r.engine.session():r.engine.lifetime(),r.rates,all||config.includeUnobtained(),new LinkedHashMap<>(identities),config.hideUnobtainedOtherWorld(),membersWorld,config.separateConditionVariants());
+		PanelState view=r.engine==null||r.rates==null?new PanelState():ViewBuilder.build(session?r.engine.session():r.engine.lifetime(),r.rates,all||config.includeUnobtained(),new LinkedHashMap<>(identities),config.hideUnobtainedOtherWorld(),membersWorld,config.separateConditionVariants(),config.includeFailedPickpockets());
 		view.showGe=config.showGe();view.showHa=config.showHa();view.luckColors=config.luckColors();view.showAllRates=config.showAllRates();
 		view.showWikiLinks=config.showWikiLinks();
 		view.includeUnobtained=config.includeUnobtained();

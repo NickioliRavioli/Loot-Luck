@@ -33,10 +33,14 @@ public final class ViewBuilder
 	}
 	public static PanelState build(Ledger ledger,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld,boolean separateVariants)
 	{
+		return build(ledger,rates,unobtained,identities,hideOtherWorld,membersWorld,separateVariants,true);
+	}
+	public static PanelState build(Ledger ledger,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld,boolean separateVariants,boolean includeFailedPickpockets)
+	{
 		PanelState state=new PanelState();state.notice="";
 		for(Map.Entry<String,Ledger.Source> entry:SourceGroups.build(ledger).entrySet())
 		{
-			Ledger.Source s=entry.getValue();PanelState.Source family=sourceView(entry.getKey(),s,rates,unobtained,identities,hideOtherWorld,membersWorld);
+			Ledger.Source s=entry.getValue();PanelState.Source family=sourceView(entry.getKey(),s,rates,unobtained,identities,hideOtherWorld,membersWorld,includeFailedPickpockets);
 			List<PanelState.Source> variants=new ArrayList<>();
 			if(separateVariants&&com.lootluck.rates.SourceConditions.hasVariants(rates.rows(s.identity)))
 			{
@@ -44,7 +48,7 @@ public final class ViewBuilder
 				boolean multipleWorlds=groups.values().stream().map(value->value.identity.context).distinct().count()>1;
 				for(Map.Entry<String,Ledger.Source> group:groups.entrySet())
 				{
-					Ledger.Source member=group.getValue();PanelState.Source child=sourceView(group.getKey(),member,rates,unobtained,identities,hideOtherWorld,membersWorld);
+					Ledger.Source member=group.getValue();PanelState.Source child=sourceView(group.getKey(),member,rates,unobtained,identities,hideOtherWorld,membersWorld,includeFailedPickpockets);
 					String label=com.lootluck.rates.SourceConditions.label(member.identity,rates.rows(member.identity));
 					if(multipleWorlds) { label+=" / "+("[MEMBERS]".equals(member.identity.context)?"Members":"[]".equals(member.identity.context)?"Free-to-play":"Special/unknown world"); }
 					child.name=family.name+" ("+label+")";variants.add(child);
@@ -68,16 +72,16 @@ public final class ViewBuilder
 		}
 		state.collections.sort(Comparator.comparingLong((PanelState.Source s)->s.lastReceived).reversed());return state;
 	}
-	private static PanelState.Source sourceView(String sourceKey,Ledger.Source s,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld)
+	private static PanelState.Source sourceView(String sourceKey,Ledger.Source s,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld,boolean includeFailedPickpockets)
 	{
 			PanelState.Source source=new PanelState.Source();source.key=sourceKey;source.familyKey=s.identity.family().key();source.name=com.lootluck.rates.RewardSources.displayName(s.identity);
 			com.lootluck.rates.TableResolver.Resolution resolution=com.lootluck.rates.TableResolver.resolve(s.identity,rates.rows(s.identity));
 			List<RateRow> sourceRates=resolution.rows;
 			String wikiOwner=sourceRates.isEmpty()?com.lootluck.rates.RewardSources.wikiOwner(s.identity):sourceRates.get(0).owner;
 			source.wikiUrl=sourceWikiUrl(wikiOwner==null?com.lootluck.rates.RewardSources.wikiOwner(s.identity):wikiOwner);
-			source.count=Math.addExact(s.notifications,s.pickpocketFailures);source.lastReceived=s.lastReceived;
+			source.count=includeFailedPickpockets?Math.addExact(s.notifications,s.pickpocketFailures):s.notifications;source.lastReceived=s.lastReceived;
 			source.countTooltip="Recorded loot notifications: "+s.notifications+"; client-reported amount: "+s.reportedAmount+"; excluded notifications: "+s.excluded+". Not automatically verified kills/openings. Context: "+s.identity.context+"; variant: "+s.identity.variant;
-			if(s.pickpocketFailures>0) { source.countTooltip+="; failed pickpockets: "+s.pickpocketFailures; }
+			if(s.pickpocketFailures>0) { source.countTooltip+="; failed pickpockets: "+s.pickpocketFailures+(includeFailedPickpockets?" (included in overall occurrences)":" (excluded from overall occurrences)"); }
 			Map<String,List<RateRow>> byName=new LinkedHashMap<>();
 			for(RateRow r:sourceRates) { byName.computeIfAbsent(normalize(r.itemName+(com.lootluck.rates.ItemRateMatcher.notedRow(r)?" (noted)":"")),key->new ArrayList<>()).add(r); }
 			Map<String,PanelState.Item> display=new LinkedHashMap<>();
