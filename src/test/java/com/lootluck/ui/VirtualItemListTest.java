@@ -11,6 +11,19 @@ import static org.junit.Assert.*;
 
 public class VirtualItemListTest
 {
+	@Test public void smallScrollKeepsValidRowLayoutsButResizingUpdatesThem() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			AtomicInteger layouts=new AtomicInteger();
+			VirtualItemList list=new VirtualItemList(Collections.nCopies(1000,44),index->new JPanel() {
+				@Override public boolean isValid() { return true; }
+				@Override public void doLayout() { layouts.incrementAndGet();super.doLayout(); }
+			},index->{});
+			JViewport viewport=new JViewport();viewport.setSize(230,400);viewport.setView(list);viewport.addNotify();viewport.doLayout();list.doLayout();int before=layouts.get();
+			viewport.setViewPosition(new Point(0,1));list.doLayout();assertEquals(before,layouts.get());
+			viewport.setSize(300,400);viewport.doLayout();list.doLayout();assertTrue(layouts.get()>before);viewport.removeNotify();
+		});
+	}
 	@Test public void gridCardsReserveEveryRowAfterSidebarResize() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{

@@ -23,7 +23,8 @@ final class VirtualItemList extends JPanel
 	private final IntConsumer released;
 	private final Map<Integer,JComponent> mounted=new HashMap<>();
 	private JViewport viewport;
-	private final ChangeListener scrolled=event->{doLayout();repaint();};
+	// JViewport already repaints the exposed viewport region when it scrolls.
+	private final ChangeListener scrolled=event->doLayout();
 	VirtualItemList(List<Integer> heights,IntFunction<JComponent> factory,IntConsumer released)
 	{
 		this.factory=factory;this.released=released;setLayout(null);setOpaque(false);setAlignmentX(LEFT_ALIGNMENT);
@@ -81,8 +82,11 @@ final class VirtualItemList extends JPanel
 		mounted.entrySet().removeIf(entry->{if(entry.getKey()<start||entry.getKey()>end) { remove(entry.getValue());released.accept(entry.getKey());return true; }return false;});
 		for(int i=first;i<=last&&i<offsets.length-1;i++)
 		{
-			JComponent row=mounted.get(i);if(row==null) { row=factory.apply(i);mounted.put(i,row);add(row); }
-			row.setBounds(0,offsets[i],getWidth(),offsets[i+1]-offsets[i]);layoutChildren(row);
+			JComponent row=mounted.get(i);boolean created=row==null;if(created) { row=factory.apply(i);mounted.put(i,row);add(row); }
+			int height=offsets[i+1]-offsets[i];
+			boolean changed=row.getX()!=0||row.getY()!=offsets[i]||row.getWidth()!=getWidth()||row.getHeight()!=height;
+			if(created||changed||!row.isValid()) { row.setBounds(0,offsets[i],getWidth(),height);layoutChildren(row); }
+			if(created) { row.repaint(); }
 		}
 	}
 	private static void layoutChildren(java.awt.Container container)
