@@ -78,6 +78,7 @@ public class LootLuckPlugin extends Plugin
 	private volatile Boolean membersWorld;
 	private volatile boolean running,session,all,lootTrackerEnabled;
 	private volatile boolean panelVisible;
+	private volatile int requestedHistoryPage=-2;
 	private final AtomicLong generation=new AtomicLong();
 	private final Map<String,Integer> identities=new ConcurrentHashMap<>();
 	// Accessed only by Swing; ItemManager already owns and caches the sprite pixels.
@@ -111,6 +112,7 @@ public class LootLuckPlugin extends Plugin
 			if(!running||run!=runtime) { return; }
 			panel=new LootLuckPanel((id,quantity)->observationIcon(id,quantity),value->{session=value;all=panel.driest();publish();},value->{configManager.setConfiguration(LootLuckConfig.GROUP,"includeUnobtained",value);publish();},this::resetSession,this::refresh);
 			panel.setDataAction(this::manageData);
+			requestedHistoryPage=-2;panel.setViewAction(()->{requestedHistoryPage=panel.requestedHistoryPage();publish();});
 			panel.setValidationAction(this::confirmGameplay);
 			panel.setSettings(config,(key,value)->configManager.setConfiguration(LootLuckConfig.GROUP,key,value),this::previewIcon);
 			panel.addHierarchyListener(event->{if((event.getChangeFlags()&java.awt.event.HierarchyEvent.SHOWING_CHANGED)!=0&&run==runtime) { panelVisible=panel.isShowing();if(panelVisible) { publish(); } }});
@@ -462,7 +464,7 @@ public class LootLuckPlugin extends Plugin
 	{
 		if(r!=runtime||token!=generation.get()||!panelVisible) { return; }
 		long revision=r.publicationRevision.get();
-		PanelState view=r.engine==null||r.rates==null?new PanelState():ViewBuilder.build(session?r.engine.session():r.engine.lifetime(),r.rates,all||config.includeUnobtained(),new LinkedHashMap<>(identities),config.hideUnobtainedOtherWorld(),membersWorld,config.separateConditionVariants(),config.includeFailedPickpockets());
+		PanelState view=r.engine==null||r.rates==null?new PanelState():ViewBuilder.build(session?r.engine.session():r.engine.lifetime(),r.rates,all||config.includeUnobtained(),identities,config.hideUnobtainedOtherWorld(),membersWorld,config.separateConditionVariants(),config.includeFailedPickpockets(),requestedHistoryPage);
 		view.showGe=config.showGe();view.showHa=config.showHa();view.luckColors=config.luckColors();view.showAllRates=config.showAllRates();
 		view.showWikiLinks=config.showWikiLinks();
 		view.includeUnobtained=config.includeUnobtained();

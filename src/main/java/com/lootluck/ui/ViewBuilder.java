@@ -37,6 +37,10 @@ public final class ViewBuilder
 	}
 	public static PanelState build(Ledger ledger,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld,boolean separateVariants,boolean includeFailedPickpockets)
 	{
+		return build(ledger,rates,unobtained,identities,hideOtherWorld,membersWorld,separateVariants,includeFailedPickpockets,-1);
+	}
+	public static PanelState build(Ledger ledger,RateProvider rates,boolean unobtained,Map<String,Integer> identities,boolean hideOtherWorld,Boolean membersWorld,boolean separateVariants,boolean includeFailedPickpockets,int historyPage)
+	{
 		PanelState state=new PanelState();state.notice="";
 		for(Map.Entry<String,Ledger.Source> entry:SourceGroups.build(ledger).entrySet())
 		{
@@ -63,7 +67,21 @@ public final class ViewBuilder
 		state.allItems.addAll(totals.values());state.allItems.sort(Comparator.comparingLong((PanelState.Item i)->i.lastReceived).reversed());
 		long failures=0,lastFailure=0;for(Ledger.Source source:ledger.sourceVariants()) { failures=Math.addExact(failures,source.pickpocketFailures);lastFailure=Math.max(lastFailure,source.lastPickpocketFailure); }
 		if(failures>0) { state.allItems.add(failureItem("all:pickpocket-failure",failures,lastFailure)); }
-		for(int index=ledger.history.size()-1;index>=0;index--)
+		state.collectionCount=ledger.history.size();state.collectionPage=historyPage<0?historyPage:Math.min(historyPage,Math.max(0,(state.collectionCount-1)/50));
+		java.util.List<Integer> historyIndices=new ArrayList<>();
+		if(historyPage!=-2)
+		{
+			boolean ordered=true;for(int i=1;i<ledger.history.size();i++) { if(ledger.history.get(i).timestamp<ledger.history.get(i-1).timestamp) { ordered=false;break; } }
+			int start=historyPage<0?0:state.collectionPage*50,end=historyPage<0?state.collectionCount:Math.min(state.collectionCount,start+50);
+			if(ordered) { for(int position=start;position<end;position++) { historyIndices.add(state.collectionCount-1-position); } }
+			else
+			{
+				for(int i=state.collectionCount-1;i>=0;i--) { historyIndices.add(i); }
+				historyIndices.sort(Comparator.comparingLong((Integer i)->ledger.history.get(i).timestamp).reversed());
+				historyIndices=new ArrayList<>(historyIndices.subList(start,end));
+			}
+		}
+		for(int index:historyIndices)
 		{
 			Ledger.CollectionRecord record=ledger.history.get(index);PanelState.Source collection=new PanelState.Source();collection.key="collection:"+index;collection.name=com.lootluck.rates.RewardSources.displayName(record.source);collection.count=record.reportedAmount;collection.lastReceived=record.timestamp;collection.countTooltip="One recorded notification; reported amount "+record.reportedAmount+". Not automatically individual attempts.";
 			for(Map.Entry<Integer,Long> item:record.quantities.entrySet()) { PanelState.Item row=new PanelState.Item();row.id=item.getKey();row.key=collection.key+":"+row.id;row.name=record.names.getOrDefault(row.id,"Item "+row.id);row.quantity=item.getValue();row.occurrences=1;row.lastReceived=record.timestamp;collection.items.add(row); }

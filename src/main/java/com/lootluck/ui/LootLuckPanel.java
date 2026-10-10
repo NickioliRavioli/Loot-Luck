@@ -48,6 +48,9 @@ public final class LootLuckPanel extends PluginPanel
 	private Consumer<String> dataAction=action->{};
 	private Consumer<String> validationAction=source->{};
 	private int historyPage;
+	private Runnable viewChanged=()->{};
+	public void setViewAction(Runnable action) { viewChanged=action; }
+	public int requestedHistoryPage() { return view.getSelectedIndex()==1?historyPage:-2; }
 	private final Consumer<Boolean> scopeChanged;
 	private final Consumer<String> openWiki;
 	private final Set<String> collapsed=new HashSet<>();
@@ -114,7 +117,7 @@ public final class LootLuckPanel extends PluginPanel
 		content.setLayout(new javax.swing.BoxLayout(content,javax.swing.BoxLayout.Y_AXIS));content.setOpaque(false);add(content,BorderLayout.CENTER);
 		sort.addActionListener(e->{scopeChanged.accept(session());render();});
 		refreshButton.addActionListener(e->refresh.run());resetButton.addActionListener(e->reset.run());
-		view.addActionListener(e->{historyPage=0;controls.removeAll();top.remove(controls);if(view.getSelectedIndex()==0) { controls.add(sort);top.add(controls); }else if(view.getSelectedIndex()==2) { controls.add(itemSort);top.add(controls); }top.revalidate();top.repaint();render();});itemSort.addActionListener(e->render());
+		view.addActionListener(e->{historyPage=0;controls.removeAll();top.remove(controls);if(view.getSelectedIndex()==0) { controls.add(sort);top.add(controls); }else if(view.getSelectedIndex()==2) { controls.add(itemSort);top.add(controls); }top.revalidate();top.repaint();viewChanged.run();render();});itemSort.addActionListener(e->render());
 	}
 	private static Icon eyeIcon(boolean slashed)
 	{
@@ -375,10 +378,13 @@ public final class LootLuckPanel extends PluginPanel
 	{
 		if(view.getSelectedIndex()==1)
 		{
-			int pages=Math.max(1,(state.collections.size()+49)/50);historyPage=Math.min(historyPage,pages-1);
-			JPanel paging=new JPanel(new BorderLayout(4,0));paging.setOpaque(false);paging.setAlignmentX(LEFT_ALIGNMENT);JButton previous=new JButton("‹"),next=new JButton("›");previous.setEnabled(historyPage>0);next.setEnabled(historyPage+1<pages);previous.addActionListener(e->{historyPage--;render();});next.addActionListener(e->{historyPage++;render();});paging.add(previous,BorderLayout.WEST);paging.add(label("Page "+(historyPage+1)+" / "+pages,MUTED),BorderLayout.CENTER);paging.add(next,BorderLayout.EAST);paging.setMaximumSize(new Dimension(Integer.MAX_VALUE,30));content.add(paging);
+			int count=state.collectionPage==-1?state.collections.size():state.collectionCount;
+			int pages=Math.max(1,(count-1)/50+1);historyPage=Math.min(historyPage,pages-1);
+			JPanel paging=new JPanel(new BorderLayout(4,0));paging.setOpaque(false);paging.setAlignmentX(LEFT_ALIGNMENT);JButton previous=new JButton("‹"),next=new JButton("›");previous.setEnabled(historyPage>0);next.setEnabled(historyPage+1<pages);previous.addActionListener(e->{historyPage--;viewChanged.run();render();});next.addActionListener(e->{historyPage++;viewChanged.run();render();});paging.add(previous,BorderLayout.WEST);paging.add(label("Page "+(historyPage+1)+" / "+pages,MUTED),BorderLayout.CENTER);paging.add(next,BorderLayout.EAST);paging.setMaximumSize(new Dimension(Integer.MAX_VALUE,30));content.add(paging);
+			if(state.collectionPage!=-1&&state.collectionPage!=historyPage) { content.add(label("Loading collection history…",MUTED));return; }
 			if(state.collections.isEmpty()) { content.add(label("No collection history yet.",MUTED));content.add(label("History starts with new loot notifications.",MUTED)); }
-			for(int index=historyPage*50;index<Math.min(state.collections.size(),(historyPage+1)*50);index++)
+			int start=state.collectionPage==-1?historyPage*50:0;
+			for(int index=start;index<Math.min(state.collections.size(),start+50);index++)
 			{
 				content.add(collectionCard(state.collections.get(index)));content.add(javax.swing.Box.createVerticalStrut(5));
 			}

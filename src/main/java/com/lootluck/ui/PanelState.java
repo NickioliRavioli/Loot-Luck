@@ -24,6 +24,8 @@ public final class PanelState
 	public boolean stackCounts=false;
 	public List<Source> sources=new ArrayList<>();
 	public List<Source> collections=new ArrayList<>();
+	/** -1 is an unpaged detached/test view; -2 omits history; otherwise one page. */
+	public int collectionPage=-1,collectionCount;
 	public List<Item> allItems=new ArrayList<>();
 	public static final class Source
 	{
