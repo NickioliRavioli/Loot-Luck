@@ -1,6 +1,7 @@
 package com.lootluck.ui;
 
 import java.awt.Color;
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
@@ -8,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/** EDT-owned, bounded cache of immutable backgrounds shared by matching tiles. */
+/** EDT-owned, bounded background buffers, drawn immediately and shared by matching tiles. */
 final class EffectFrames
 {
 	private final int pixelLimit,entryLimit;
@@ -20,14 +21,16 @@ final class EffectFrames
 		Key key=new Key(effect,color.getRGB(),width,height,pixelWidth,pixelHeight);
 		long frameTick=effect==ItemEffect.RARITY_FADE?0:tick;
 		Frame previous=frames.get(key);if(previous!=null&&previous.tick==frameTick) { return previous.image; }
-		BufferedImage image=new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_ARGB_PRE);
+		// Keep the same image across ticks so Java2D can reuse its managed surface.
+		// Flushing/replacing it every tick also repeatedly allocates GPU textures.
+		BufferedImage image=previous==null?new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_ARGB_PRE):previous.image;
 		Graphics2D graphics=image.createGraphics();
-		try { graphics.scale((double)pixelWidth/width,(double)pixelHeight/height);EffectButton.paintEffect(graphics,width,height,effect,color,tick*.05); }
+		try { graphics.setComposite(AlphaComposite.Clear);graphics.fillRect(0,0,pixelWidth,pixelHeight);graphics.setComposite(AlphaComposite.SrcOver);graphics.scale((double)pixelWidth/width,(double)pixelHeight/height);EffectButton.paintEffect(graphics,width,height,effect,color,tick*.05); }
 		finally { graphics.dispose(); }
 		long size=(long)pixelWidth*pixelHeight;
 		if(size<=pixelLimit)
 		{
-			if(previous!=null) { pixels-=previous.size();previous.image.flush(); }
+			if(previous!=null) { previous.tick=frameTick;return image; }
 			frames.put(key,new Frame(frameTick,image));pixels+=size;
 			Iterator<Frame> entries=frames.values().iterator();
 			while(pixels>pixelLimit||frames.size()>entryLimit) { Frame evicted=entries.next();pixels-=evicted.size();evicted.image.flush();entries.remove(); }
@@ -39,7 +42,7 @@ final class EffectFrames
 	int size() { return frames.size(); }
 	private static final class Frame
 	{
-		final long tick;final BufferedImage image;
+		long tick;final BufferedImage image;
 		Frame(long tick,BufferedImage image) { this.tick=tick;this.image=image; }
 		long size() { return (long)image.getWidth()*image.getHeight(); }
 	}

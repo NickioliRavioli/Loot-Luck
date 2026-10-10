@@ -14,11 +14,21 @@ public class EffectFramesTest
 		assertSame(first,cache.get(ItemEffect.RARITY_AURORA,Color.RED,42,42,42,42,25));
 		assertNotSame(first,cache.get(ItemEffect.RARITY_AURORA,Color.BLUE,42,42,42,42,25));
 		assertEquals(84,cache.get(ItemEffect.RARITY_AURORA,Color.RED,42,42,84,84,25).getWidth());
-		BufferedImage later=cache.get(ItemEffect.RARITY_AURORA,Color.RED,42,42,42,42,55);assertNotSame(first,later);
-		boolean changed=false;for(int y=0;y<42;y++) { for(int x=0;x<42;x++) { changed|=first.getRGB(x,y)!=later.getRGB(x,y); } }assertTrue(changed);
+		int[] earlier=first.getRGB(0,0,42,42,null,0,42);
+		BufferedImage later=cache.get(ItemEffect.RARITY_AURORA,Color.RED,42,42,42,42,55);assertSame(first,later);
+		assertFalse(java.util.Arrays.equals(earlier,later.getRGB(0,0,42,42,null,0,42)));
 		BufferedImage fade=cache.get(ItemEffect.RARITY_FADE,Color.RED,42,42,42,42,25);
 		assertSame(fade,cache.get(ItemEffect.RARITY_FADE,Color.RED,42,42,42,42,100));
 		assertEquals(0,first.getRGB(0,0));
+	}
+	@Test public void animatedBuffersAreReusedWithoutAccumulatingOldPixels()
+	{
+		EffectFrames cache=new EffectFrames(100000,20);
+		BufferedImage first=cache.get(ItemEffect.RARITY_AURORA,Color.RED,210,44,263,55,0);
+		for(int tick=1;tick<=100;tick++) { assertSame(first,cache.get(ItemEffect.RARITY_AURORA,Color.RED,210,44,263,55,tick)); }
+		EffectFrames fresh=new EffectFrames(100000,20);BufferedImage reference=fresh.get(ItemEffect.RARITY_AURORA,Color.RED,210,44,263,55,100);
+		assertArrayEquals(reference.getRGB(0,0,263,55,null,0,263),first.getRGB(0,0,263,55,null,0,263));
+		assertEquals(1,cache.size());assertEquals(263*55,cache.pixels());
 	}
 	@Test public void memoryAndEntryLimitsHoldAcrossManyColorsAndOversizedFrames()
 	{
