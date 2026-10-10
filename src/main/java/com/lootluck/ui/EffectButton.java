@@ -41,7 +41,9 @@ class EffectButton extends JButton
 	{
 		if(width<=0||height<=0||effect==ItemEffect.NONE) { return; }
 		g.clipRect(2,2,Math.max(0,width-4),Math.max(0,height-4));
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		// Rectangle gradients do not need antialiasing. On Windows, combining it
+		// with complex paints can force software tiles followed by D3D transfers.
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
 		Color gold=new Color(255,203,85);double phase=seconds%6/6;
 		switch(effect)
 		{
@@ -54,7 +56,7 @@ class EffectButton extends JButton
 				Color first=Color.getHSBColor((float)(phase),.65f,1),second=Color.getHSBColor((float)((phase+.35)%1),.7f,1);
 				g.setPaint(new GradientPaint(0,0,alpha(first,80),width,height,alpha(second,65)));g.fillRect(0,0,width,height);edge(g,width,height,first,90);break;
 			case STARBURST:
-				wash(g,width,height,gold,28);g.setColor(alpha(gold,40));double rotation=seconds*.08;
+				wash(g,width,height,gold,28);smooth(g);g.setColor(alpha(gold,40));double rotation=seconds*.08;
 				for(int i=0;i<10;i++) { double a=rotation+i*Math.PI/5;Path2D ray=new Path2D.Double();ray.moveTo(width*.35,height*.5);ray.lineTo(width*.35+Math.cos(a)*width*2,height*.5+Math.sin(a)*width*2);ray.lineTo(width*.35+Math.cos(a+.08)*width*2,height*.5+Math.sin(a+.08)*width*2);ray.closePath();g.fill(ray); }particles(g,width,height,gold,seconds*.4,false);break;
 			case CELEBRATION:
 				wash(g,width,height,gold,25);particles(g,width,height,gold,seconds,true);edge(g,width,height,gold,(int)(35+55*(1-phase)));break;
@@ -62,7 +64,7 @@ class EffectButton extends JButton
 				wash(g,width,height,rarity,45);float radius=Math.max(width,height)*.75f;
 				g.setPaint(new RadialGradientPaint(new Point2D.Float((float)(width*(.5+.25*Math.sin(seconds*.7))),height*.5f),radius,new float[]{0,1},new Color[]{alpha(rarity,85),alpha(rarity,0)}));g.fillRect(0,0,width,height);edge(g,width,height,rarity,(int)(55+30*Math.sin(seconds)));break;
 			case FIRE:
-				wash(g,width,height,new Color(255,86,20),32);
+				wash(g,width,height,new Color(255,86,20),32);smooth(g);
 				for(int i=0;i<12;i++)
 				{
 					double age=(seconds*.6+i*.173)%1,x=((i*.618)%1)*width+Math.sin(seconds*3+i)*3;
@@ -71,7 +73,7 @@ class EffectButton extends JButton
 					Path2D flame=new Path2D.Double();flame.moveTo(x,y-size);flame.curveTo(x+size,y,x+size,y+size,x,y+size);flame.curveTo(x-size,y+size,x-size,y,x,y-size);g.fill(flame);
 				}break;
 			case RAIN:
-				wash(g,width,height,new Color(87,143,208),25);g.setStroke(new BasicStroke(1f));
+				wash(g,width,height,new Color(87,143,208),25);smooth(g);g.setStroke(new BasicStroke(1f));
 				for(int i=0;i<15;i++) { double age=(seconds*.7+i*.137)%1,x=((i*.618)%1)*width-age*8,y=age*(height+12)-6;g.setColor(alpha(new Color(143,201,242),90+i%3*20));g.draw(new Line2D.Double(x,y,x-3,y+7)); }break;
 			case RARITY_PRISM:
 				wash(g,width,height,rarity,60);Color prism=neighbor(rarity,.06f);float center=(float)(width*(.5+.4*Math.sin(seconds*.7)));
@@ -80,14 +82,14 @@ class EffectButton extends JButton
 				wash(g,width,height,rarity,60);
 				for(int i=0;i<3;i++) { float x=(float)(width*(.5+.45*Math.sin(seconds*.35+i*1.7))),y=(float)(height*(.5+.4*Math.cos(seconds*.45+i)));g.setPaint(new RadialGradientPaint(new Point2D.Float(x,y),Math.max(width,height)*.6f,new float[]{0,1},new Color[]{alpha(i==1?neighbor(rarity,-.05f):rarity,65),alpha(rarity,0)}));g.fillRect(0,0,width,height); }edge(g,width,height,rarity,85);break;
 			case RARITY_OPAL:
-				wash(g,width,height,rarity,65);double motion=seconds*.3;
+				wash(g,width,height,rarity,65);smooth(g);double motion=seconds*.3;
 				for(int i=0;i<6;i++) { double x=width*((i*.213+motion*.08)%1),y=height*(.5+.5*Math.sin(motion+i));g.setColor(alpha(i%3==0?neighbor(rarity,.04f):rarity,30+i%3*15));Path2D facet=new Path2D.Double();facet.moveTo(x-width*.3,y);facet.lineTo(x,y-height);facet.lineTo(x+width*.3,y);facet.lineTo(x,y+height);facet.closePath();g.fill(facet); }edge(g,width,height,rarity,95);break;
 			case RARITY_FADE:
 				iconFade(g,width,height,rarity,90);break;
 			case RARITY_PULSE:
 				iconFade(g,width,height,rarity,(int)(75+30*Math.sin(seconds*1.6)));break;
 			case RARITY_DUST:
-				iconFade(g,width,height,rarity,85);
+				iconFade(g,width,height,rarity,85);smooth(g);
 				for(int i=0;i<8;i++)
 				{
 					double age=(seconds*.16+i*.137)%1,x=iconCenter(width)+age*width*.65,y=height*(.2+(i*.213)% .65)+Math.sin(seconds+i)*2;
@@ -114,9 +116,11 @@ class EffectButton extends JButton
 	}
 	private static Color alpha(Color color,int opacity) { return new Color(color.getRed(),color.getGreen(),color.getBlue(),opacity); }
 	private static void wash(Graphics2D g,int w,int h,Color c,int opacity) { g.setPaint(new GradientPaint(0,0,alpha(c,opacity),0,h,alpha(c,8)));g.fillRect(0,0,w,h); }
-	private static void edge(Graphics2D g,int w,int h,Color c,int opacity) { g.setColor(alpha(c,opacity));g.drawRoundRect(3,3,w-7,h-7,7,7); }
+	private static void smooth(Graphics2D g) { g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON); }
+	private static void edge(Graphics2D g,int w,int h,Color c,int opacity) { smooth(g);g.setColor(alpha(c,opacity));g.drawRoundRect(3,3,w-7,h-7,7,7); }
 	private static void particles(Graphics2D g,int w,int h,Color color,double seconds,boolean burst)
 	{
+		smooth(g);
 		for(int i=0;i<9;i++)
 		{
 			double age=burst?seconds%6/2:(seconds*.22+i*.137)%1;if(burst&&age>1) { continue; }
