@@ -67,6 +67,9 @@ public class LootLuckPlugin extends Plugin
 		LedgerEngine engine;
 		ValidationRegistry validation;
 		String profile,error="";
+		final java.util.concurrent.atomic.AtomicBoolean publicationQueued=new java.util.concurrent.atomic.AtomicBoolean();
+		final AtomicLong publicationRevision=new AtomicLong();
+		volatile long publicationGeneration;
 	}
 	private volatile RuntimeData runtime;
 	private java.util.concurrent.CompletableFuture<Void> ioTail=java.util.concurrent.CompletableFuture.completedFuture(null);
@@ -74,6 +77,7 @@ public class LootLuckPlugin extends Plugin
 	private volatile String activeProfile;
 	private volatile Boolean membersWorld;
 	private volatile boolean running,session,all,lootTrackerEnabled;
+	private volatile boolean panelVisible;
 	private final AtomicLong generation=new AtomicLong();
 	private final Map<String,Integer> identities=new ConcurrentHashMap<>();
 	// Accessed only by Swing; ItemManager already owns and caches the sprite pixels.
@@ -109,6 +113,7 @@ public class LootLuckPlugin extends Plugin
 			panel.setDataAction(this::manageData);
 			panel.setValidationAction(this::confirmGameplay);
 			panel.setSettings(config,(key,value)->configManager.setConfiguration(LootLuckConfig.GROUP,key,value),this::previewIcon);
+			panel.addHierarchyListener(event->{if((event.getChangeFlags()&java.awt.event.HierarchyEvent.SHOWING_CHANGED)!=0&&run==runtime) { panelVisible=panel.isShowing();if(panelVisible) { publish(); } }});
 			BufferedImage image=ImageUtil.loadImageResource(LootLuckPlugin.class,"icon.png");
 			navigation=NavigationButton.builder().tooltip("Loot Luck").icon(image).priority(6).panel(panel).build();toolbar.addNavigation(navigation);publish();
 		});
@@ -446,10 +451,17 @@ public class LootLuckPlugin extends Plugin
 			publishOnWorker(r,generation.get());
 		});
 	}
-	private void publish() { long token=generation.get();submit(r->publishOnWorker(r,token)); }
+	private void publish() { RuntimeData r=runtime;if(r!=null) { publishOnWorker(r,generation.get()); } }
 	private void publishOnWorker(RuntimeData r,long token)
 	{
-		if(r!=runtime || token!=generation.get()) { return; }
+		if(!running||r!=runtime||token!=generation.get()) { return; }
+		r.publicationGeneration=token;r.publicationRevision.incrementAndGet();
+		if(r.publicationQueued.compareAndSet(false,true)) { submit(current->{r.publicationQueued.set(false);if(current==r) { buildView(r,r.publicationGeneration); }}); }
+	}
+	private void buildView(RuntimeData r,long token)
+	{
+		if(r!=runtime||token!=generation.get()||!panelVisible) { return; }
+		long revision=r.publicationRevision.get();
 		PanelState view=r.engine==null||r.rates==null?new PanelState():ViewBuilder.build(session?r.engine.session():r.engine.lifetime(),r.rates,all||config.includeUnobtained(),new LinkedHashMap<>(identities),config.hideUnobtainedOtherWorld(),membersWorld,config.separateConditionVariants(),config.includeFailedPickpockets());
 		view.showGe=config.showGe();view.showHa=config.showHa();view.luckColors=config.luckColors();view.showAllRates=config.showAllRates();
 		view.showWikiLinks=config.showWikiLinks();
@@ -472,7 +484,7 @@ public class LootLuckPlugin extends Plugin
 			if(!view.sources.contains(source)) { source.validationAvailable=false; }
 		} }
 		clientThread.invoke(()->{
-			if(!running||token!=generation.get()) { return; }
+			if(!running||token!=generation.get()||revision!=r.publicationRevision.get()) { return; }
 			java.util.List<PanelState.Source> pricedSources=view.sourceRows();pricedSources.addAll(view.collections);
 			Map<Integer,long[]> unitPrices=new java.util.HashMap<>();
 			for(PanelState.Source source:pricedSources)
@@ -485,7 +497,7 @@ public class LootLuckPlugin extends Plugin
 				source.value=LootLuckPanel.money(total);
 			}
 			for(PanelState.Item item:view.allItems) { priceItem(item,unitPrices); }
-			SwingUtilities.invokeLater(()->{if(running&&token==generation.get()&&panel!=null) { panel.update(view); }});
+			SwingUtilities.invokeLater(()->{if(running&&token==generation.get()&&revision==r.publicationRevision.get()&&panel!=null) { panel.update(view); }});
 		});
 	}
 	private void priceItem(PanelState.Item item,Map<Integer,long[]> unitPrices)
@@ -515,7 +527,7 @@ public class LootLuckPlugin extends Plugin
 		mysteryBoxes.clear();
 		mazeRewards.clear();mazeTarget=null;
 		npcDeaths.clear();pendingNpcItems=null;pendingNpcContext="";
-		running=false;generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.close(); }
+		running=false;panelVisible=false;generation.incrementAndGet();RuntimeData run=runtime;if(run!=null&&run.rates!=null) { run.rates.close(); }
 		// Already captured immutable observations finish on the storage worker; never block the client thread.
 		// Shared executor is not shut down; only previously accepted immutable observations drain.
 		NavigationButton oldNavigation=navigation;LootLuckPanel oldPanel=panel;SwingUtilities.invokeLater(()->{if(oldNavigation!=null) { toolbar.removeNavigation(oldNavigation); }if(panel==oldPanel) { panel=null;icons.clear(); }});

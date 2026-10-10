@@ -58,6 +58,15 @@ public final class LootLuckPanel extends PluginPanel
 	private PanelState state=new PanelState();
 	private String expanded;
 	private String gridReveal;
+	private boolean showingSettings;
+	private final JLabel noticeLabel=label("",MUTED),statusLabel=label("",MUTED),emptyLabel=label("No loot recorded in this view.",MUTED);
+	private final java.util.Map<String,SourceCard> sourceCards=new java.util.HashMap<>();
+	private static final class SourceCard
+	{
+		final JPanel panel;final java.awt.Component spacing=javax.swing.Box.createVerticalStrut(5);
+		final java.util.List<Object> presentation;final PanelState.Source source;
+		SourceCard(JPanel panel,java.util.List<Object> presentation,PanelState.Source source) { this.panel=panel;this.presentation=presentation;this.source=source; }
+	}
 	private final java.util.Map<String,JButton> itemButtons=new java.util.HashMap<>();
 	public LootLuckPanel(IntFunction<Icon> icons,Consumer<Boolean> scopeChanged,Consumer<Boolean> allChanged,Runnable reset,Runnable refresh)
 	{
@@ -143,6 +152,7 @@ public final class LootLuckPanel extends PluginPanel
 	}
 	private void showSettings(boolean visible)
 	{
+		showingSettings=visible;if(!visible) { render(); }
 		if(configSettings!=null) { configSettings.sync(); }
 		removeAll();add(visible?settings:top,BorderLayout.NORTH);if(!visible) { add(content,BorderLayout.CENTER); }
 		getWrappedPanel().remove(settingsHeader);if(visible) { getWrappedPanel().add(settingsHeader,BorderLayout.NORTH); }
@@ -155,19 +165,59 @@ public final class LootLuckPanel extends PluginPanel
 	public void update(PanelState state) { if(!SwingUtilities.isEventDispatchThread()) { throw new IllegalStateException("Swing thread required"); } this.state=state;render(); }
 	private void render()
 	{
-		content.removeAll();itemButtons.clear();
+		for(JButton action:java.util.List.of(resetButton,exportData,importData,deleteData)) { action.setEnabled(state.canManageData); }
+		if(showingSettings) { if(configSettings!=null) { configSettings.sync(); }return; }
 		boolean showingUnobtained=state.includeUnobtained||driest();toggleUnobtained.setIcon(eyeIcon(!showingUnobtained));toggleUnobtained.setSelected(showingUnobtained);toggleUnobtained.setEnabled(view.getSelectedIndex()==0&&!driest());toggleUnobtained.getAccessibleContext().setAccessibleDescription(showingUnobtained?"Unobtained items shown":"Unobtained items hidden");toggleUnobtained.setToolTipText(showingUnobtained?"Hide unobtained items":"Show unobtained items");
 		toggleGrid.setText(state.gridView?"☰":"▦");toggleGrid.getAccessibleContext().setAccessibleName(state.gridView?"Switch to list view":"Switch to grid view");toggleGrid.setEnabled(view.getSelectedIndex()!=2);
 		toggleGrid.setToolTipText(toggleGrid.getAccessibleContext().getAccessibleName());
 		boolean anyExpanded=state.sources.stream().anyMatch(source->!collapsed.contains(source.key));toggleSources.setText(anyExpanded?"▴":"▾");toggleSources.getAccessibleContext().setAccessibleName(anyExpanded?"Collapse all sources":"Expand all sources");toggleSources.setEnabled(view.getSelectedIndex()==0&&!state.sources.isEmpty());
 		toggleSources.setToolTipText(toggleSources.getAccessibleContext().getAccessibleName());
-		for(JButton action:java.util.List.of(resetButton,exportData,importData,deleteData)) { action.setEnabled(state.canManageData); }
 		if(configSettings!=null) { configSettings.sync(); }
-		if(!state.notice.isEmpty()) { JLabel notice=label(state.notice,MUTED);content.add(notice); }
-		if(view.getSelectedIndex()!=0) { renderObservations();content.revalidate();content.repaint();return; }
-		for(PanelState.Source source:state.sources) { content.add(sourceCard(source));content.add(javax.swing.Box.createVerticalStrut(5)); }
-		if(state.sources.isEmpty()) { JLabel empty=label("No loot recorded in this view.",MUTED);empty.setBorder(BorderFactory.createEmptyBorder(12,0,12,0));content.add(empty); }
-		JLabel status=label(state.dataStatus,MUTED);content.add(status);content.revalidate();content.repaint();
+		if(view.getSelectedIndex()!=0)
+		{
+			content.removeAll();itemButtons.clear();sourceCards.clear();
+			if(!state.notice.isEmpty()) { content.add(label(state.notice,MUTED)); }
+			renderObservations();content.revalidate();content.repaint();return;
+		}
+		if(sourceCards.isEmpty()) { itemButtons.clear(); }
+		Set<String> keys=new HashSet<>();for(PanelState.Source source:state.sources) { keys.add(source.key); }
+		sourceCards.entrySet().removeIf(entry->{if(keys.contains(entry.getKey())) { return false; }releaseCard(entry.getValue());return true;});
+		java.util.List<java.awt.Component> desired=new ArrayList<>();
+		if(!state.notice.isEmpty()) { noticeLabel.setText(state.notice);desired.add(noticeLabel); }
+		for(PanelState.Source source:state.sources)
+		{
+			java.util.List<Object> presentation=presentation(source);SourceCard card=sourceCards.get(source.key);
+			if(card==null||!card.presentation.equals(presentation))
+			{
+				if(card!=null) { releaseCard(card); }
+				card=new SourceCard(sourceCard(source),presentation,source);sourceCards.put(source.key,card);
+			}
+			desired.add(card.panel);desired.add(card.spacing);
+		}
+		if(state.sources.isEmpty()) { emptyLabel.setBorder(BorderFactory.createEmptyBorder(12,0,12,0));desired.add(emptyLabel); }
+		statusLabel.setText(state.dataStatus);desired.add(statusLabel);
+		for(int i=0;i<desired.size();i++)
+		{
+			java.awt.Component component=desired.get(i);
+			if(component.getParent()!=content) { content.add(component,i); }
+			else if(content.getComponent(i)!=component) { content.setComponentZOrder(component,i); }
+		}
+		while(content.getComponentCount()>desired.size()) { content.remove(content.getComponentCount()-1); }
+		content.revalidate();content.repaint();
+	}
+	private void releaseCard(SourceCard card)
+	{
+		content.remove(card.panel);content.remove(card.spacing);for(PanelState.Item item:card.source.items) { itemButtons.remove(item.key); }
+	}
+	private java.util.List<Object> presentation(PanelState.Source source)
+	{
+		java.util.List<Object> values=new ArrayList<>(java.util.Arrays.asList(state.showGe,state.showHa,state.luckColors,state.showAllRates,state.showWikiLinks,state.groupByDropTable,state.hideUnobtainedOtherWorld,state.gridView,state.itemEffect,state.stackCounts,state.iconQuantities,sortMode(),collapsed.contains(source.key),source.key,source.name,source.count,source.value,source.wikiUrl,source.familyKey,source.validationAvailable,source.validationApproved));
+		for(PanelState.Item item:source.items)
+		{
+			values.add(java.util.Arrays.asList(item.key,item.id,item.name,item.quantity,item.occurrences,item.rate,item.rateTooltip,item.reason,item.worldMarker,item.dropTable,item.tableOrder,item.wikiOrder,item.publishedRarity,item.lastReceived,item.occurrenceOnly,item.rarity,backgroundColor(item),item.icon,item.ge,item.ha,item.valueAvailable,item.attempts,item.dry,item.probability,item.expected,item.ratio,item.observed,item.noDrop,item.upper,item.lower,item.dryness,item.unresolvedQuantity,item.unresolvedOccurrences,item.key.equals(expanded)));
+			for(PanelState.RateOption option:item.rateOptions) { values.add(java.util.Arrays.asList(option.key,option.table,option.dropQuantity,option.rate,option.tooltip,option.color,option.historical,option.quantity,option.occurrences)); }
+		}
+		return values;
 	}
 	private JPanel sourceCard(PanelState.Source source)
 	{

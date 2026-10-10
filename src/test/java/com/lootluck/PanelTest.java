@@ -14,6 +14,23 @@ import static org.junit.Assert.*;
 
 public class PanelTest
 {
+	@Test public void updatesKeepUnchangedCardsMountedAndRefreshChangedCountsAndEffects() throws Exception
+	{
+		SwingUtilities.invokeAndWait(()->{
+			PanelState state=new PanelState();state.notice="";
+			for(String name:java.util.List.of("Cow","Dragon"))
+			{
+				PanelState.Source source=new PanelState.Source();source.key=name;source.name=name;
+				PanelState.Item item=new PanelState.Item();item.key=name+":coins";item.name=name+" coins";item.rate="Always";item.quantity=10;item.occurrences=1;source.items.add(item);state.sources.add(source);
+			}
+			LootLuckPanel panel=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});panel.update(state);
+			JButton cow=findButton(panel,"Cow coins"),dragon=findButton(panel,"Dragon coins");
+			state.dataStatus="Refreshed status";panel.update(state);assertSame(cow,findButton(panel,"Cow coins"));assertSame(dragon,findButton(panel,"Dragon coins"));
+			state.sources.get(0).items.get(0).quantity=20;panel.update(state);assertNotSame(cow,findButton(panel,"Cow coins"));assertSame(dragon,findButton(panel,"Dragon coins"));
+			state.itemEffect=com.lootluck.ui.ItemEffect.RARITY_AURORA;panel.update(state);assertNotSame(dragon,findButton(panel,"Dragon coins"));
+			findButton(panel,"Cow coins").doClick();assertNotNull(findLabel(panel,"Quantity"));
+		});
+	}
 	@Test public void recentCollectionRowsMatchSourceRowColoursAndHeight() throws Exception
 	{
 		SwingUtilities.invokeAndWait(()->{
