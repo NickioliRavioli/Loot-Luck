@@ -14,6 +14,10 @@ public final class LedgerStore
 {
 	private final Filepath directory;
 	private final Gson gson;
+	// Immutable serialized snapshots, never mutable Ledger references. Worker-owned.
+	private final java.util.Map<String,String> lastGood=new java.util.LinkedHashMap<String,String>(4,.75f,true) {
+		@Override protected boolean removeEldestEntry(java.util.Map.Entry<String,String> entry) { return size()>2; }
+	};
 	public LedgerStore(Filepath directory, Gson gson) throws IOException { this.directory = directory; this.gson = gson; directory.createDirectories(); }
 	private Filepath file(String key) { return directory.joinSegment(WikiParser.hash(key) + ".json"); }
 	private static final class Export
@@ -52,14 +56,16 @@ public final class LedgerStore
 		save(key,new Ledger());
 		directory.joinSegment(WikiParser.hash(key)+".backup.json").deleteIfExists();
 		file(key).deleteIfExists();
+		lastGood.remove(key);
 	}
 	public Ledger load(String key) throws IOException
 	{
 		Filepath main = file(key), backup = directory.joinSegment(WikiParser.hash(key)+".backup.json");
+		lastGood.remove(key);
 		if (!main.exists() && !backup.exists()) { return new Ledger(); }
-		try { return read(main); } catch (IOException | RuntimeException ex)
+		try { Ledger ledger=read(main);lastGood.put(key,gson.toJson(ledger));return ledger; } catch (IOException | RuntimeException ex)
 		{
-			if (backup.exists()) { return read(backup); }
+			if (backup.exists()) { Ledger ledger=read(backup);lastGood.put(key,gson.toJson(ledger));return ledger; }
 			throw new IOException("Snapshot invalid; original retained. Tracking disabled for this profile until recovery.", ex);
 		}
 	}
@@ -72,8 +78,12 @@ public final class LedgerStore
 	{
 		if (ledger == null || ledger.schema != 3 || ledger.sources == null) { throw new IllegalArgumentException("Unsupported snapshot format. Delete test data to start fresh."); }
 		if(ledger.history==null) { ledger.history=new java.util.ArrayList<>(); }
-		for(Ledger.CollectionRecord record:ledger.history) { if(record!=null&&record.pickpocketFailure&&(record.source==null||!"PICKPOCKET".equals(record.source.type)||record.reportedAmount!=0||record.quantities==null||!record.quantities.isEmpty())) { throw new IllegalArgumentException("Invalid pickpocket failure history"); } }
-		for(Ledger.CollectionRecord record:ledger.history) { if(record==null||record.source==null||record.timestamp<0||record.reportedAmount<0||record.quantities==null||record.names==null) { throw new IllegalArgumentException("Invalid collection history"); }record.quantities.forEach((id,quantity)->{if(id<=0||quantity<=0) { throw new IllegalArgumentException("Invalid collection quantity"); }}); }
+		for(Ledger.CollectionRecord record:ledger.history)
+		{
+			if(record==null||record.source==null||record.timestamp<0||record.reportedAmount<0||record.quantities==null||record.names==null) { throw new IllegalArgumentException("Invalid collection history"); }
+			if(record.pickpocketFailure&&(!"PICKPOCKET".equals(record.source.type)||record.reportedAmount!=0||!record.quantities.isEmpty())) { throw new IllegalArgumentException("Invalid pickpocket failure history"); }
+			record.quantities.forEach((id,quantity)->{if(id<=0||quantity<=0) { throw new IllegalArgumentException("Invalid collection quantity"); }});
+		}
 		ledger.sources.forEach((key,family)->{
 			if(family!=null&&(family.pickpocketFailures!=0||family.lastPickpocketFailure!=0)) { throw new IllegalArgumentException("Invalid family failure count"); }
 			if(family==null||family.identity==null||!key.equals(family.identity.family().key())||!key.equals(family.identity.key())||family.variants==null||family.items==null||!family.items.isEmpty()||family.segments==null||!family.segments.isEmpty()||family.activeSegment!=null||family.notifications!=0||family.reportedAmount!=0||family.excluded!=0||family.lastReceived!=0) { throw new IllegalArgumentException("Invalid source family"); }
@@ -95,13 +105,23 @@ public final class LedgerStore
 	public void save(String key, Ledger ledger) throws IOException
 	{
 		validate(ledger); Filepath main = file(key), backup = directory.joinSegment(WikiParser.hash(key)+".backup.json");
-		Filepath temp = directory.createTempFile("snapshot-", ".tmp");
+		String snapshot=gson.toJson(ledger),previous=lastGood.get(key);
+		if(previous==null&&main.exists())
+		{
+			try { previous=gson.toJson(read(main)); }
+			catch(RuntimeException|IOException invalid) { /* Keep an existing last-good backup if the untrusted main file is corrupt. */ }
+		}
+		if(previous!=null) { writeSnapshot(backup,previous); }
+		writeSnapshot(main,snapshot);lastGood.put(key,snapshot);
+	}
+	private void writeSnapshot(Filepath target,String snapshot) throws IOException
+	{
+		Filepath temp=directory.createTempFile("snapshot-", ".tmp");
 		try
 		{
-			temp.write(gson.toJson(ledger));
-			if (main.exists()) { try { read(main); main.copyTo(backup, StandardCopyOption.REPLACE_EXISTING); } catch (RuntimeException | IOException invalid) { /* Never overwrite last-good backup with corruption. */ } }
-			try { temp.moveTo(main, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING); }
-			catch (AtomicMoveNotSupportedException ex) { temp.moveTo(main,StandardCopyOption.REPLACE_EXISTING); }
+			temp.write(snapshot);
+			try { temp.moveTo(target,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING); }
+			catch(AtomicMoveNotSupportedException ex) { temp.moveTo(target,StandardCopyOption.REPLACE_EXISTING); }
 		}
 		finally { temp.deleteIfExists(); }
 	}

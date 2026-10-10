@@ -13,6 +13,22 @@ import static org.junit.Assert.*;
 public class LedgerStoreTest
 {
 	@Rule public TemporaryFolder folder=new TemporaryFolder();
+	@Test public void cachedRecoveryUsesImmutablePreviousSnapshotEvenAfterMainCorruption() throws Exception
+	{
+		Filepath path=Filepath.Unchecked.getRooted(folder.getRoot().toPath());LedgerStore store=new LedgerStore(path,new Gson());Ledger ledger=new Ledger();
+		store.save("A",ledger);
+		Ledger.CollectionRecord record=new Ledger.CollectionRecord();record.source=new com.lootluck.model.SourceIdentity("NPC","Cow","","");record.timestamp=1;ledger.history.add(record);store.save("A",ledger);
+		Ledger.CollectionRecord second=new Ledger.CollectionRecord();second.source=record.source;second.timestamp=2;ledger.history.add(second);
+		path.joinSegment(WikiParser.hash("A")+".json").write("{broken");store.save("A",ledger);
+		assertEquals(2,store.load("A").history.size());path.joinSegment(WikiParser.hash("A")+".json").write("{broken");
+		Ledger recovered=new LedgerStore(path,new Gson()).load("A");assertEquals(1,recovered.history.size());assertEquals(1,recovered.history.get(0).timestamp);
+	}
+	@Test public void coldSaveCannotReplaceGoodBackupWithCorruptMain() throws Exception
+	{
+		Filepath path=Filepath.Unchecked.getRooted(folder.getRoot().toPath());LedgerStore store=new LedgerStore(path,new Gson());Ledger ledger=Fixtures.engine().lifetime();store.save("A",ledger);store.save("A",ledger);
+		path.joinSegment(WikiParser.hash("A")+".json").write("{broken");new LedgerStore(path,new Gson()).save("A",new Ledger());
+		path.joinSegment(WikiParser.hash("A")+".json").write("{broken");assertEquals(ledger.history.size(),new LedgerStore(path,new Gson()).load("A").history.size());
+	}
 	@Test public void exportsRoundTripAndRejectOtherProfilesOrMalformedFiles() throws Exception
 	{
 		Filepath path=Filepath.Unchecked.getRooted(folder.getRoot().toPath());LedgerStore store=new LedgerStore(path,new Gson());Filepath export=path.joinSegment("export.json");
