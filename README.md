@@ -15,6 +15,31 @@ Enable **Loot Luck** and RuneLite's built-in **Loot Tracker**. The plugin does n
 
 For Jagex accounts, follow RuneLite's development-client login instructions: https://github.com/runelite/runelite/wiki/Using-Jagex-Accounts. Only the user should interact with RuneScape; automated game input is not used.
 
+## Plugin Hub build
+
+`runelite-plugin.properties` selects `build=gradle` because the retained statistics
+implementation uses Apache Commons Math 3.6.1. The Hub's standard build replaces
+the project's Gradle files and would omit that dependency. The custom Gradle path
+lets the Hub package main output and runtime dependencies; the development
+`shadowJar` includes the test launcher and RuneLite client and is not a Hub artifact.
+Java output remains targeted to release 11.
+
+Local checks:
+
+```powershell
+.\gradlew.bat clean test jar verifyMathArtifact recordRuntime --no-daemon
+```
+
+The local `gradle/verification-metadata.xml` pins dependency hashes. The Hub
+replaces this file with its own verification metadata during packaging. Before
+submission, add Commons Math **3.6.1** to the Hub's
+`package/verification-template/build.gradle` third-party configuration and generate
+and review the corresponding SHA-256 metadata as described in the
+[Plugin Hub dependency instructions](https://github.com/runelite/plugin-hub#third-party-dependencies).
+The currently listed Commons Math 3.0 does not cover 3.6.1. Keep that verification
+change in the submission PR alongside the plugin manifest. Local checks do not
+replace Hub CI, dependency review or user-run gameplay validation.
+
 ## Review the chosen interface
 
 - Source headers show recorded notification count and optional current GE total. They do not claim an unvalidated count is kills or openings.
