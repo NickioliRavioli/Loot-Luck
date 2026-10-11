@@ -148,7 +148,7 @@ public final class LootLuckPanel extends PluginPanel
 	{
 		LootLuckPanel preview=new LootLuckPanel(id->null,value->{},value->{},()->{},()->{});
 		preview.state.iconQuantities=style.iconQuantities;preview.state.stackCounts=style.stackCounts;preview.state.itemEffect=ItemEffect.NONE;
-		PanelState.Item item=new PanelState.Item();item.key="preview";item.name="Coins";item.rate="1/128";item.quantity=12500;item.occurrences=7;item.icon=icon;item.rarity=GOLD;
+		PanelState.Item item=new PanelState.Item();item.id=net.runelite.api.gameval.ItemID.COINS;item.key="preview";item.name="Coins";item.rate="1/128";item.quantity=12500;item.occurrences=7;item.icon=icon;item.rarity=GOLD;
 		JPanel row=preview.itemRow(item);JButton button=(JButton)row.getComponent(0);
 		for(java.awt.event.ActionListener listener:button.getActionListeners()) { button.removeActionListener(listener); }
 		row.remove(button);button.setAlignmentX(LEFT_ALIGNMENT);button.setMaximumSize(new Dimension(Integer.MAX_VALUE,44));button.setPreferredSize(new Dimension(210,44));
@@ -457,7 +457,7 @@ public final class LootLuckPanel extends PluginPanel
 	{
 		JButton row=new EffectButton(item.quantity>0?state.itemEffect:ItemEffect.NONE,backgroundColor(item),backgroundTier(item));row.setLayout(new BorderLayout(5,0));row.setBackground(itemBackground(item,false));row.setBorder(BorderFactory.createEmptyBorder(4,2,4,4));row.setAlignmentX(LEFT_ALIGNMENT);
 		JLabel sprite=new JLabel(itemIcon(item));sprite.setPreferredSize(new Dimension(40,32));sprite.setHorizontalAlignment(JLabel.CENTER);row.add(sprite,BorderLayout.WEST);
-		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.add(label(item.name,Color.LIGHT_GRAY));if(combined&&!item.occurrenceOnly&&!state.stackCounts&&!state.iconQuantities) { text.add(label("x"+NUMBER.format(item.occurrences),MUTED)); }row.add(text,BorderLayout.CENTER);row.add(itemCounts(item),BorderLayout.EAST);row.setMaximumSize(new Dimension(Integer.MAX_VALUE,42));row.getAccessibleContext().setAccessibleName(item.name+(item.occurrenceOnly?", occurrences "+item.occurrences:", quantity "+item.quantity));
+		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.add(label(item.name,Color.LIGHT_GRAY));if(combined&&!item.occurrenceOnly&&!state.stackCounts&&!state.iconQuantities) { text.add(label("x"+NUMBER.format(item.occurrences),MUTED)); }row.add(itemTextAndCounts(text,item,true),BorderLayout.CENTER);row.setMaximumSize(new Dimension(Integer.MAX_VALUE,42));row.getAccessibleContext().setAccessibleName(item.name+(item.occurrenceOnly?", occurrences "+item.occurrences:", quantity "+item.quantity));
 		itemButtons.put(item.key,row);row.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;render();JButton current=itemButtons.get(item.key);if(current!=null) { current.requestFocusInWindow(); }});makeRowClickable(row,row);
 		addWikiMenu(row,itemWikiUrl(item));
 		return row;
@@ -471,7 +471,7 @@ public final class LootLuckPanel extends PluginPanel
 		JPanel holder=new JPanel(new BorderLayout());holder.setOpaque(false);holder.setAlignmentX(LEFT_ALIGNMENT);
 		JButton button=new EffectButton(item.quantity>0?state.itemEffect:ItemEffect.NONE,backgroundColor(item),backgroundTier(item));button.setLayout(new BorderLayout(5,0));button.setBackground(itemBackground(item,item.key.equals(expanded)));button.setBorder(BorderFactory.createMatteBorder(0,0,1,0,BG));
 		JLabel icon=new JLabel(itemIcon(item));icon.setHorizontalAlignment(JLabel.CENTER);icon.setBorder(BorderFactory.createEmptyBorder(0,2,0,2));icon.setPreferredSize(new Dimension(40,36));if(item.id==0) { icon.setText("?"); }button.add(icon,BorderLayout.WEST);
-		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);text.setBorder(BorderFactory.createEmptyBorder(4,0,4,0));
+		JPanel text=new JPanel(new GridLayout(0,1));text.setOpaque(false);
 		JLabel name=label(item.name+(!state.hideUnobtainedOtherWorld&&!item.worldMarker.isEmpty()?" "+item.worldMarker:""),item.quantity==0&&!item.occurrenceOnly?MUTED:Color.LIGHT_GRAY);text.add(name);
 		if(!collection&&!item.occurrenceOnly)
 		{
@@ -480,8 +480,7 @@ public final class LootLuckPanel extends PluginPanel
 			String summary=item.rate.startsWith("Variants:")||item.rate.equals("Multiple published rates")?"Multiple published rates"+(item.rate.contains("*")?" *":""):item.rate;
 			if(shownRates.isEmpty()) { JLabel rate=rateLabel(summary,item.rarity);text.add(rate); }
 		}
-		button.add(text,BorderLayout.CENTER);
-		if(item.quantity>0||item.occurrenceOnly) { button.add(itemCounts(item),BorderLayout.EAST); }
+		JPanel aligned=itemTextAndCounts(text,item,item.quantity>0||item.occurrenceOnly);aligned.setBorder(BorderFactory.createEmptyBorder(4,0,4,0));button.add(aligned,BorderLayout.CENTER);
 
 		button.getAccessibleContext().setAccessibleName(item.name+(collection||item.occurrenceOnly?"":", "+item.rate)+(item.occurrenceOnly?", occurrences "+item.occurrences:", quantity "+item.quantity)+", "+(item.key.equals(expanded)?"expanded":"collapsed"));
 		itemButtons.put(item.key,button);button.addActionListener(e->{expanded=item.key.equals(expanded)?null:item.key;render();JButton current=itemButtons.get(item.key);if(current!=null) { current.requestFocusInWindow(); }});makeRowClickable(button,button);addWikiMenu(button,itemWikiUrl(item));holder.add(button);holder.setMaximumSize(new Dimension(Integer.MAX_VALUE,Math.max(44,button.getPreferredSize().height)));return holder;
@@ -592,6 +591,19 @@ public final class LootLuckPanel extends PluginPanel
 		JButton information=new JButton("i");information.setFont(new java.awt.Font("SansSerif",java.awt.Font.BOLD,12));information.setForeground(MUTED);information.setBackground(ROW);information.setPreferredSize(new Dimension(22,22));information.setMargin(new java.awt.Insets(0,0,0,0));information.getAccessibleContext().setAccessibleName("Item information: "+item.name);
 		information.addActionListener(e->showInformation(information,item));footer.add(information,BorderLayout.EAST);wrap.add(footer,BorderLayout.SOUTH);
 		wrap.setMaximumSize(new Dimension(Integer.MAX_VALUE,wrap.getPreferredSize().height));return wrap;
+	}
+	private JPanel itemTextAndCounts(JPanel text,PanelState.Item item,boolean includeCounts)
+	{
+		JPanel aligned=new JPanel(new BorderLayout(5,0));aligned.setOpaque(false);aligned.add(text,BorderLayout.CENTER);
+		if(includeCounts)
+		{
+			JPanel counts=itemCounts(item);int rows=Math.max(text.getComponentCount(),counts.getComponentCount());
+			text.setLayout(new GridLayout(rows,1));counts.setLayout(new GridLayout(rows,1));
+			while(text.getComponentCount()<rows) { text.add(label("",MUTED)); }
+			while(counts.getComponentCount()<rows) { counts.add(label("",MUTED)); }
+			aligned.add(counts,BorderLayout.EAST);
+		}
+		return aligned;
 	}
 	private JPanel itemCounts(PanelState.Item item)
 	{
